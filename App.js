@@ -1,20 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import 'react-native-reanimated';
+import { ActivityIndicator, View } from 'react-native';
+import AuthStack from './src/navigation/AuthStack';
+import MainStack from './src/navigation/MainStack';
+import { AuthProvider, AuthContext } from './src/context/AuthContext';
+import { useContext } from 'react';
+import MainTabs from './src/navigation/MainTabs';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+
+function RootNavigator() {
+  const { user, userData,loading } = useContext(AuthContext);
+  console.log("RootNavigator: Current user:", user?user.email:null); // Debug log
+  
+  if (loading) {
+    console.log("RootNavigator: Loading state is true"); // Debug log
+    return(
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
     </View>
+    ); // Show a loader while loading data
+ // Show a loader while loading data
+  }
+  return user ? <MainStack /> : <AuthStack />;
+}
+
+function AppWrapper() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        
+        <NavigationContainer>
+          <MainTabs />
+        </NavigationContainer>
+        
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default AppWrapper;
