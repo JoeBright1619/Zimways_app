@@ -1,40 +1,33 @@
 import {useEffect,useState ,React} from 'react';
-import {ScrollView, View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import style from '../constants/colors_fonts'; // adjust if needed
 import SearchBar from '../components/SearchBar'; // your custom search bar
 import { Feather } from '@expo/vector-icons';
-import { getAllProducts } from '../helpers/productHelper';
-import { getAllVendors } from '../helpers/vendorHelper'; // adjust if needed
-import ProductCard from '../components/productCard'; // your custom product card
-import VendorCard from '../components/vendorCard'; // your custom vendor card
+import ProductCard from '../components/product/productCard'; // your custom product card
+import VendorCard from '../components/vendor/vendorCard'; 
 import { FlatList } from 'react-native-gesture-handler'; // for better performance with large lists
 import { pickAndSaveProfileImage } from '../helpers/profileHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchAllItems } from '../api/items';
+import useVendors from '../api/useVendors';
 
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [products, setProducts] = useState([]);
-  const [vendors, setVendors] = useState([]);
+   const { vendors, loadingVendors } = useVendors();
   const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
   const fetch = async () => {
-    const data = await getAllProducts();
+    const data = await fetchAllItems();
     setProducts(data);
   };
   fetch();
 }, []);
 
-useEffect(() => {
-  const fetchVendors = async () => {
-    const data = await getAllVendors();
-    setVendors(data);
-  };
-  fetchVendors();
-}, []);
 
 useEffect(() => {
   const loadProfileImage = async () => {
@@ -94,21 +87,25 @@ useEffect(() => {
       <FlatList
     data={products}
     keyExtractor={(item) => item.id}
-    renderItem={({ item }) => <ProductCard product={item} />}
+    renderItem={({ item }) => <ProductCard product={item} variant="home"/>}
     horizontal={true}
     showsHorizontalScrollIndicator={false}
     contentContainerStyle={styles.list}
     />
       <Text style={styles.categoryLabel}>All Vendors:</Text>
-      <FlatList
-    data={vendors}
-    keyExtractor={(item) => item.id}
-    renderItem={({ item }) => <VendorCard vendor={item} />}
-    horizontal={true}
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={styles.list}
+{
+  loadingVendors ? (
+    <ActivityIndicator size="large" color="#899305" />
+  ) : (
+    <FlatList
+      data={vendors}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => <VendorCard vendor={item} />}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.list}
     />
-      
+  )}
       </ScrollView>
     </View>
   );

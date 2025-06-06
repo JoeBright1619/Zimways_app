@@ -1,19 +1,24 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import {useEffect,useState, React} from 'react';
-import imageMap from '../constants/imageMap'; // adjust path as needed
+import imageMap from '../../constants/imageMap'; // adjust path as needed
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function VendorCard({ vendor }) {
-  const imageSource = imageMap[vendor.imageurl] || require('../../assets/placeholder.jpg');
+  const navigation = useNavigation();
+  const imageSource = imageMap[vendor.imageurl] || require('../../../assets/placeholder.jpg');
   return (
+    <TouchableOpacity onPress={() => navigation.navigate('Vendor', { vendor })}>
     <View style={styles.card}>
       <Image source={imageSource} style={styles.image} />
-      <Text style={styles.name}>{vendor.vendorName}</Text>
+      <Text style={styles.name}>{vendor.name}</Text>
       <Text style={styles.type}>{vendor.vendorType}</Text>
-      <Text style={styles.address}>{vendor.address}</Text>
+      <Text style={styles.address}>{vendor.location}</Text>
       <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>⭐ {vendor.rating}</Text>
+            <Text style={styles.ratingText}>⭐ {vendor.averageRating}</Text>
         </View>
     </View>
+    </TouchableOpacity>
   );
   
 }

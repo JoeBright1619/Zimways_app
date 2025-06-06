@@ -29,14 +29,13 @@ function AppWrapper() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
-        
         <NavigationContainer>
-          <MainTabs />
+          <RootNavigator />
         </NavigationContainer>
-        
       </AuthProvider>
     </GestureHandlerRootView>
   );
 }
+
 
 export default AppWrapper;

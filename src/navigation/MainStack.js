@@ -1,14 +1,16 @@
 import React from 'react';
 import { Alert, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import {createStackNavigator, createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import NavigationBar from '../screens/NavigationBar';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 import ProductDetailsScreen from '../screens/productDetailsScreen';
-
+import MainTabs from './MainTabs'; // Assuming you have a MainTabs component for the main navigation
+import VendorScreen from '../screens/vendorScreen'; // Assuming you have a VendorScreen component
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 // 🔴 Custom Drawer Content
 function CustomDrawerContent(props) {
   const handleLogout = () => {
@@ -46,7 +48,7 @@ function CustomDrawerContent(props) {
 }
 
 // 🧭 Drawer Navigator using the custom drawer
-export default function DrawerNavigator() {
+ function DrawerNavigator() {
   return (
     <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
@@ -55,23 +57,31 @@ export default function DrawerNavigator() {
   );
 }
 
-export default function MainStack() {
+ export default function MainStack() {
   return (
     <Stack.Navigator>
+      
       <Stack.Screen
-        name="Main"
-        component={DrawerNavigator}
-        options={{ headerShown: false }}
+        name="MainTabs"
+        component={MainTabs}
+        options={{ headerShown: false }} // Hide header for MainTabs
       />
+      
       <Stack.Screen
         name="ProductDetails"
         component={ProductDetailsScreen}
         options={{ title: 'Product Details' }} // Optional title
       />
+      <Stack.Screen
+        name="Vendor"
+        component={VendorScreen}
+        options={{ headerShown: false }} // Optional title
+        // Optional title
+      />
+
     </Stack.Navigator>
   );
-}
-
+} 
 
 const styles = StyleSheet.create({
   logoutBtn: {

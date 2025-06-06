@@ -5,6 +5,7 @@ import OrderHistoryScreen from '../screens/OrderHistory';
 import CartScreen from '../screens/CartScreen';
 import SettingsScreen from '../screens/SettingScreen';
 import { Feather } from '@expo/vector-icons';
+import colors_fonts from '../constants/colors_fonts';
 
 const Tab = createBottomTabNavigator();
 
@@ -13,8 +14,8 @@ export default function MainTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: '#2b8a3e',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: colors_fonts.secondary,
+        tabBarInactiveTintColor: colors_fonts.primary,
         tabBarIcon: ({ color, size }) => {
           let iconName;
           if (route.name === 'Home') iconName = 'home';

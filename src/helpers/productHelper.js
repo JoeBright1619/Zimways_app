@@ -14,7 +14,7 @@ export const getAllProducts = async () => {
 export const getProductsByVendor = async (vendorId) => {
   const q = query(
     collection(db, 'products'),
-    where('vendorId', 'array-contains', vendorId)
+    where('vendorId', '==', vendorId)
   );
 
   const snapshot = await getDocs(q);
