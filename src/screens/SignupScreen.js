@@ -1,49 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert, Image, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform  } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import CustomButton from '../components/button';
 import style from '../constants/colors_fonts';
-import ZimwaysLogo from '../../assets/zimways.png'; // Import the PNG
+import ZimwaysLogo from '../../assets/zimways.png';
+import { AuthContext } from '../context/AuthContext';
 
 export default function SignupScreen({ navigation }) {
+  const { register } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
       Alert.alert('Password Mismatch', 'Passwords do not match.');
       return;
     }
-     if (!email || !username || !password || !phone) {
-      Alert.alert('Please fill all fields');
+    if (!email || !username || !password || !phone) {
+      Alert.alert('Missing Information', 'Please fill all fields');
       return;
     }
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      setLoading(true);
+      setError('');
+      
+      // Use the register function from AuthContext
+      await register({
+        email,
+        password,
+        name: username,  // backend expects 'name' instead of 'username'
+        phone,
+        address: '' // optional, can be updated later
+      });
 
-      await setDoc(doc(db, 'users', user.uid), {
-  uid: user.uid,
-  email: user.email,
-  phone: phone,
-  username: username, // Ensure username is correctly passed
-  createdAt: new Date().toISOString(),
-  profile: '', // Empty string or you can leave this as null if you want
-  location: '', // Same with location, can be left as empty string or null
-});
-
-
-      Alert.alert('User successfully created');
+      Alert.alert(
+        'Success',
+        'Account created successfully!',
+        [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
+      );
     } catch (err) {
       setError(err.message);
       Alert.alert('Signup Error', err.message);
       console.error('Signup Error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,17 +63,58 @@ export default function SignupScreen({ navigation }) {
       <Image source={ZimwaysLogo} style={styles.logo} />
       <Text style={styles.title}>Sign Up</Text>
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <TextInput style={styles.input} placeholder="Username" value={username} onChangeText={setUsername} />
-      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" />
-      <TextInput style={styles.input} placeholder="Phone Number" value={phone} onChangeText={setPhone} keyboardType="phone-pad" />
-      <TextInput style={styles.input} placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
-      <TextInput style={styles.input} placeholder="Confirm Password" value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry />
+      <TextInput 
+        style={styles.input} 
+        placeholder="Username" 
+        value={username} 
+        onChangeText={setUsername}
+        editable={!loading}
+      />
+      <TextInput 
+        style={styles.input} 
+        placeholder="Email" 
+        value={email} 
+        onChangeText={setEmail} 
+        keyboardType="email-address"
+        autoCapitalize="none"
+        editable={!loading}
+      />
+      <TextInput 
+        style={styles.input} 
+        placeholder="Phone Number" 
+        value={phone} 
+        onChangeText={setPhone} 
+        keyboardType="phone-pad"
+        editable={!loading}
+      />
+      <TextInput 
+        style={styles.input} 
+        placeholder="Password" 
+        value={password} 
+        onChangeText={setPassword} 
+        secureTextEntry
+        editable={!loading}
+      />
+      <TextInput 
+        style={styles.input} 
+        placeholder="Confirm Password" 
+        value={confirmPassword} 
+        onChangeText={setConfirmPassword} 
+        secureTextEntry
+        editable={!loading}
+      />
 
-      <CustomButton title="Signup" onPress={handleSignup} style={{ width: 200, height: 50 }} textStyle={{ fontSize: 18 }} />
+      <CustomButton 
+        title={loading ? "Creating Account..." : "Signup"} 
+        onPress={handleSignup} 
+        style={{ width: 200, height: 50 }} 
+        textStyle={{ fontSize: 18 }}
+        disabled={loading}
+      />
 
       <View style={styles.signupContainer}>
         <Text style={styles.signupText}>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} disabled={loading}>
           <Text style={styles.signupLink}>Sign in</Text>
         </TouchableOpacity>
       </View>
@@ -80,7 +127,6 @@ export default function SignupScreen({ navigation }) {
 const styles = StyleSheet.create({
   keyboardcontainer: {
     flex: 1,
-    
   },
   container: {
     flex: 1,
@@ -95,8 +141,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    borderWidth: 1, // Add a border
-    borderColor: style.primary, // Use style.primary for the stroke color
+    borderWidth: 1,
+    borderColor: style.primary,
     padding: 8,
     marginBottom: 16,
     borderRadius: 4,
@@ -107,13 +153,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: 'center',
   },
-   logo: {
+  logo: {
     width: 250,
     height: 150,
     marginBottom: 20,
     resizeMode: 'contain',
   },
-   signupContainer: {
+  signupContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 16,

@@ -1,23 +1,64 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, Image } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
 import CustomButton from '../components/button';
-import { auth } from '../../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+
 import style from '../constants/colors_fonts';
 import ZimwaysLogo from '../../assets/zimways.png' // Import the PNG
+import { AuthContext } from '../context/AuthContext';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Missing Information', 'Please fill in all fields');
+      return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert('Login Successful!');
+      setLoading(true);
+      setError('');
+      
+      const result = await login(email, password);
+      
+     
+
+      if (!result || !result.success) {
+        throw new Error('Login failed - invalid response from server');
+      }
+
+      if (result.requiresTFA) {
+        // Navigate to 2FA screen if required
+        navigation.navigate('TwoFactorAuth', { 
+          userId: result.userId,
+          email: email 
+        });
+        return;
+      }
+        // Clear form
+        setEmail('');
+        setPassword('');
+        setError('');
+      
     } catch (err) {
-      Alert.alert('Login Error', err.message);
-      setError(err.message);
+      // More specific error handling
+      let errorMessage = 'An error occurred during login';
+      if (err.message.includes('auth/user-not-found')) {
+        errorMessage = 'No account exists with this email';
+      } else if (err.message.includes('auth/wrong-password')) {
+        errorMessage = 'Invalid password';
+      } else if (err.message.includes('Backend authentication failed')) {
+        errorMessage = 'Account exists but backend verification failed';
+      }
+      
+      setError(errorMessage);
+      Alert.alert('Login Error', errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,6 +75,8 @@ export default function LoginScreen({ navigation }) {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+        autoCapitalize="none"
+        editable={!loading}
       />
       <TextInput
         style={styles.input}
@@ -41,18 +84,26 @@ export default function LoginScreen({ navigation }) {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        editable={!loading}
       />
-      <CustomButton
-        title="Log in"
-        onPress={handleLogin}
-        style={{ width: 200, height: 50 }}
-        textStyle={{ fontSize: 18 }}
-      />
+      
+      {loading ? (
+        <ActivityIndicator size="large" color={style.primary} style={styles.loader} />
+      ) : (
+        <CustomButton
+          title="Log in"
+          onPress={handleLogin}
+          style={{ width: 200, height: 50 }}
+          textStyle={{ fontSize: 18 }}
+          disabled={loading}
+        />
+      )}
       <View style={styles.signupContainer}>
         <Text style={styles.signupText}>New customer? </Text>
         <Text
           style={styles.signupLink}
           onPress={() => navigation.navigate('Signup')}
+          disabled={loading}
         >
           Sign up here
         </Text>
@@ -106,5 +157,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'red',
     fontWeight: 'bold',
+  },
+  loader: {
+    marginVertical: 20,
   },
 });
