@@ -1,8 +1,8 @@
 const imageMap = {
-  'sharonburger.png': require('../../assets/sharonburger.png'),
-  'sharonprofile.png': require('../../assets/sharonprofile.png'),
-  'zim.png': require('../../assets/zimflag.png'),
-  'sharonburger2.png': require('../../assets/sharonburger2.png'), // adjust path if needed
+  'sharonbeefburger.png': require('C:\\Users\\user\\Desktop\\Projects\\zimWays\\assets\\vendors\\sharons_zone\\products\\sharon_beef_burger.png'),
+  'sharonprofile.png': require('C:\\Users\\user\\Desktop\\Projects\\zimWays\\assets\\vendors\\profile.PNG'),
+  'zim.png': require('C:\\Users\\user\\Desktop\\Projects\\zimWays\\assets\\zimways.png'),
+  'sharonchickenburger.png': require('C:\\Users\\user\\Desktop\\Projects\\zimWays\\assets\\vendors\\sharons_zone\\products\\sharon_chicken_burger.png'), // adjust path if needed
   // Add more mappings as you add more images
 };
 

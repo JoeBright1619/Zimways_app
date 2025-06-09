@@ -1,22 +1,20 @@
 import axios from 'axios';
-
-const BASE_URL = 'http://192.168.1.68:8080/api/items'; 
-
+import { productsAPI } from '../services/api.service';
 
 export const fetchAllItems = async () => {
-  const response = await axios.get(BASE_URL);
+  const response = await productsAPI.getAll();
 
-  return response.data;
+  return response;
 };
 
 export const fetchItemsByVendor = async (vendorId) => {
-  const response = await axios.get(`${BASE_URL}/vendor/${vendorId}`);
-  return response.data;
+  const response = await productsAPI.getByVendor(vendorId);
+  return response;
 };
 
 export const fetchItemById = async (id) => {
-  const response = await axios.get(`${BASE_URL}/${id}`);
-  return response.data;
+  const response = await productsAPI.getById(id);
+  return response;
 };
 
 // Add more as needed...
