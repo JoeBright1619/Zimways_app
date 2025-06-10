@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function VendorCard({ vendor }) {
   const navigation = useNavigation();
-  const imageSource = imageMap[vendor.imageurl] || require('../../../assets/placeholder.jpg');
+  const imageSource = imageMap[vendor.imageUrl] || require('../../../assets/placeholder.jpg');
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Vendor', { vendor })}>
     <View style={styles.card}>
