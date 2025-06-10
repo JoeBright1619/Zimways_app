@@ -14,7 +14,7 @@ export default function VendorScreenInfo({ vendor: vendor, translateY: translate
     <Animated.View style={[styles.stickyHeader, { transform: [{ translateY }] }]}>
                  <View style={styles.vendorImageWrapper}>
             <Image
-              source={imageMap[vendor.imageurl] || require('../../../assets/placeholder.jpg')}
+              source={imageMap[vendor.imageUrl] || require('../../../assets/placeholder.jpg')}
               style={styles.vendorImage}
               resizeMode="cover"
             />

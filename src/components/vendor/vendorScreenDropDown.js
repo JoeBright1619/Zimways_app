@@ -5,6 +5,7 @@ import DottedLine from './DottedLine'; // adjust path as needed
 import Ionicons from 'react-native-vector-icons/Ionicons'; // ensure you have this installed
 import colors_fonts from '../../constants/colors_fonts'; 
 import { getCategoriesByVendorId } from '../../api/categories';
+import { vendorsAPI } from '../../services/api.service';
 
 export default function VendorScreenDropDown({ vendor, selectedCategory, setSelectedCategory, translateY}) {
     const [showCategories, setShowCategories] = useState(false);
@@ -14,7 +15,7 @@ export default function VendorScreenDropDown({ vendor, selectedCategory, setSele
 
     useEffect(() => {
       const fetchCategories = async () => {
-        const data = await getCategoriesByVendorId(vendor.id);
+        const data = await vendorsAPI.getCategories(vendor.id);
         setCategories(data);
       };
       fetchCategories();

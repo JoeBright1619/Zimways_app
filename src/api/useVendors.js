@@ -13,7 +13,7 @@ export default function useVendors() {
       try {
         const response = await vendorsAPI.getAll();
         setVendors(response);
-        console.log('Fetched vendors:', response.data);
+        console.log('Fetched vendors:', response);
       } catch (error) {
         console.error('Failed to fetch vendors:', error);
       } finally {

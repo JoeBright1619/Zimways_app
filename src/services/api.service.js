@@ -168,9 +168,13 @@ export const vendorsAPI = {
 
   getCategories: async (vendorId) => {
     try {
-      const response = await api.get(config.ENDPOINTS.VENDORS.CATEGORIES(vendorId));
+      const response = await api.get(config.ENDPOINTS.CATEGORIES.BY_VENDOR(vendorId));
       return response.data;
     } catch (error) {
+      if (error.response?.status === 404) {
+        console.log('No categories found for vendor:', vendorId);
+        return []; // Return empty array instead of throwing error
+      }
       console.error('Get Vendor Categories API Error:', error);
       throw error.response?.data || error.message;
     }
