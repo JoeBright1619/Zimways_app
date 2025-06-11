@@ -9,8 +9,11 @@ import { auth } from '../../firebase';
 import ProductDetailsScreen from '../screens/productDetailsScreen';
 import MainTabs from './MainTabs'; // Assuming you have a MainTabs component for the main navigation
 import VendorScreen from '../screens/vendorScreen'; // Assuming you have a VendorScreen component
+import CategoryScreen from '../screens/CategoryScreen';
+
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
+
 // 🔴 Custom Drawer Content
 function CustomDrawerContent(props) {
   const handleLogout = () => {
@@ -48,7 +51,7 @@ function CustomDrawerContent(props) {
 }
 
 // 🧭 Drawer Navigator using the custom drawer
- function DrawerNavigator() {
+function DrawerNavigator() {
   return (
     <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
@@ -57,16 +60,14 @@ function CustomDrawerContent(props) {
   );
 }
 
- export default function MainStack() {
+export default function MainStack() {
   return (
     <Stack.Navigator>
-      
       <Stack.Screen
         name="MainTabs"
         component={MainTabs}
         options={{ headerShown: false }} // Hide header for MainTabs
       />
-      
       <Stack.Screen
         name="ProductDetails"
         component={ProductDetailsScreen}
@@ -76,12 +77,15 @@ function CustomDrawerContent(props) {
         name="Vendor"
         component={VendorScreen}
         options={{ headerShown: false }} // Optional title
-        // Optional title
       />
-
+      <Stack.Screen
+        name="Category"
+        component={CategoryScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
-} 
+}
 
 const styles = StyleSheet.create({
   logoutBtn: {

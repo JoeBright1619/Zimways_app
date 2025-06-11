@@ -1,4 +1,4 @@
-const DEV_API_URL = 'http://192.168.1.70:8080/api';
+const DEV_API_URL = 'http://192.168.1.67:8080/api';
 const PROD_API_URL = 'https://your-production-url.com/api';
 
 const config = {
@@ -14,11 +14,13 @@ const config = {
       BASE: '/vendors',
       BY_ID: (id) => `/vendors/${id}`,
       CATEGORIES: (id) => `/vendors/${id}/categories`,
+      BY_CATEGORY: (category) => `/categories/${category}/vendors`,
     },
     PRODUCTS: {
       BASE: '/items',
       BY_ID: (id) => `/items/${id}`,
       BY_VENDOR: (vendorId) => `/items/vendor/${vendorId}`,
+      BY_CATEGORY: (category) => `/categories/${category}/items`,
     },
     CATEGORIES: {
       BASE: '/categories',

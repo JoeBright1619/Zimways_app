@@ -12,6 +12,7 @@ import { pickAndSaveProfileImage } from '../helpers/profileHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchAllItems } from '../api/items';
 import useVendors from '../api/useVendors';
+import CategoryGrid from '../components/CategoryGrid';
 
 
 const HomeScreen = () => {
@@ -53,6 +54,12 @@ useEffect(() => {
   }
 };
 
+  const handleCategoryPress = (category) => {
+    // Handle category selection
+    console.log('Selected category:', category);
+    // You can add navigation or filtering logic here
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -83,6 +90,7 @@ useEffect(() => {
         
       </View>
     <ScrollView>
+      <CategoryGrid onCategoryPress={handleCategoryPress} />
       <Text style={styles.categoryLabel}>All Products:</Text>
       <FlatList
     data={products}
