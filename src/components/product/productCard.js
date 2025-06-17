@@ -47,7 +47,7 @@ const ProductCard = ({ product, variant = 'home' }) => {
 const homeStyles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
-    width: 200,
+    width: 160,
     height: 190,
     borderRadius: 10,
     marginRight: 15,

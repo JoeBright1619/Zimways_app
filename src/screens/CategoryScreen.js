@@ -2,115 +2,39 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { fetchAllItems } from '../api/items';
-import useVendors from '../api/useVendors';
-import ProductCard from '../components/product/productCard';
-import VendorCard from '../components/vendor/vendorCard';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors_fonts from '../constants/colors_fonts';
+import { VendorsCategory } from '../components/category/vendorsCategory';
+import { ProductsCategory } from '../components/category/productsCategory';
+import {  VendorAndProductCategory } from '../components/category/vendorAndproductCategory';
+import { VerticalCategoryList } from '../components/category/allCategoriesList';
 
 const CategoryScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { category } = route.params;
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const { vendors, loadingVendors } = useVendors();
-  const [loading, setLoading] = useState(true);
+  const { selectedCategory, type } = route.params;
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await fetchAllItems();
-        setProducts(data);
-        // Filter products based on category
-        const filtered = data.filter(product => 
-          product.categoryNames?.includes(category.name) || 
-          product.category?.includes(category.name)
-        );
-        setFilteredProducts(filtered);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [category]);
-
-  // Filter vendors based on category
-  const filteredVendors = vendors?.filter(vendor => 
-    vendor.vendorType?.toLowerCase() === category.name.toLowerCase() ||
-    vendor.categories?.includes(category.name)
-  );
-
-  const getCategoryIcon = () => {
-    switch (category.name.toLowerCase()) {
-      case 'restaurants':
-        return 'restaurant';
-      case 'groceries':
-        return 'cart';
-      case 'pharmacy':
-        return 'medical';
-      case 'electronics':
-        return 'phone-portrait';
-      case 'fashion':
-        return 'shirt';
-      default:
-        return 'grid';
-    }
-  };
+  console.log('Selected Category:', selectedCategory);
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="white" />
+          <MaterialCommunityIcons name="chevron-left" size={30} color="white" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
-          <Ionicons name={getCategoryIcon()} size={32} color="white" />
-          <Text style={styles.headerTitle}>{category.name}</Text>
+          <MaterialCommunityIcons name={selectedCategory.icon} size={32} color="white" />
+          <Text style={styles.headerTitle}>{selectedCategory.name}</Text>
         </View>
       </View>
+    
+        {/* Render based on category type */}
+  {type === 'BOTH' && <VendorAndProductCategory selectedCategoryName={selectedCategory.name} />}
+  {type === 'VENDOR' && <VendorsCategory selectedCategoryName={selectedCategory.name} />}
+  {type === 'PRODUCT' && <ProductsCategory selectedCategoryName={selectedCategory.name} />}
+  {type === 'ALL' && <VerticalCategoryList />}
 
-      <ScrollView style={styles.content}>
-        {loading ? (
-          <ActivityIndicator size="large" color={colors_fonts.primary} style={styles.loader} />
-        ) : (
-          <>
-            {/* Products Section */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Products</Text>
-              {filteredProducts.length > 0 ? (
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {filteredProducts.map(product => (
-                    <ProductCard key={product.id} product={product} variant="home" />
-                  ))}
-                </ScrollView>
-              ) : (
-                <Text style={styles.noItemsText}>No products found in this category</Text>
-              )}
-            </View>
-
-            {/* Vendors Section */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Vendors</Text>
-              {loadingVendors ? (
-                <ActivityIndicator size="large" color={colors_fonts.primary} />
-              ) : filteredVendors?.length > 0 ? (
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {filteredVendors.map(vendor => (
-                    <VendorCard key={vendor.id} vendor={vendor} />
-                  ))}
-                </ScrollView>
-              ) : (
-                <Text style={styles.noItemsText}>No vendors found in this category</Text>
-              )}
-            </View>
-          </>
-        )}
-      </ScrollView>
     </View>
   );
 };

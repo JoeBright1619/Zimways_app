@@ -2,6 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../../firebase';
 import config from '../config/api.config';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const api = axios.create({
   baseURL: config.API_URL,
@@ -179,6 +180,15 @@ export const vendorsAPI = {
       throw error.response?.data || error.message;
     }
   },
+  getByCategory: async (category) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.VENDORS.BY_CATEGORY(category));
+      return response.data;
+    } catch (error) {
+      console.error('Get Vendors By Category API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
 };
 
 // Products API calls
@@ -210,6 +220,38 @@ export const productsAPI = {
       return response.data;
     } catch (error) {
       console.error('Get Products By Vendor API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+  getByCategory: async (category) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.PRODUCTS.BY_CATEGORY(category));
+      return response.data;
+    } catch (error) {
+      console.error('Get Products By Category API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  }
+};
+
+export const categoriesAPI = {
+  getAll: async () => {
+    try {
+      console.log('Fetching all categories...');
+      const response = await api.get(config.ENDPOINTS.CATEGORIES.BASE);
+      return response.data;
+    } catch (error) {
+      console.error('Get All Categories API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getByName: async (name) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.CATEGORIES.BY_NAME(name.toUpperCase()));
+      return response.data;
+    } catch (error) {
+      console.error('Get Category By Name API Error:', error);
       throw error.response?.data || error.message;
     }
   },

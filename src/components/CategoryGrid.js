@@ -1,23 +1,40 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors_fonts from '../constants/colors_fonts';
 import { useNavigation } from '@react-navigation/native';
+import { categoriesAPI } from '../services/api.service';
 
 const categories = [
-  { id: 1, name: 'Restaurants', icon: 'restaurant' },
-  { id: 2, name: 'Groceries', icon: 'cart' },
-  { id: 3, name: 'Pharmacy', icon: 'medical' },
-  { id: 4, name: 'Electronics', icon: 'phone-portrait' },
-  { id: 5, name: 'Fashion', icon: 'shirt' },
+   { id: 1, name: 'Restaurants', icon: 'food-fork-drink' },
+  { id: 2, name: 'Groceries', icon: 'cart-variant' },
+  { id: 3, name: 'Pharmacies', icon: 'pill' },
+  { id: 4, name: 'Electronics', icon: 'monitor-cellphone' },
+  { id: 5, name: 'Fashion', icon: 'tshirt-crew-outline' },
 ];
+
 
 const CategoryGrid = () => {
   const navigation = useNavigation();
 
-  const handleCategoryPress = (category) => {
-    navigation.navigate('Category', { category });
-  };
+ const handleCategoryPress = async (selectedCategory) => {
+  try {
+    if(selectedCategory.name === 'More Categories') {
+      navigation.navigate('Category', { selectedCategory, type: "ALL" });
+      return;
+    }
+    const categoryObj = await categoriesAPI.getByName(selectedCategory.name);
+    if (!categoryObj) {
+      console.warn('Category not found:', selectedCategory.name);
+      return;
+    }
+    console.log('whole category object:', categoryObj);
+    navigation.navigate('Category', { selectedCategory: categoryObj, type: categoryObj.type });
+  } catch (error) {
+    console.error('Error fetching category:', error);
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -27,7 +44,7 @@ const CategoryGrid = () => {
           style={styles.categoryBox}
           onPress={() => handleCategoryPress(category)}
         >
-          <Ionicons name={category.icon} size={32} color={colors_fonts.primary} />
+          <MaterialCommunityIcons name={category.icon} size={32} color={colors_fonts.primary} />
           <Text style={styles.categoryText}>{category.name}</Text>
         </TouchableOpacity>
       ))}
@@ -37,7 +54,7 @@ const CategoryGrid = () => {
         style={[styles.categoryBox, styles.moreCategoriesBox]}
         onPress={() => handleCategoryPress({ id: 'more', name: 'More Categories' })}
       >
-        <Ionicons name="grid" size={32} color={colors_fonts.primary} />
+        <MaterialCommunityIcons name="view-grid" size={32} color={colors_fonts.primary} />
         <Text style={styles.categoryText}>More Categories</Text>
       </TouchableOpacity>
     </View>

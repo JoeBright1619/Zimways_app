@@ -85,12 +85,13 @@ useEffect(() => {
         </TouchableOpacity>
 
         </View>
+        
         <SearchBar style={styles.searchBar} />
 
         
       </View>
     <ScrollView>
-      <CategoryGrid onCategoryPress={handleCategoryPress} />
+      <CategoryGrid />
       <Text style={styles.categoryLabel}>All Products:</Text>
       <FlatList
     data={products}

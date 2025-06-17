@@ -1,4 +1,4 @@
-const DEV_API_URL = 'http://192.168.1.67:8080/api';
+const DEV_API_URL = 'http://192.168.1.65:8080/api';
 const PROD_API_URL = 'https://your-production-url.com/api';
 
 const config = {
@@ -24,7 +24,9 @@ const config = {
     },
     CATEGORIES: {
       BASE: '/categories',
+      BY_NAME: (name) => `/categories/${name}`,
       BY_VENDOR: (id) => `/categories/vendors/${id}/categories`,
+      
     },
     ORDERS: {
       BASE: '/orders',
