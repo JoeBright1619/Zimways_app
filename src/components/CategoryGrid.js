@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,11 +12,46 @@ const categories = [
   { id: 3, name: 'Pharmacies', icon: 'pill' },
   { id: 4, name: 'Electronics', icon: 'monitor-cellphone' },
   { id: 5, name: 'Fashion', icon: 'tshirt-crew-outline' },
+  { id: 6, name: 'Beauty & Health', icon: 'lipstick' },
 ];
 
 
-const CategoryGrid = () => {
+
+
+
+const CategoryGrid = ({filter}) => {
   const navigation = useNavigation();
+  const [categoryData, setCategoryData] = useState(categories);
+
+useEffect(() => {
+  const fetchCategories = async () => {
+    let fetchedCategories = [];
+
+    try {
+      if (filter === 'ALL') {
+        fetchedCategories = categories;
+        console.log('Fetched Categories:', fetchedCategories);
+      } else if (filter === 'VENDORS') {
+        fetchedCategories = await categoriesAPI.getByType('VENDOR');
+        console.log('Fetched Vendor Categories:', fetchedCategories);
+      } else if (filter === 'PRODUCTS') {
+        fetchedCategories = await categoriesAPI.getByType('PRODUCT');
+        console.log('Fetched Product Categories:', fetchedCategories);
+      } else {
+        console.warn('Unknown filter type:', filter);
+        return;
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    } finally {
+     
+      setCategoryData(fetchedCategories.length ? fetchedCategories : categories); // fallback to static
+    }
+  };
+
+  fetchCategories();
+}, [filter]);
+
 
  const handleCategoryPress = async (selectedCategory) => {
   try {
@@ -36,18 +71,23 @@ const CategoryGrid = () => {
   }
 };
 
+const getIconForCategory = (name) => {
+  const found = categories.find(cat => cat.name === name);
+  return found?.icon || 'help-circle';
+};
   return (
     <View style={styles.container}>
-      {categories.map((category) => (
-        <TouchableOpacity
-          key={category.id}
-          style={styles.categoryBox}
-          onPress={() => handleCategoryPress(category)}
-        >
-          <MaterialCommunityIcons name={category.icon} size={32} color={colors_fonts.primary} />
-          <Text style={styles.categoryText}>{category.name}</Text>
-        </TouchableOpacity>
-      ))}
+      {categoryData.slice(0, 5).map((category) => (
+    <TouchableOpacity
+      key={category.id}
+      style={styles.categoryBox}
+      onPress={() => handleCategoryPress(category)}
+    >
+   <MaterialCommunityIcons name={category.icon} size={32} color={colors_fonts.primary} />
+
+    <Text style={styles.categoryText}>{category.name}</Text>
+  </TouchableOpacity>
+))}
       
       {/* More Categories Box */}
       <TouchableOpacity

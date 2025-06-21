@@ -189,6 +189,15 @@ export const vendorsAPI = {
       throw error.response?.data || error.message;
     }
   },
+  getBySearch: async (query) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.VENDORS.BY_SEARCH(query));
+      return response.data;
+    } catch (error) {
+      console.error('Get Vendors By Search API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  }
 };
 
 // Products API calls
@@ -231,6 +240,15 @@ export const productsAPI = {
       console.error('Get Products By Category API Error:', error);
       throw error.response?.data || error.message;
     }
+  },
+  getBySearch: async (query) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.PRODUCTS.BY_SEARCH(query));
+      return response.data;
+    } catch (error) {
+      console.error('Get Products By Search API Error:', error);
+      throw error.response?.data || error.message;
+    }
   }
 };
 
@@ -255,6 +273,15 @@ export const categoriesAPI = {
       throw error.response?.data || error.message;
     }
   },
+  getByType: async (type) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.CATEGORIES.BY_TYPE(type));
+      return response.data;
+    } catch (error) {
+      console.error('Get Categories By Type API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  }
 };
 
 export default api; 

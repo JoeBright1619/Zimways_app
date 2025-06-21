@@ -1,121 +1,166 @@
-import {useEffect,useState ,React} from 'react';
+import {useEffect,useState , useCallback} from 'react';
 import {ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import style from '../constants/colors_fonts'; // adjust if needed
-import SearchBar from '../components/SearchBar'; // your custom search bar
+import SearchBar from '../components/search/SearchBar'; // your custom search bar
 import { Feather } from '@expo/vector-icons';
 import ProductCard from '../components/product/productCard'; // your custom product card
 import VendorCard from '../components/vendor/vendorCard'; 
 import { FlatList } from 'react-native-gesture-handler'; // for better performance with large lists
+import debounce from 'lodash.debounce';
 import { pickAndSaveProfileImage } from '../helpers/profileHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchAllItems } from '../api/items';
-import useVendors from '../api/useVendors';
 import CategoryGrid from '../components/CategoryGrid';
+import { vendorsAPI, productsAPI } from '../services/api.service';
+import {VendorAndProductSearch} from '../components/search/Vendors&Products'; // your custom search component
+import { VendorSearch } from '../components/search/Vendors';
+import { ProductSearch } from '../components/search/Products'; // if you have a separate search for products
 
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
   const [products, setProducts] = useState([]);
-   const { vendors, loadingVendors } = useVendors();
+  const [vendors, setVendors] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [loadingVendors, setLoadingVendors] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
 
+  const [searchText, setSearchText] = useState('');
+  const [debouncedText, setDebouncedText] = useState('');
+  const [filter, setFilter] = useState('ALL');
+
+  // ✅ Debounced update function
+  const debouncedUpdate = useCallback(
+    debounce((text) => {
+      setDebouncedText(text);
+    }, 1000),
+    []
+  );
+
+  // ✅ Call debounce when searchText changes
   useEffect(() => {
-  const fetch = async () => {
-    const data = await fetchAllItems();
-    setProducts(data);
-  };
-  fetch();
-}, []);
+    debouncedUpdate(searchText);
+    return () => debouncedUpdate.cancel();
+  }, [searchText]);
 
+  // ✅ Fetch on debouncedText or filter change
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        if (filter === 'ALL' || filter === 'PRODUCTS') {
+          setLoadingProducts(true);
+          const productData = await productsAPI.getBySearch(debouncedText);
+          setProducts(productData);
+        }
 
-useEffect(() => {
-  const loadProfileImage = async () => {
-    const storedUri = await AsyncStorage.getItem('profileImageUri');
-    if (storedUri) setProfileImage(storedUri);
-  };
-  loadProfileImage();
-}, []);
+        if (filter === 'ALL' || filter === 'VENDORS') {
+          setLoadingVendors(true);
+          const vendorData = await vendorsAPI.getBySearch(debouncedText);
+          setVendors(vendorData);
+        }
 
+        console.log('Fetching for:', debouncedText);
+      } catch (err) {
+        console.error('Error fetching search data:', err);
+      } finally {
+        setLoadingProducts(false);
+        setLoadingVendors(false);
+      }
+    };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    fetch();
+  }, [debouncedText, filter]); // <-- this was wrong before
+
+  // ✅ Load profile image
+  useEffect(() => {
+    const loadProfileImage = async () => {
+      const storedUri = await AsyncStorage.getItem('profileImageUri');
+      if (storedUri) setProfileImage(storedUri);
+    };
+    loadProfileImage();
+  }, []);
 
   const handleProfileImageChange = async () => {
-  const newUri = await pickAndSaveProfileImage();
-  if (newUri) {
-    setProfileImage(newUri); // 💥 this triggers UI to update
-  }
-};
-
-  const handleCategoryPress = (category) => {
-    // Handle category selection
-    console.log('Selected category:', category);
-    // You can add navigation or filtering logic here
+    const newUri = await pickAndSaveProfileImage();
+    if (newUri) {
+      setProfileImage(newUri);
+    }
   };
-
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.profiledetails}>
           <View style={styles.locationContainer}>
-        <Text style={styles.label}>Delivery location:</Text>
-        <TouchableOpacity style={styles.dropdown}>
-          <Text style={styles.dropdownText}>Kigali, Rwanda</Text>
-          <Feather name="chevron-down" size={16} color="black" />
-        </TouchableOpacity>
-      </View>
-        <TouchableOpacity onPress={handleProfileImageChange} style={styles.profile}>
-          <Image
-            source={
-              profileImage
-                ? { uri: profileImage }
-                : { uri: 'https://i.pravatar.cc/40' }
-            }
-            style={styles.profilePic}
-          />
-          <Feather name="chevron-down" size={16} color="black" style={styles.iconBelow} />
-        </TouchableOpacity>
-
+            <Text style={styles.label}>Delivery location:</Text>
+            <TouchableOpacity style={styles.dropdown}>
+              <Text style={styles.dropdownText}>Kigali, Rwanda</Text>
+              <Feather name="chevron-down" size={16} color="black" />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity onPress={handleProfileImageChange} style={styles.profile}>
+            <Image
+              source={
+                profileImage
+                  ? { uri: profileImage }
+                  : { uri: 'https://i.pravatar.cc/40' }
+              }
+              style={styles.profilePic}
+            />
+            <Feather name="chevron-down" size={16} color="black" style={styles.iconBelow} />
+          </TouchableOpacity>
         </View>
-        
-        <SearchBar style={styles.searchBar} />
 
-        
+        <SearchBar
+          value={searchText}
+          onChangeText={setSearchText}
+          filter={filter}
+          onFilterChange={setFilter}
+          showFilter={true}
+        />
       </View>
-    <ScrollView>
-      <CategoryGrid />
-      <Text style={styles.categoryLabel}>All Products:</Text>
-      <FlatList
-    data={products}
-    keyExtractor={(item) => item.id}
-    renderItem={({ item }) => <ProductCard product={item} variant="home"/>}
-    horizontal={true}
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={styles.list}
-    />
-      <Text style={styles.categoryLabel}>All Vendors:</Text>
-{
-  loadingVendors ? (
-    <ActivityIndicator size="large" color="#899305" />
-  ) : (
-    <FlatList
-      data={vendors}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <VendorCard vendor={item} />}
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.list}
-    />
-  )}
+{searchText === "" ? (
+      <ScrollView>
+
+
+        <CategoryGrid filter={filter} />
+
+        <Text style={styles.categoryLabel}>All Products:</Text>
+        {
+          loadingProducts ? (
+          <ActivityIndicator size="large" color={style.primary} />
+        ) : (
+          <FlatList
+            data={products}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <ProductCard product={item} variant="home" />}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.list}
+          />
+        )}
+
+        <Text style={styles.categoryLabel}>All Vendors:</Text>
+        {loadingVendors ? (
+          <ActivityIndicator size="large" color={style.primary} />
+        ) : (
+          <FlatList
+            data={vendors}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <VendorCard vendor={item} />}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.list}
+          />
+        )}
       </ScrollView>
+      ) : filter === "VENDORS" ? (
+  <VendorSearch vendors={vendors} searchText={searchText} />
+) : filter === "PRODUCTS" ? (
+  <ProductSearch products={products} searchText={searchText} />
+) : (
+  <VendorAndProductSearch products={products} vendors={vendors} searchText={searchText} />
+)}
     </View>
   );
 };
