@@ -5,26 +5,45 @@ import {
   StyleSheet,
   FlatList,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import VendorCard from "../vendor/vendorCard";
 import colors_fonts from "../../constants/colors_fonts";
 
 const screenWidth = Dimensions.get("window").width;
 
-export const VendorSearch = ({ vendors, searchText }) => {
+export const VendorSearch = ({ vendors, searchText, loading = false }) => {
   const renderItem = ({ item }) => (
     <View style={styles.gridItem}>
       <VendorCard vendor={item} />
     </View>
   );
 
+  const renderLoadingState = () => (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color={colors_fonts.primary} />
+      <Text style={styles.loadingText}>Searching vendors...</Text>
+    </View>
+  );
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.noItemsText}>No vendors found</Text>
+      <Text style={styles.emptySubText}>
+        Try adjusting your search or browse all vendors
+      </Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.searchTitle}>
-        Search results for <Text style={styles.highlightText}>"{searchText}"</Text>
+        Search results for vendors: <Text style={styles.highlightText}>"{searchText}"</Text>
       </Text>
 
-      {vendors.length > 0 ? (
+      {loading ? (
+        renderLoadingState()
+      ) : vendors.length > 0 ? (
         <FlatList
           data={vendors}
           renderItem={renderItem}
@@ -35,7 +54,7 @@ export const VendorSearch = ({ vendors, searchText }) => {
           contentContainerStyle={styles.list}
         />
       ) : (
-        <Text style={styles.noItemsText}>No vendors found</Text>
+        renderEmptyState()
       )}
     </View>
   );
@@ -58,11 +77,35 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors_fonts.primary,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#666',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
   noItemsText: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#666",
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  emptySubText: {
     fontSize: 14,
     textAlign: "center",
     color: "#999",
-    marginTop: 12,
+    paddingHorizontal: 20,
   },
   row: {
     justifyContent: "space-between",

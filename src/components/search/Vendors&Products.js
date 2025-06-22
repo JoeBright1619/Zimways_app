@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import VendorCard from "../vendor/vendorCard";
 import ProductCard from "../product/productCard";
@@ -12,7 +13,13 @@ import colors_fonts from "../../constants/colors_fonts";
 
 const screenWidth = Dimensions.get("window").width;
 
-export const VendorAndProductSearch = ({ products, vendors, searchText }) => {
+export const VendorAndProductSearch = ({ 
+  products, 
+  vendors, 
+  searchText, 
+  loadingProducts = false,
+  loadingVendors = false 
+}) => {
   const renderVendor = ({ item }) => (
     <View style={styles.cardWrapper}>
       <VendorCard vendor={item} />
@@ -25,6 +32,22 @@ export const VendorAndProductSearch = ({ products, vendors, searchText }) => {
     </View>
   );
 
+  const renderLoadingState = (type) => (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color={colors_fonts.primary} />
+      <Text style={styles.loadingText}>Searching {type}...</Text>
+    </View>
+  );
+
+  const renderEmptyState = (type) => (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.noItemsText}>No {type} found</Text>
+      <Text style={styles.emptySubText}>
+        Try adjusting your search
+      </Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.searchTitle}>
@@ -34,7 +57,9 @@ export const VendorAndProductSearch = ({ products, vendors, searchText }) => {
       {/* Vendors */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Vendors</Text>
-        {vendors.length > 0 ? (
+        {loadingVendors ? (
+          renderLoadingState('vendors')
+        ) : vendors.length > 0 ? (
           <FlatList
             data={vendors}
             renderItem={renderVendor}
@@ -44,14 +69,16 @@ export const VendorAndProductSearch = ({ products, vendors, searchText }) => {
             contentContainerStyle={styles.list}
           />
         ) : (
-          <Text style={styles.noItemsText}>No vendors found</Text>
+          renderEmptyState('vendors')
         )}
       </View>
 
       {/* Products */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Products</Text>
-        {products.length > 0 ? (
+        {loadingProducts ? (
+          renderLoadingState('products')
+        ) : products.length > 0 ? (
           <FlatList
             data={products}
             renderItem={renderProduct}
@@ -61,7 +88,7 @@ export const VendorAndProductSearch = ({ products, vendors, searchText }) => {
             contentContainerStyle={styles.list}
           />
         ) : (
-          <Text style={styles.noItemsText}>No products found</Text>
+          renderEmptyState('products')
         )}
       </View>
     </View>
@@ -94,11 +121,31 @@ const styles = StyleSheet.create({
     color: colors_fonts.text,
     marginBottom: 10,
   },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginTop: 8,
+    fontSize: 14,
+    color: '#666',
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
   noItemsText: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#666",
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  emptySubText: {
     fontSize: 14,
     textAlign: "center",
     color: "#999",
-    marginTop: 8,
+    paddingHorizontal: 20,
   },
   cardWrapper: {
     marginRight: 12,

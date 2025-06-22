@@ -1,5 +1,5 @@
 import {useEffect,useState , useCallback} from 'react';
-import {ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import {ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import style from '../constants/colors_fonts'; // adjust if needed
@@ -16,60 +16,27 @@ import { vendorsAPI, productsAPI } from '../services/api.service';
 import {VendorAndProductSearch} from '../components/search/Vendors&Products'; // your custom search component
 import { VendorSearch } from '../components/search/Vendors';
 import { ProductSearch } from '../components/search/Products'; // if you have a separate search for products
-
+import { useSearch } from '../hooks/useSearch'; // Import the custom hook
 
 const HomeScreen = () => {
-  const [products, setProducts] = useState([]);
-  const [vendors, setVendors] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(false);
-  const [loadingVendors, setLoadingVendors] = useState(false);
+  // Replace all the search-related state with the useSearch hook
+  const {
+    searchText,
+    filter,
+    products,
+    vendors,
+    loadingProducts,
+    loadingVendors,
+    searchHistory,
+    error,
+    setSearchText,
+    setFilter,
+    clearSearch,
+    retrySearch,
+    setSearchFromHistory,
+  } = useSearch();
+
   const [profileImage, setProfileImage] = useState(null);
-
-  const [searchText, setSearchText] = useState('');
-  const [debouncedText, setDebouncedText] = useState('');
-  const [filter, setFilter] = useState('ALL');
-
-  // ✅ Debounced update function
-  const debouncedUpdate = useCallback(
-    debounce((text) => {
-      setDebouncedText(text);
-    }, 1000),
-    []
-  );
-
-  // ✅ Call debounce when searchText changes
-  useEffect(() => {
-    debouncedUpdate(searchText);
-    return () => debouncedUpdate.cancel();
-  }, [searchText]);
-
-  // ✅ Fetch on debouncedText or filter change
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        if (filter === 'ALL' || filter === 'PRODUCTS') {
-          setLoadingProducts(true);
-          const productData = await productsAPI.getBySearch(debouncedText);
-          setProducts(productData);
-        }
-
-        if (filter === 'ALL' || filter === 'VENDORS') {
-          setLoadingVendors(true);
-          const vendorData = await vendorsAPI.getBySearch(debouncedText);
-          setVendors(vendorData);
-        }
-
-        console.log('Fetching for:', debouncedText);
-      } catch (err) {
-        console.error('Error fetching search data:', err);
-      } finally {
-        setLoadingProducts(false);
-        setLoadingVendors(false);
-      }
-    };
-
-    fetch();
-  }, [debouncedText, filter]); // <-- this was wrong before
 
   // ✅ Load profile image
   useEffect(() => {
@@ -86,6 +53,7 @@ const HomeScreen = () => {
       setProfileImage(newUri);
     }
   };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -117,50 +85,72 @@ const HomeScreen = () => {
           filter={filter}
           onFilterChange={setFilter}
           showFilter={true}
+          searchHistory={searchHistory}
+          onHistoryItemPress={setSearchFromHistory}
         />
       </View>
-{searchText === "" ? (
-      <ScrollView>
 
+      {/* Error State */}
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={retrySearch}>
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
-        <CategoryGrid filter={filter} />
+      {searchText === "" ? (
+        <ScrollView>
+          <CategoryGrid filter={filter} />
 
-        <Text style={styles.categoryLabel}>All Products:</Text>
-        {
-          loadingProducts ? (
-          <ActivityIndicator size="large" color={style.primary} />
-        ) : (
-          <FlatList
-            data={products}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ProductCard product={item} variant="home" />}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.list}
-          />
-        )}
+          <Text style={styles.categoryLabel}>All Products:</Text>
+          {loadingProducts ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={style.primary} />
+              <Text style={styles.loadingText}>Loading products...</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={products}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <ProductCard product={item} variant="home" />}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.list}
+            />
+          )}
 
-        <Text style={styles.categoryLabel}>All Vendors:</Text>
-        {loadingVendors ? (
-          <ActivityIndicator size="large" color={style.primary} />
-        ) : (
-          <FlatList
-            data={vendors}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <VendorCard vendor={item} />}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.list}
-          />
-        )}
-      </ScrollView>
+          <Text style={styles.categoryLabel}>All Vendors:</Text>
+          {loadingVendors ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={style.primary} />
+              <Text style={styles.loadingText}>Loading vendors...</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={vendors}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <VendorCard vendor={item} />}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.list}
+            />
+          )}
+        </ScrollView>
       ) : filter === "VENDORS" ? (
-  <VendorSearch vendors={vendors} searchText={searchText} />
-) : filter === "PRODUCTS" ? (
-  <ProductSearch products={products} searchText={searchText} />
-) : (
-  <VendorAndProductSearch products={products} vendors={vendors} searchText={searchText} />
-)}
+        <VendorSearch vendors={vendors} searchText={searchText} loading={loadingVendors} />
+      ) : filter === "PRODUCTS" ? (
+        <ProductSearch products={products} searchText={searchText} loading={loadingProducts} />
+      ) : (
+        <VendorAndProductSearch 
+          products={products} 
+          vendors={vendors} 
+          searchText={searchText} 
+          loadingProducts={loadingProducts}
+          loadingVendors={loadingVendors}
+        />
+      )}
     </View>
   );
 };
@@ -183,7 +173,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '90%',
     justifyContent: 'space-between',
-
   },
   profile:{
      alignItems: 'center',
@@ -229,12 +218,45 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   list: {
-  paddingLeft: 20,
-  paddingRight: 10,
-  paddingVertical: 10,
-  height: 230 ,
-},
-
+    paddingLeft: 20,
+    paddingRight: 10,
+    paddingVertical: 10,
+    height: 230,
+  },
+  // New styles for improved UX
+  errorContainer: {
+    backgroundColor: '#ffebee',
+    padding: 16,
+    margin: 16,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: '#c62828',
+    flex: 1,
+    marginRight: 12,
+  },
+  retryButton: {
+    backgroundColor: '#c62828',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 4,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontWeight: '600',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginTop: 8,
+    color: '#666',
+    fontSize: 14,
+  },
 });
 
 export default HomeScreen;
