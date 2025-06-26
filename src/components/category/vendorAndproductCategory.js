@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity
 import ProductCard from '../product/productCard';
 import VendorCard from '../vendor/vendorCard';
 import colors_fonts from '../../constants/colors_fonts';
+import SearchSkeleton from '../search/SearchSkeleton';
 
 import { vendorsAPI, productsAPI } from '../../services/api.service';
 
@@ -21,6 +22,7 @@ export const VendorAndProductCategory = ({selectedCategoryName}) => {
           } catch (error) {
             console.error('Error fetching products:', error);
           } finally {
+            
             setLoadingProducts(false);
             setLoadingVendors(false);
           }
@@ -31,14 +33,14 @@ export const VendorAndProductCategory = ({selectedCategoryName}) => {
 
     return (
         <ScrollView style={styles.content}>
-            {loadingProducts ? (
-                <ActivityIndicator size="large" color={colors_fonts.primary} style={styles.loader} />
-            ) : (
+            
                 <>
                     {/* Products Section */}
                     <View style={styles.section}>
               <Text style={styles.sectionTitle}>Products</Text>
-              {products.length > 0 ? (
+              {loadingProducts ? (
+                <SearchSkeleton type="horizantal" count="6"/>
+            ) : products.length > 0 ? (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {products.map(product => (
                     <ProductCard key={product.id} product={product} variant="home" />
@@ -47,13 +49,15 @@ export const VendorAndProductCategory = ({selectedCategoryName}) => {
               ) : (
                 <Text style={styles.noItemsText}>No products found in this category</Text>
               )}
-            </View>
+           
+             
+               </View>
 
             {/* Vendors Section */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Vendors</Text>
               {loadingVendors ? (
-                <ActivityIndicator size="large" color={colors_fonts.primary} />
+                <SearchSkeleton type="horizontal"/>
               ) : vendors?.length > 0 ? (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {vendors.map(vendor => (
@@ -65,7 +69,7 @@ export const VendorAndProductCategory = ({selectedCategoryName}) => {
               )}
             </View>
           </>
-        )}
+      
       </ScrollView>
         
     );

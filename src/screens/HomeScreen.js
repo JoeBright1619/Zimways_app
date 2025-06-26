@@ -12,7 +12,7 @@ import debounce from 'lodash.debounce';
 import { pickAndSaveProfileImage } from '../helpers/profileHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CategoryGrid from '../components/CategoryGrid';
-import { vendorsAPI, productsAPI } from '../services/api.service';
+import SearchSkeleton from '../components/search/SearchSkeleton';
 import {VendorAndProductSearch} from '../components/search/Vendors&Products'; // your custom search component
 import { VendorSearch } from '../components/search/Vendors';
 import { ProductSearch } from '../components/search/Products'; // if you have a separate search for products
@@ -106,10 +106,7 @@ const HomeScreen = () => {
 
           <Text style={styles.categoryLabel}>All Products:</Text>
           {loadingProducts ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color={style.primary} />
-              <Text style={styles.loadingText}>Loading products...</Text>
-            </View>
+            <SearchSkeleton type=""/>
           ) : (
             <FlatList
               data={products}
@@ -123,10 +120,7 @@ const HomeScreen = () => {
 
           <Text style={styles.categoryLabel}>All Vendors:</Text>
           {loadingVendors ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color={style.primary} />
-              <Text style={styles.loadingText}>Loading vendors...</Text>
-            </View>
+            <SearchSkeleton type=""/>
           ) : (
             <FlatList
               data={vendors}

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import VendorCard from "../vendor/vendorCard";
 import colors_fonts from "../../constants/colors_fonts";
+import SearchSkeleton from "./SearchSkeleton";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -42,7 +43,7 @@ export const VendorSearch = ({ vendors, searchText, loading = false }) => {
       </Text>
 
       {loading ? (
-        renderLoadingState()
+        <SearchSkeleton />
       ) : vendors.length > 0 ? (
         <FlatList
           data={vendors}

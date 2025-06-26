@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import ProductCard from "../product/productCard";
 import colors_fonts from "../../constants/colors_fonts";
-
+import SearchSkeleton from "./SearchSkeleton";
 const screenWidth = Dimensions.get("window").width;
 
 export const ProductSearch = ({ products, searchText, loading = false }) => {
@@ -19,12 +19,7 @@ export const ProductSearch = ({ products, searchText, loading = false }) => {
     </View>
   );
 
-  const renderLoadingState = () => (
-    <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={colors_fonts.primary} />
-      <Text style={styles.loadingText}>Searching products...</Text>
-    </View>
-  );
+
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
@@ -42,7 +37,7 @@ export const ProductSearch = ({ products, searchText, loading = false }) => {
       </Text>
 
       {loading ? (
-        renderLoadingState()
+        <SearchSkeleton />
       ) : products.length > 0 ? (
         <FlatList
           data={products}

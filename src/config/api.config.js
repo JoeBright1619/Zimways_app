@@ -1,4 +1,4 @@
-const DEV_API_URL = 'http://192.168.1.70:8080/api';
+const DEV_API_URL = 'http://192.168.1.67:8080/api';
 const PROD_API_URL = 'https://your-production-url.com/api';
 
 const config = {

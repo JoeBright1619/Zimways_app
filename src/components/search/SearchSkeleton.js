@@ -77,7 +77,7 @@ const SearchSkeleton = ({ type = 'grid', count = 6 }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+
   },
   gridContainer: {
     flexDirection: 'row',
@@ -85,11 +85,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   gridItem: {
-    width: (screenWidth - 48) / 2,
+    width: (screenWidth - 60) / 2,
     marginBottom: 16,
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
-    padding: 8,
+    padding: 3,
   },
   imageSkeleton: {
     width: '100%',
@@ -115,11 +115,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   horizontalItem: {
-    width: 150,
+    width: 168,
     marginRight: 12,
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
     padding: 8,
+  
   },
   horizontalImageSkeleton: {
     width: '100%',

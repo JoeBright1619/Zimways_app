@@ -10,6 +10,7 @@ import {
 import VendorCard from "../vendor/vendorCard";
 import ProductCard from "../product/productCard";
 import colors_fonts from "../../constants/colors_fonts";
+import SearchSkeleton from "./SearchSkeleton";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -58,7 +59,7 @@ export const VendorAndProductSearch = ({
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Vendors</Text>
         {loadingVendors ? (
-          renderLoadingState('vendors')
+          <SearchSkeleton type=""/>
         ) : vendors.length > 0 ? (
           <FlatList
             data={vendors}
@@ -77,7 +78,7 @@ export const VendorAndProductSearch = ({
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Products</Text>
         {loadingProducts ? (
-          renderLoadingState('products')
+          <SearchSkeleton type=""/>
         ) : products.length > 0 ? (
           <FlatList
             data={products}

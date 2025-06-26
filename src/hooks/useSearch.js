@@ -25,7 +25,7 @@ export const useSearch = () => {
     }, 800),
     []
   );
-
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   // Update debounced text when search text changes
   useEffect(() => {
     debouncedUpdate(searchText);
@@ -41,9 +41,9 @@ export const useSearch = () => {
   useEffect(() => {
     const performSearch = async () => {
       if (debouncedText.trim() === '' && filter === 'ALL') {
-        if (isInitialLoad) {
-          await loadInitialData();
-        }
+       
+        await loadInitialData();
+        
         return;
       }
 
@@ -53,12 +53,14 @@ export const useSearch = () => {
         // Optimize API calls based on filter
         if (filter === 'ALL' || filter === 'PRODUCTS') {
           setLoadingProducts(true);
+          
           const productData = await productsAPI.getBySearch(debouncedText);
           setProducts(productData);
         }
 
         if (filter === 'ALL' || filter === 'VENDORS') {
           setLoadingVendors(true);
+          await sleep(2000);
           const vendorData = await vendorsAPI.getBySearch(debouncedText);
           setVendors(vendorData);
         }
