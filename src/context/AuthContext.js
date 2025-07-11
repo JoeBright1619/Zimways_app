@@ -33,9 +33,9 @@ export const AuthProvider = ({ children }) => {
           const idToken = await firebaseUser.getIdToken();
           try {
             const backendData = await authAPI.login(firebaseUser.email, idToken);
-            setBackendUser(backendData);
+            setBackendUser(backendData.data);
             setUser(firebaseUser); // Only set Firebase user if backend auth succeeds
-            console.log('2. Backend user data:', backendData);
+            console.log('2. Backend user data:', backendData.data);
           } catch (error) {
             console.error('3. Failed to get backend user:', error);
             // If backend auth fails, sign out from Firebase
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
           profileUrl: profileUrl
         });
 
-        setBackendUser(backendResponse);
+        setBackendUser(backendResponse.data);
         return { success: true };
       } catch (error) {
         // If backend registration fails, delete the Firebase user

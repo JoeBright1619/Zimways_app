@@ -284,4 +284,136 @@ export const categoriesAPI = {
   }
 };
 
+export const cartAPI = {
+  create: async (customerId) => {
+    try {
+      const response = await api.post(config.ENDPOINTS.CART.CREATE(customerId));
+      return response.data;
+    } catch (error) {
+      console.error('Create Cart API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getByCustomer: async (customerId) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.CART.BY_CUSTOMER(customerId));
+      return response.data;
+    } catch (error) {
+      console.error('Get Cart By Customer API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  addItem: async (customerId, itemId, quantity = 1) => {
+    try {
+      const response = await api.post(config.ENDPOINTS.CART.ADD_ITEM(customerId), { itemId, quantity });
+      return response.data;
+    } catch (error) {
+      console.error('Add Item To Cart API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  removeItem: async (customerId, itemId, quantity = 1) => {
+    try {
+      const response = await api.post(config.ENDPOINTS.CART.REMOVE_ITEM(customerId), { itemId, quantity });
+      return response.data;
+    } catch (error) {
+      console.error('Remove Item From Cart API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  deleteItem: async (customerId, itemId) => {
+    try {
+      const response = await api.delete(config.ENDPOINTS.CART.DELETE_ITEM(customerId, itemId));
+      return response.data;
+    } catch (error) {
+      console.error('Delete Item From Cart API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  clearCart: async (cartId) => {
+    try {
+      const response = await api.post(config.ENDPOINTS.CART.CHECKOUT(cartId));
+      return response.data;
+    } catch (error) {
+      console.error('Clear Cart API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  deleteCart: async (cartId) => {
+    try {
+      const response = await api.delete(config.ENDPOINTS.CART.DELETE(cartId));
+      return response.data;
+    } catch (error) {
+      console.error('Delete Cart API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+  cartVendors: async (customerId) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.CART.VENDORS(customerId));
+      return response.data;
+    } catch (error) {
+      console.error('Get Cart Vendors API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+  cartItemsByVendor: async (customerId, vendorId) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.CART.ITEMS_BY_VENDOR(customerId, vendorId));
+      return response.data;
+    } catch (error) {
+      console.error('Get Cart Items By vendors API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+  getTotal: async (customerId) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.CART.TOTAL(customerId));
+      return response.data;
+    } catch (error) {
+      console.error('Get Cart Total API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+};
+
+export const orderAPI = {
+  createOrder: async (orderData) => {
+    try {
+      const response = await api.post(config.ENDPOINTS.ORDERS.BASE, orderData);
+      return response.data;
+    } catch (error) {
+      console.error('Create Order API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getOrderById: async (orderId) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.ORDERS.BY_ID(orderId));
+      return response.data;
+    } catch (error) {
+      console.error('Get Order By ID API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getOrdersByCustomer: async (customerId) => {
+    try {
+      const response = await api.get(config.ENDPOINTS.ORDERS.BY_CUSTOMER(customerId));
+      return response.data;
+    } catch (error) {
+      console.error('Get Orders By Customer API Error:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
 export default api; 

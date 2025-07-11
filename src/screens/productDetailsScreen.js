@@ -1,39 +1,40 @@
 // screens/ProductDetailsScreen.js
-import React, { useEffect, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import imageMap from '../constants/imageMap';
 import colors_fonts from '../constants/colors_fonts';
-import { getVendorById } from '../helpers/vendorHelper';
+// Adjust the import based on your auth context setup
+import { cartAPI } from '../services/api.service';
+import { AuthContext } from '../context/AuthContext'; // Adjust the import based on your auth context setup
 
 const ProductDetailsScreen = ({ route }) => {
   const { product } = route.params;
   const imageSource = imageMap[product.imageUrl] || require('../../assets/placeholder.jpg');
-
-  const [vendorName, setVendorName] = useState('Loading...');
+  const { backendUser } = useContext(AuthContext);
   const [vendor, setVendor] = useState({});
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    const fetchVendor = async () => {
-      const vendor = await getVendorById(product.vendorId);
-      setVendor(vendor || {});
-      setVendorName(vendor ? vendor.vendorName : 'Unknown Vendor');
-    };
 
-    fetchVendor();
-  }, [product.vendorId]);
 
   const increaseQty = () => setQuantity(q => q + 1);
   const decreaseQty = () => setQuantity(q => (q > 1 ? q - 1 : 1));
 
-  const handleAddToCart = () => {
-    // This should call your Cart Context or Redux dispatch
-    console.log('Add to cart:', {
-      productId: product.id,
-      name: product.productName,
-      quantity,
-      price: product.price,
-    });
+  const handleAddToCart = async () => {
+    setLoading(true);
+    setMessage('');
+    try {
+      await cartAPI.addItem( backendUser.id, product.id, quantity);
+      setMessage('Added to cart!');
+    } catch (error) {
+      setMessage('Failed to add to cart');
+      console.error('Add to cart error:', error);
+    } finally {
+      setLoading(false);
+      // Set timeout to clear message after 3 seconds
+      setTimeout(() => setMessage(''), 3000);
+    }
   };
 
   const total = product.price * quantity;
@@ -66,10 +67,11 @@ const ProductDetailsScreen = ({ route }) => {
       <TouchableOpacity
         style={[styles.addToCartBtn, !product.available && styles.disabled]}
         onPress={handleAddToCart}
-        disabled={!product.available}
+        disabled={!product.available || loading}
       >
-        <Text style={styles.cartText}>{product.available ? 'Add to Cart' : 'Out of Stock'}</Text>
+        <Text style={styles.cartText}>{loading ? 'Adding...' : (product.available ? 'Add to Cart' : 'Out of Stock')}</Text>
       </TouchableOpacity>
+      {message ? <Text style={{ color: message.includes('Failed') ? 'red' : 'green', marginTop: 8 }}>{message}</Text> : null}
     </ScrollView>
   );
 };

@@ -36,8 +36,25 @@ const config = {
       BY_ID: (id) => `/orders/${id}`,
       BY_CUSTOMER: (customerId) => `/orders/customer/${customerId}`,
     },
+    CART: {
+      BASE: '/carts',
+      BY_ID: (cartId) => `/carts/${cartId}`,
+      ALL: '/carts',
+      BY_CUSTOMER: (customerId) => `/carts/customer/${customerId}`,
+      CREATE: (customerId) => `/carts/customer/${customerId}`,
+      ADD_ITEM: (customerId) => `/carts/customer/${customerId}/add-item`,
+      REMOVE_ITEM: (customerId) => `/carts/customer/${customerId}/remove-item`,
+      UPDATE_ITEM: (customerId) => `/carts/customer/${customerId}/update-item`,
+      ITEMS: (customerId) => `/carts/customer/${customerId}/items`,
+      TOTAL: (customerId) => `/carts/customer/${customerId}/total`,
+      CHECKOUT: (customerId) => `/carts/customer/${customerId}/checkout`,
+      DELETE: (cartId) => `/carts/${cartId}`,
+      DELETE_ITEM: (customerId, itemId) => `/carts/customer/${customerId}/items/${itemId}`,
+      VENDORS: (customerId) => `/carts/customer/${customerId}/vendors`,
+      ITEMS_BY_VENDOR: (customerId, vendorId) => `/carts/customer/${customerId}/vendor/${vendorId}/items`,
+    },
   },
   TIMEOUT: 30000, // Increased to 30 seconds
 };
 
-export default config; 
+export default config;
