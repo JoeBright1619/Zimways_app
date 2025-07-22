@@ -12,7 +12,7 @@ export const getCategories = async () => {
   }
 };
 
-export const getCategoriesByVendorId = async (id) => {
+export const getCategoriesByVendorId = async (id: string) => {
   try {
     const response = await axios.get(`${API_URL}/vendors/${id}/categories`);
     if (!response.data || response.data.length === 0) {

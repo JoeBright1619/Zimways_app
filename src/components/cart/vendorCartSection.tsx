@@ -3,6 +3,16 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Dimensio
 import ProductCartCard from './productCartCard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors_fonts from '../../constants/colors_fonts';
+import { ProductProps } from '../../type/productType'; // Adjust the import based on your types setup
+type props = {
+  vendorName: string;
+  products: ProductProps[];
+  onAddMore: () => void;
+  onProductAction: (action: 'increase' | 'decrease' | 'remove' | 'details', product: any) => void;
+  message: string;
+  setMessage: (message: string) => void;
+}
+
 const VendorCartSection = ({
   vendorName,
   products,
@@ -10,7 +20,7 @@ const VendorCartSection = ({
   onProductAction,
   message,
   setMessage,
-}) => {
+}: props) => {
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -33,7 +43,6 @@ const VendorCartSection = ({
               <ProductCartCard
                 name={item.name}
                 price={item.price}
-                quantity={item.quantity}
                 description={item.description}
                 imageUrl={item.imageUrl}
                 onIncrease={() => onProductAction('increase', item)}
@@ -45,7 +54,7 @@ const VendorCartSection = ({
             style={styles.productList}
           />
           <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 12, marginBottom: 8 }}>
-            <MaterialCommunityIcons name="dots-grid" size="20"/>
+            <MaterialCommunityIcons name="dots-grid" size={20}/>
             <TouchableOpacity style={styles.addMoreBtn} onPress={onAddMore}>
             <Text style={styles.addMoreText}>Add more from {vendorName}</Text>
           </TouchableOpacity>

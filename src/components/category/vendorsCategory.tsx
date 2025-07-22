@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity
 import VendorCard from '../vendor/vendorCard';
 import { vendorsAPI } from '../../services/api.service';
 import colors_fonts from '../../constants/colors_fonts';
+import { VendorProps } from '../../type/vendorType';
 
-export const VendorsCategory = ({ selectedCategoryName }) => {
+export const VendorsCategory = ({ selectedCategoryName }: {selectedCategoryName: string}) => {
   // Filter vendors based on the selected category
-  const [vendors, setVendors] = useState([]);
+  const [vendors, setVendors] = useState<VendorProps[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchVendors = async () => {

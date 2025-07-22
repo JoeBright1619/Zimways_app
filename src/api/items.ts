@@ -7,12 +7,12 @@ export const fetchAllItems = async () => {
   return response;
 };
 
-export const fetchItemsByVendor = async (vendorId) => {
+export const fetchItemsByVendor = async (vendorId: string) => {
   const response = await productsAPI.getByVendor(vendorId);
   return response;
 };
 
-export const fetchItemById = async (id) => {
+export const fetchItemById = async (id: string) => {
   const response = await productsAPI.getById(id);
   return response;
 };

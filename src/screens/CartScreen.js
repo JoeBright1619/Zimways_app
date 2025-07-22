@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, TouchableOpacity, FlatList, ActivityIndicator, Text, Alert, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Modal, TouchableOpacity, FlatList, ActivityIndicator, Text, Alert, StyleSheet, SafeAreaView } from 'react-native';
 import { cartAPI } from '../services/api.service';
 import { AuthContext } from '../context/AuthContext';
 import VendorCartSection from '../components/cart/vendorCartSection';
 import colors_fonts from '../constants/colors_fonts';
+import AddressModal from '../components/cart/AddressModal';
+import PaymentMethodModal from '../components/cart/PaymentMethodModal';
 
 const CartScreen = () => {
   const { backendUser } = useContext(AuthContext);
@@ -14,7 +16,15 @@ const CartScreen = () => {
   const [updating, setUpdating] = useState(false);
   const [total, setTotal] = useState(0);
   const [DeliveryFee, setDeliveryFee] = useState(1500); // Assuming a fixed delivery fee
-
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const paymentMethods = [
+    { id: '1', label: 'Mobile Money' },
+    { id: '2', label: 'Cash on Delivery' },
+    { id: '3', label: 'Card Payment' },
+  ];
   useEffect(() => {
     const fetchVendorsAndProducts = async () => {
       setLoading(true);
@@ -146,11 +156,32 @@ const CartScreen = () => {
     <View style={styles.fixedButtonContainer}>
       <TouchableOpacity
         style={styles.checkoutBtn}
-        onPress={() => Alert.alert('Checkout', 'Proceed to checkout')}
+        onPress={() => setShowAddressModal(true)}
       >
         <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }}>Checkout</Text>
       </TouchableOpacity>
     </View>
+    <AddressModal
+  visible={showAddressModal}
+  addresses={backendUser.locations || [{ label: "kicukiro" }, { label: "remera" }]}
+  onSelect={address => {
+    setSelectedAddress(address);
+    setShowAddressModal(false);
+    setShowPaymentModal(true);
+  }}
+  onClose={() => setShowAddressModal(false)}
+/>
+
+<PaymentMethodModal
+  visible={showPaymentModal}
+  paymentMethods={paymentMethods}
+  onSelect={method => {
+    setSelectedPayment(method);
+    setShowPaymentModal(false);
+    navigation.navigate('PaymentInfo', { address: selectedAddress, paymentMethod: method });
+  }}
+  onClose={() => setShowPaymentModal(false)}
+/>
     </View>
   );
 };
@@ -253,13 +284,37 @@ totalDivider: {
     alignItems: 'center',
     width: '80%',
   },
-  retryBtn: {
-    backgroundColor: '#007BFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
-    marginTop: 16,
-  },
+
+  modalOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.4)',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+modalContent: {
+  backgroundColor: '#fff',
+  borderRadius: 12,
+  padding: 24,
+  width: '80%',
+  alignItems: 'center',
+},
+modalTitle: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  marginBottom: 16,
+},
+modalOption: {
+  padding: 12,
+  borderBottomWidth: 1,
+  borderColor: '#eee',
+  width: '100%',
+  alignItems: 'center',
+},
+modalCancel: {
+  color: '#FF6347',
+  marginTop: 20,
+  fontWeight: 'bold',
+},
 });
 
 export default CartScreen;

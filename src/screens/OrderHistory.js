@@ -1,18 +1,26 @@
-import {React, useState, useEffect} from 'react';
+import {React, useState, useEffect, useContext} from 'react';
 import { View,ScrollView, Text, TouchableOpacity } from 'react-native';
 import colors_fonts from '../constants/colors_fonts';
 import { orderAPI } from '../services/api.service';
-const OrderHistoryScreen = async() => {
+import { AuthContext } from '../context/AuthContext';
+
+const OrderHistoryScreen = () => {
   const [processing, setProcessing] = useState(true);
   const [completed, setCompleted] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [orders, setOrders] = useState([]); // Fetch orders from API
+  const [allOrders, setAllOrders] = useState([]); // Store all fetched orders
+  const [orders, setOrders] = useState([]);       // Store currently displayed orders
+
+  const { backendUser } = useContext(AuthContext); // Assuming you have a context for user data
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await orderAPI.getOrders(); // Adjust this to your API call
-        setOrders(response.data); // Assuming response.data contains the orders
+        const response = await orderAPI.getOrdersByCustomer(backendUser.id); // Adjust this to your API call
+        console.log( response);
+        setAllOrders(response); // Save all orders
+        setOrders(response); 
+        
       } catch (error) {
         console.error('Failed to fetch orders:', error);
       }
@@ -26,18 +34,19 @@ const OrderHistoryScreen = async() => {
       setProcessing(true);
       setCompleted(false);
       setFailed(false);
-      setOrders(orders.filter(order => order.status !== 'COMPLETED')); // Filter processing orders
+      setOrders((allOrders || []).filter(order => order.status !== 'COMPLETED')); // Filter processing orders
     }
     else if (screen === 'completed') {
       setProcessing(false);
       setCompleted(true);
       setFailed(false);
-      setOrders(orders.filter(order => order.status === 'COMPLETED')); // Filter completed orders
+
+      setOrders((allOrders || []).filter(order => order.status === 'COMPLETED')); // Filter completed orders
     } else if (screen === 'failed') {
       setProcessing(false);
       setCompleted(false);
       setFailed(true);
-      setOrders(orders.filter(order => order.status === 'FAILED')); // Filter failed orders
+      setOrders((allOrders || []).filter(order => order.status === 'FAILED')); // Filter failed orders
     }
   }
   return (

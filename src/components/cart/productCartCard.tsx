@@ -4,6 +4,16 @@ import { View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import imageMap from '../../constants/imageMap';
 import colors_fonts from '../../constants/colors_fonts'; // Adjust the import based on your colors/fonts setup
 import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons'; // Adjust the import based on your icon library
+import {ProductProps} from '../../type/productType'; // Adjust the import based on your types setup
+
+type props = Pick<ProductProps, 'name' | 'price' | 'description' | 'imageUrl'> & {
+  quantity?: number;
+  onIncrease: () => void;
+  onDecrease: () => void;
+  onRemove: () => void;
+  onMoreDetails: () => void;
+};
+
 const ProductCartCard = ({
   name,
   price,
@@ -14,11 +24,11 @@ const ProductCartCard = ({
   onDecrease,
   onRemove,
   onMoreDetails,
-}) => (
+}: props) => (
   <View style={styles.card}>
     <View style={styles.topRow}>
       <Image
-    source={imageMap[imageUrl] || require('../../../assets/placeholder.jpg')}
+    source={imageUrl && imageMap[imageUrl] ? imageMap[imageUrl] : require('../../../assets/placeholder.jpg')}
     style={styles.image} // optional: make sure to style it
   />
   <View style={styles.productdescription}>

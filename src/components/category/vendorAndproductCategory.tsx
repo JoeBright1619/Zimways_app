@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView} from 'react-native';
 import ProductCard from '../product/productCard';
 import VendorCard from '../vendor/vendorCard';
-import colors_fonts from '../../constants/colors_fonts';
 import SearchSkeleton from '../search/SearchSkeleton';
 
 import { vendorsAPI, productsAPI } from '../../services/api.service';
+import { ProductProps } from '../../type/productType';
+import { VendorProps } from '../../type/vendorType';
 
-export const VendorAndProductCategory = ({selectedCategoryName}) => {
-  const [products, setProducts] = useState([]);
-  const [vendors, setVendors] = useState([]);
+export const VendorAndProductCategory = ({selectedCategoryName}: {selectedCategoryName: string}) => {
+  const [products, setProducts] = useState<ProductProps[]>([]);
+  const [vendors, setVendors] = useState<VendorProps[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [loadingVendors, setLoadingVendors] = useState(true);
     useEffect(() => {
@@ -39,7 +40,7 @@ export const VendorAndProductCategory = ({selectedCategoryName}) => {
                     <View style={styles.section}>
               <Text style={styles.sectionTitle}>Products</Text>
               {loadingProducts ? (
-                <SearchSkeleton type="horizantal" count="6"/>
+                <SearchSkeleton type="horizantal" count={6}/>
             ) : products.length > 0 ? (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {products.map(product => (

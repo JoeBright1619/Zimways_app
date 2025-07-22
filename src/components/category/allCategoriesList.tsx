@@ -1,12 +1,27 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ListRenderItem } from 'react-native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import colors_fonts from '../../constants/colors_fonts';
 import { categoriesAPI } from '../../services/api.service';
+import { RootStackParamList } from '../../type/navigationType';
+
+type Category = {
+  id: number | string;
+  name: string;
+  icon?: string;
+  type?: string;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Category'>;
+
+type HorizontalCategoryListProps = {
+  categories: Category[];
+};
 
 export const VerticalCategoryList = () => {
-  const navigation = useNavigation();
-  const [categories, setCategories] = React.useState([]);
+   const navigation = useNavigation<NavigationProp>();
+  const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -21,14 +36,14 @@ export const VerticalCategoryList = () => {
   }, []);
 
 
-  const handlePress = (category) => {
+  const handlePress = (category: Category) => {
     navigation.navigate('Category', {
       selectedCategory: category,
-      type: category.type, // if your category has type (e.g. PRODUCTS, VENDORS, BOTH)
+      type: category.type ?? '', // if your category has type (e.g. PRODUCTS, VENDORS, BOTH)
     });
   };
 
-  const renderItem = ({ item }) => (
+ const renderItem: ListRenderItem<Category> = ({ item }) => (
     <TouchableOpacity style={styles.tile} onPress={() => handlePress(item)}>
       <Text style={styles.tileText}>{item.name}</Text>
     </TouchableOpacity>
@@ -50,31 +65,34 @@ export const VerticalCategoryList = () => {
 
 
 
-export const HorizontalCategoryList = ({ categories }) => {
-  const navigation = useNavigation();
+export const HorizontalCategoryList = ({ categories }: HorizontalCategoryListProps) => {
+  const navigation = useNavigation<NavigationProp>();
 
-  const handlePress = (category) => {
+  const handlePress = (category: Category) => {
     navigation.navigate('Category', {
       category,
-      type: category.type, // if your category has type (e.g. PRODUCTS, VENDORS, BOTH)
+      type: category.type ?? '', // if your category has type (e.g. PRODUCTS, VENDORS, BOTH)
     });
   };
+
+  const renderItem: ListRenderItem<Category> = ({ item }) => (
+    <TouchableOpacity style={styles.tile} onPress={() => handlePress(item)}>
+      <Text style={styles.tileText}>{item.name}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <FlatList
       data={categories}
       keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
-        <TouchableOpacity style={styles.tile} onPress={() => handlePress(item)}>
-          <Text style={styles.tileText}>{item.name}</Text>
-        </TouchableOpacity>
-      )}
+      renderItem={renderItem}
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.horizontalList}
     />
   );
 };
+
 
 
 const styles = StyleSheet.create({
