@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Dimensions } from 'react-native';
-import colors_fonts from '../../constants/colors_fonts';
 
 const screenWidth = Dimensions.get('window').width;
 

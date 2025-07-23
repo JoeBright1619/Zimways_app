@@ -1,8 +1,20 @@
 import React, { useState, useRef } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, FlatList, Modal } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import style from '../../constants/colors_fonts';
+
+type searchBarProps = {
+  placeholder: string;
+  onChangeText: (text: string) => void;
+  value: string;
+  filter: string;
+  onFilterChange: React.Dispatch<React.SetStateAction<string>>; // ✅ correct
+  showFilter: boolean;
+ 
+  searchHistory: string[];
+  onHistoryItemPress: (item: string) => void;
+}
 
 const SearchBar = ({
   placeholder = "Search...",
@@ -13,7 +25,7 @@ const SearchBar = ({
   showFilter = true,
   searchHistory = [],
   onHistoryItemPress,
-}) => {
+}: searchBarProps) => {
   const [open, setOpen] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [items] = useState([
@@ -22,7 +34,7 @@ const SearchBar = ({
     { label: 'Vendors', value: 'VENDORS' },
   ]);
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<TextInput>(null);
 
   const handleFocus = () => {
     if (searchHistory.length > 0 && !value) {
@@ -35,7 +47,7 @@ const SearchBar = ({
     setTimeout(() => setShowHistory(false), 200);
   };
 
-  const handleHistoryItemPress = (item) => {
+  const handleHistoryItemPress = (item: string) => {
     onHistoryItemPress?.(item);
     setShowHistory(false);
     inputRef.current?.blur();
@@ -46,7 +58,7 @@ const SearchBar = ({
     setShowHistory(false);
   };
 
-  const renderHistoryItem = ({ item }) => (
+  const renderHistoryItem = ({ item }: { item: string }) => (
     <TouchableOpacity
       style={styles.historyItem}
       onPress={() => handleHistoryItemPress(item)}
@@ -90,7 +102,12 @@ const SearchBar = ({
           dropDownContainerStyle={styles.dropDownContainer}
           textStyle={{ fontSize: 14, color: style.text }}
           labelStyle={{ color: style.text }}
-          arrowIconStyle={{ tintColor: 'gray' }}
+          ArrowDownIconComponent={() => (
+            <MaterialCommunityIcons name="chevron-down" size={20} color="grey" />
+          )}
+          ArrowUpIconComponent={() => (
+            <MaterialCommunityIcons name="chevron-up" size={20} color="black" />
+          )}
         />
       )}
 

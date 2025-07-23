@@ -8,7 +8,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'ProductDetails'>;
 
-const ProductCard = ({ product, variant = 'home' }: {product: ProductProps, variant: 'home'|'vendor'}) => {
+const ProductCard = ({ product, variant = 'home' }: {product: ProductProps, variant?: 'home'|'vendor'}) => {
   
   const navigation = useNavigation<NavigationProp>();
 

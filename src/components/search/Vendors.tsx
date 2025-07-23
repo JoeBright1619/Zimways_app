@@ -10,11 +10,12 @@ import {
 import VendorCard from "../vendor/vendorCard";
 import colors_fonts from "../../constants/colors_fonts";
 import SearchSkeleton from "./SearchSkeleton";
+import { VendorProps } from "../../type/vendor.type";
 
 const screenWidth = Dimensions.get("window").width;
 
-export const VendorSearch = ({ vendors, searchText, loading = false }) => {
-  const renderItem = ({ item }) => (
+export const VendorSearch = ({ vendors, searchText, loading = false }: {vendors: VendorProps[], searchText: string, loading: boolean}) => {
+  const renderItem = ({ item }: {item: VendorProps}) => (
     <View style={styles.gridItem}>
       <VendorCard vendor={item} />
     </View>

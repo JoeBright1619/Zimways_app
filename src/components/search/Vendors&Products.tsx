@@ -11,6 +11,8 @@ import VendorCard from "../vendor/vendorCard";
 import ProductCard from "../product/productCard";
 import colors_fonts from "../../constants/colors_fonts";
 import SearchSkeleton from "./SearchSkeleton";
+import { VendorProps } from "../../type/vendor.type";
+import { ProductProps } from "../../type/product.type";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -20,27 +22,27 @@ export const VendorAndProductSearch = ({
   searchText, 
   loadingProducts = false,
   loadingVendors = false 
-}) => {
-  const renderVendor = ({ item }) => (
+}: {products: ProductProps[], vendors: VendorProps[], searchText: string, loadingProducts: boolean, loadingVendors: boolean}) => {
+  const renderVendor = ({ item }: {item: VendorProps}) => (
     <View style={styles.cardWrapper}>
       <VendorCard vendor={item} />
     </View>
   );
 
-  const renderProduct = ({ item }) => (
+  const renderProduct = ({ item }: {item: ProductProps}) => (
     <View style={styles.cardWrapper}>
       <ProductCard product={item} />
     </View>
   );
 
-  const renderLoadingState = (type) => (
+  const renderLoadingState = (type: string) => (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" color={colors_fonts.primary} />
       <Text style={styles.loadingText}>Searching {type}...</Text>
     </View>
   );
 
-  const renderEmptyState = (type) => (
+  const renderEmptyState = (type: string) => (
     <View style={styles.emptyContainer}>
       <Text style={styles.noItemsText}>No {type} found</Text>
       <Text style={styles.emptySubText}>

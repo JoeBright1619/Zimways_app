@@ -11,18 +11,12 @@ import {
 import ProductCard from "../product/productCard";
 import { productsAPI } from "../../services/api.service";
 import colors_fonts from "../../constants/colors_fonts";
+import { ProductProps } from "../../type/product.type";
 
 const screenWidth = Dimensions.get("window").width;
-type Product = {
-  id: number | string;
-  name: string;
-  price: number;
-  imageUrl?: string;
-  description?: string;
-  averageRating?: number;
-};
+
 export const ProductsCategory = ({ selectedCategoryName }: {selectedCategoryName: string}) => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductProps[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,7 +34,7 @@ export const ProductsCategory = ({ selectedCategoryName }: {selectedCategoryName
     fetchProducts();
   }, [selectedCategoryName]);
 
-  const renderItem:ListRenderItem<Product> = ({ item }) => (
+  const renderItem:ListRenderItem<ProductProps> = ({ item }) => (
     <View style={styles.gridItem}>
       <ProductCard product={item} />
     </View>

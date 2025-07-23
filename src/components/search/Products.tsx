@@ -10,10 +10,12 @@ import {
 import ProductCard from "../product/productCard";
 import colors_fonts from "../../constants/colors_fonts";
 import SearchSkeleton from "./SearchSkeleton";
+import { ProductProps } from "../../type/product.type";
+
 const screenWidth = Dimensions.get("window").width;
 
-export const ProductSearch = ({ products, searchText, loading = false }) => {
-  const renderItem = ({ item }) => (
+export const ProductSearch = ({ products, searchText, loading = false }: {products: ProductProps[], searchText: string, loading: boolean}) => {
+  const renderItem = ({ item }: {item: ProductProps}) => (
     <View style={styles.gridItem}>
       <ProductCard product={item} />
     </View>
