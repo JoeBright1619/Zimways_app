@@ -2,9 +2,15 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import imageMap from '../../constants/imageMap';
+import { ProductProps } from '../../type/product.type';
+import { RootStackParamList } from '../../type/navigation.type';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const ProductCard = ({ product, variant = 'home' }) => {
-  const navigation = useNavigation();
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'ProductDetails'>;
+
+const ProductCard = ({ product, variant = 'home' }: {product: ProductProps, variant: 'home'|'vendor'}) => {
+  
+  const navigation = useNavigation<NavigationProp>();
 
   const imageSource = imageMap[product.imageUrl] || require('../../../assets/placeholder.jpg');
   const styles = variant === 'vendor' ? vendorStyles : homeStyles;
@@ -18,15 +24,15 @@ const ProductCard = ({ product, variant = 'home' }) => {
             <Text style={styles.name}>{product.name}</Text>
             <Text style={styles.desc}>{product.vendorName || 'Unknown Vendor'}</Text>
             <Text style={styles.price}>RWF {product.price}</Text>
-            <View style={styles.ratingContainer}>
-              <Text style={styles.ratingText}>⭐ {product.averageRating || 0}</Text>
+            <View style={homeStyles.ratingContainer}>
+              <Text style={homeStyles.ratingText}>⭐ {product.averageRating || 0}</Text>
             </View>
           </>
         )}
 
         {variant === 'vendor' && (
           <>
-            <View style={styles.info}>
+            <View style={vendorStyles.info}>
               <Text style={styles.name}>{product.name }</Text>
               <Text style={styles.desc}>By {product.description || 'No description'}</Text>
 
