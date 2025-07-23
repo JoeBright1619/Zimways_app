@@ -1,11 +1,22 @@
-import React, {useEffect, useState} from "react";
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
-import VendorCard from '../vendor/vendorCard';
-import { vendorsAPI } from '../../services/api.service';
-import colors_fonts from '../../constants/colors_fonts';
-import { VendorProps } from '../../type/vendorType';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import VendorCard from "../vendor/vendorCard";
+import { vendorsAPI } from "../../services/api.service";
+import colors_fonts from "../../constants/colors_fonts";
+import { VendorProps } from "../../type/vendor.type";
 
-export const VendorsCategory = ({ selectedCategoryName }: {selectedCategoryName: string}) => {
+export const VendorsCategory = ({
+  selectedCategoryName,
+}: {
+  selectedCategoryName: string;
+}) => {
   // Filter vendors based on the selected category
   const [vendors, setVendors] = useState<VendorProps[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,9 +25,8 @@ export const VendorsCategory = ({ selectedCategoryName }: {selectedCategoryName:
       try {
         const vendorData = await vendorsAPI.getByCategory(selectedCategoryName);
         setVendors(vendorData);
-  
       } catch (error) {
-        console.error('Error fetching vendors:', error);
+        console.error("Error fetching vendors:", error);
       } finally {
         setLoading(false);
       }
@@ -36,17 +46,18 @@ export const VendorsCategory = ({ selectedCategoryName }: {selectedCategoryName:
         <ActivityIndicator size="large" color={colors_fonts.primary} />
       ) : vendors?.length > 0 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {vendors.map(vendor => (
+          {vendors.map((vendor) => (
             <VendorCard key={vendor.id} vendor={vendor} />
           ))}
         </ScrollView>
       ) : (
-        <Text style={styles.noItemsText}>No vendors found in this category</Text>
+        <Text style={styles.noItemsText}>
+          No vendors found in this category
+        </Text>
       )}
     </View>
   );
-
-}
+};
 
 const styles = StyleSheet.create({
   section: {
@@ -55,11 +66,11 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   noItemsText: {
-    textAlign: 'center',
-    color: '#888',
+    textAlign: "center",
+    color: "#888",
   },
 });

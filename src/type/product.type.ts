@@ -12,3 +12,13 @@ export type ProductProps = {
   categoryNames: string[];
   available: boolean;
 };
+
+export type ProductSummaryProps = {
+  productId: string;
+  name: string;
+  description: string;
+  price: number;
+  quantity: number;
+  vendorId: string;
+  vendorName: string;
+}

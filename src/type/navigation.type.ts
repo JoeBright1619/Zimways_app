@@ -1,5 +1,5 @@
-import { ProductProps } from "./productType";
-import { VendorProps} from "./vendorType";
+import { ProductProps } from "./product.type";
+import { VendorProps } from "./vendor.type";
 
 type Category = {
   id: number | string;
@@ -10,7 +10,7 @@ type Category = {
 
 export type RootStackParamList = {
   Home: undefined;
-  Category: { selectedCategory?: Category, category?: Category, type: string};
+  Category: { selectedCategory?: Category; category?: Category; type: string };
   ProductDetails: { product: ProductProps };
   Vendor: { vendor: VendorProps };
   Login: undefined;

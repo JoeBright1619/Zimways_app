@@ -4,7 +4,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import colors_fonts from '../../constants/colors_fonts';
 import { categoriesAPI } from '../../services/api.service';
-import { RootStackParamList } from '../../type/navigationType';
+import { RootStackParamList } from '../../type/navigation.type';
 
 type Category = {
   id: number | string;

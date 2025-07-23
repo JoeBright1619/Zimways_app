@@ -1,4 +1,4 @@
-import { LocationProps } from "./locationType";
+import { LocationProps } from "./location.type";
 export type UserProps = {
   id: string;
   name: string;
