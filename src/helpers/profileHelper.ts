@@ -71,7 +71,7 @@ export const pickAndSaveProfileImage = async () => {
   });
 };
 
-const saveImage = async (imageUri) => {
+const saveImage = async (imageUri: string) => {
   // Save to local device storage (AsyncStorage)
   await AsyncStorage.setItem('profileImageUri', imageUri);
 
