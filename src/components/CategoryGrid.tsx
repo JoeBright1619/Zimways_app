@@ -6,6 +6,9 @@ import colors_fonts from '../constants/colors_fonts';
 import { useNavigation } from '@react-navigation/native';
 import { categoriesAPI } from '../services/api.service';
 
+import { RootStackParamList } from '../type/navigation.type';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 const categories = [
    { id: 1, name: 'Restaurants', icon: 'food-fork-drink' },
   { id: 2, name: 'Groceries', icon: 'cart-variant' },
@@ -15,12 +18,16 @@ const categories = [
   { id: 6, name: 'Beauty & Health', icon: 'lipstick' },
 ];
 
+type CategoryProps = {
+  id: number;
+  name: string;
+  icon?: string;
+}
 
 
 
-
-const CategoryGrid = ({filter}) => {
-  const navigation = useNavigation();
+const CategoryGrid = ({filter}: {filter: string}) => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList,"Category">>();
   const [categoryData, setCategoryData] = useState(categories);
 
 useEffect(() => {
@@ -53,7 +60,7 @@ useEffect(() => {
 }, [filter]);
 
 
- const handleCategoryPress = async (selectedCategory) => {
+ const handleCategoryPress = async (selectedCategory: CategoryProps) => {
   try {
     if(selectedCategory.name === 'More Categories') {
       navigation.navigate('Category', { selectedCategory, type: "ALL" });
@@ -71,7 +78,7 @@ useEffect(() => {
   }
 };
 
-const getIconForCategory = (name) => {
+const getIconForCategory = (name: string) => {
   const found = categories.find(cat => cat.name === name);
   return found?.icon || 'help-circle';
 };
@@ -83,7 +90,7 @@ const getIconForCategory = (name) => {
       style={styles.categoryBox}
       onPress={() => handleCategoryPress(category)}
     >
-   <MaterialCommunityIcons name={category.icon} size={32} color={colors_fonts.primary} />
+   <MaterialCommunityIcons name={category.icon as any} size={32} color={colors_fonts.primary} />
 
     <Text style={styles.categoryText}>{category.name}</Text>
   </TouchableOpacity>
@@ -92,7 +99,7 @@ const getIconForCategory = (name) => {
       {/* More Categories Box */}
       <TouchableOpacity
         style={[styles.categoryBox, styles.moreCategoriesBox]}
-        onPress={() => handleCategoryPress({ id: 'more', name: 'More Categories' })}
+        onPress={() => handleCategoryPress({ id: 7, name: 'More Categories' })}
       >
         <MaterialCommunityIcons name="view-grid" size={32} color={colors_fonts.primary} />
         <Text style={styles.categoryText}>More Categories</Text>

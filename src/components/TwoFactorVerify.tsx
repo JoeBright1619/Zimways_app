@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import CustomButton from './button';
 
-export default function TwoFactorVerify({ onVerify, loading, error }) {
+export default function TwoFactorVerify({ onVerify, loading, error }: {onVerify: (code: string, secret: string) => void, loading: boolean, error?: string}) {
   const [code, setCode] = useState('');
   const [secret, setSecret] = useState('');
 

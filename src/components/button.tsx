@@ -7,6 +7,7 @@ type Props = {
   onPress: () => void;
   style?: object;
   textStyle?: object;
+  disabled?: boolean;
 };
 
 export default function CustomButton({ title, onPress, style, textStyle }: Props) {
