@@ -3,12 +3,11 @@ import { View, Text, Image, StyleSheet, Animated } from "react-native";
 import imageMap from "../../constants/imageMap"; // adjust path as needed
 import { useNavigation } from "@react-navigation/native";
 import colors_fonts from "../../constants/colors_fonts"; // adjust path as needed
+import { VendorProps } from "../../type/vendor.type"; // adjust path as needed
 
-export default function VendorScreenInfo({ vendor: vendor, translateY: translateY }) {
 
- 
 
- 
+export default function VendorScreenInfo({ vendor: vendor, translateY: translateY }: {vendor: VendorProps, translateY: Animated.AnimatedInterpolation<string | number>}) {
 
   return (
     <Animated.View style={[styles.stickyHeader, { transform: [{ translateY }] }]}>

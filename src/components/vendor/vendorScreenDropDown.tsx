@@ -4,10 +4,17 @@ import { View, Text, StyleSheet, TouchableOpacity, Animated, ScrollView } from '
 import DottedLine from './DottedLine'; // adjust path as needed
 import Ionicons from 'react-native-vector-icons/Ionicons'; // ensure you have this installed
 import colors_fonts from '../../constants/colors_fonts'; 
-import { getCategoriesByVendorId } from '../../api/categories';
 import { vendorsAPI } from '../../services/api.service';
+import { VendorProps } from '../../type/vendor.type';
 
-export default function VendorScreenDropDown({ vendor, selectedCategory, setSelectedCategory, translateY}) {
+type VendorScreenDropDownProps = {
+  vendor: VendorProps;
+  selectedCategory: string;
+  setSelectedCategory:  React.Dispatch<React.SetStateAction<string>>;
+  translateY: Animated.AnimatedInterpolation<string | number>;
+};
+
+export default function VendorScreenDropDown({ vendor, selectedCategory, setSelectedCategory, translateY}: VendorScreenDropDownProps) {
     const [showCategories, setShowCategories] = useState(false);
     const [categories, setCategories] = useState([]);
     const dropdownHeight = useRef(new Animated.Value(0)).current;

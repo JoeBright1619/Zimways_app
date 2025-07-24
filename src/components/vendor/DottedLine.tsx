@@ -2,7 +2,19 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const DottedLine = ({ color = '#ccc', dotSize = 4, gap = 6, lineWidth = '100%' }) => {
+type DottedLineProps = {
+  color?: string;
+  dotSize?: number;
+  gap?: number;
+  lineWidth?: number | `${number}%`;
+};
+
+const DottedLine: React.FC<DottedLineProps> = ({
+  color = '#ccc',
+  dotSize = 4,
+  gap = 6,
+  lineWidth = '100%',
+}) => {
   const dots = new Array(100).fill(null); // Adjust number for longer or shorter lines
 
   return (

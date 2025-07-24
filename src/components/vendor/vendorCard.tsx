@@ -1,11 +1,14 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import {useEffect,useState, React} from 'react';
+import { useEffect, useState } from 'react';
 import imageMap from '../../constants/imageMap'; // adjust path as needed
 import { useNavigation } from '@react-navigation/native';
+import { VendorProps } from '../../type/vendor.type'; // adjust path as needed
+import { RootStackParamList } from '../../type/navigation.type';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Vendor'>;
 
-
-export default function VendorCard({ vendor }) {
-  const navigation = useNavigation();
+export default function VendorCard({ vendor }: { vendor: VendorProps }) {
+  const navigation = useNavigation<NavigationProp>();
   const imageSource = imageMap[vendor.imageUrl] || require('../../../assets/placeholder.jpg');
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Vendor', { vendor })}>
