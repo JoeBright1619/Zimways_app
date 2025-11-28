@@ -1,4 +1,5 @@
 export type ProductProps = {
+  estimatedDelivery: string;
   id: string;
   name: string;
   price: number;
@@ -11,6 +12,7 @@ export type ProductProps = {
   vendorName: string;
   categoryNames: string[];
   available: boolean;
+  quantity?: number;
 };
 
 export type ProductSummaryProps = {
@@ -21,4 +23,4 @@ export type ProductSummaryProps = {
   quantity: number;
   vendorId: string;
   vendorName: string;
-}
+};

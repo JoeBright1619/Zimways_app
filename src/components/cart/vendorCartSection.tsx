@@ -59,6 +59,7 @@ const VendorCartSection = ({
                 price={item.price}
                 description={item.description}
                 imageUrl={item.imageUrl}
+                quantity={item.quantity}
                 onIncrease={() => onProductAction("increase", item)}
                 onDecrease={() => onProductAction("decrease", item)}
                 onRemove={() => onProductAction("remove", item)}

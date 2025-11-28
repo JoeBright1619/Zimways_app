@@ -85,28 +85,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
+    
   },
   image: {
     width: 60,
     height: 60,
     borderRadius: 30, // half of width/height makes it circular
     resizeMode: "cover", // ensures image covers the frame
+    
   },
   productdescription: {
-    marginLeft: -50,
-    maxWidth: "50%",
+    marginRight: 30,
+    width: "50%",
+    
   },
   name: {
     fontWeight: "bold",
     fontSize: 16,
     color: "#333",
     flex: 1,
-    textAlign: "left",
   },
   description: {
     fontSize: 11,
     color: colors_fonts.text,
-    flex: 2,
+    flex: 1,
     paddingBottom: 10, // optional: add some padding for better readability
   },
   price: {

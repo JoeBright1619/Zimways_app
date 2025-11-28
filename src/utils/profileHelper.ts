@@ -5,7 +5,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import { Alert } from 'react-native';
 
-export const pickAndSaveProfileImage = async () => {
+export const pickAndSaveProfileImage = async (): Promise<string | null> => {
   return new Promise(async (resolve) => {
     Alert.alert(
       'Update Profile Image',

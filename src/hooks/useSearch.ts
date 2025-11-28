@@ -2,21 +2,23 @@ import { useState, useEffect, useCallback } from 'react';
 import { vendorsAPI, productsAPI } from '../services/api.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash.debounce';
+import { VendorProps } from '../type/vendor.type';
+import { ProductProps } from '../type/product.type';
 
 export const useSearch = () => {
-  const [searchText, setSearchText] = useState('');
-  const [debouncedText, setDebouncedText] = useState('');
-  const [filter, setFilter] = useState('ALL');
+  const [searchText, setSearchText] = useState<string>('');
+  const [debouncedText, setDebouncedText] = useState<string>('');
+  const [filter, setFilter] = useState<string>('ALL');
   
-  const [products, setProducts] = useState([]);
-  const [vendors, setVendors] = useState([]);
+  const [products, setProducts] = useState<ProductProps[]>([]);
+  const [vendors, setVendors] = useState<VendorProps[]>([]);
   
-  const [loadingProducts, setLoadingProducts] = useState(false);
-  const [loadingVendors, setLoadingVendors] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
+  const [loadingVendors, setLoadingVendors] = useState<boolean>(false);
   
-  const [searchHistory, setSearchHistory] = useState([]);
-  const [error, setError] = useState(null);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [error, setError] = useState<string|null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
   // Debounced search text update
   const debouncedUpdate = useCallback(
@@ -25,7 +27,7 @@ export const useSearch = () => {
     }, 800),
     []
   );
-  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
   // Update debounced text when search text changes
   useEffect(() => {
     debouncedUpdate(searchText);
@@ -118,7 +120,7 @@ export const useSearch = () => {
     }
   };
 
-  const saveToSearchHistory = async (searchTerm) => {
+  const saveToSearchHistory = async (searchTerm: string) => {
     try {
       const newHistory = [
         searchTerm,
@@ -156,7 +158,7 @@ export const useSearch = () => {
   };
 
   // Set search text from history
-  const setSearchFromHistory = (text) => {
+  const setSearchFromHistory = (text: string) => {
     setSearchText(text);
   };
 

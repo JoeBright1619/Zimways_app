@@ -20,6 +20,9 @@ export type VendorProps = {
 
 export type VendorSummaryProps = {
     vendorId: string;
-    name: string;
+    vendorName: string;
     type: string;
+    phone: string;
+    place: string;
+    street: string;
 }

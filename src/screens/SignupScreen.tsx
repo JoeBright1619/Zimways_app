@@ -3,18 +3,24 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert, Ima
 import { auth, db } from '../../firebase';
 import CustomButton from '../components/button';
 import style from '../constants/colors_fonts';
-import ZimwaysLogo from '../../assets/zimways.png';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../type/navigation.type';
 
-export default function SignupScreen({ navigation }) {
-  const { register } = useContext(AuthContext);
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Signup'>;
+
+export default function SignupScreen() {
+  const { register } = useAuth();
+  const [email, setEmail] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  
+  const navigation = useNavigation<NavigationProp>();
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
@@ -44,10 +50,13 @@ export default function SignupScreen({ navigation }) {
         'Account created successfully!',
         [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
       );
-    } catch (err) {
-      setError(err.message);
-      Alert.alert('Signup Error', err.message);
-      console.error('Signup Error:', err);
+    } catch (err: unknown) {
+      if(err instanceof Error){
+        setError(err.message);
+        Alert.alert('Signup Error', err.message);
+        console.error('Signup Error:', err);
+      }
+      
     } finally {
       setLoading(false);
     }
@@ -60,7 +69,7 @@ export default function SignupScreen({ navigation }) {
     >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
-      <Image source={ZimwaysLogo} style={styles.logo} />
+      <Image source={require('../../assets/zimways.png')} style={styles.logo} />
       <Text style={styles.title}>Sign Up</Text>
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <TextInput 

@@ -5,7 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import style from '../../constants/colors_fonts';
 
 type searchBarProps = {
-  placeholder: string;
+  placeholder?: string;
   onChangeText: (text: string) => void;
   value: string;
   filter: string;
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     margin: 16,
     width: '90%',
     alignSelf: 'center',
-    zIndex: 1000,
+    zIndex: 999,
   },
   searchContainer: {
     flex: 1,

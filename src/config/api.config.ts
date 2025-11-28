@@ -1,4 +1,4 @@
-const DEV_API_URL = 'http://192.168.1.67:8080/api';
+const DEV_API_URL = 'http://192.168.0.126:8080/api';
 const PROD_API_URL = 'https://your-production-url.com/api';
 
 type EndpointFn<T extends any[] = any[]> = (...args: T) => string;
@@ -37,6 +37,13 @@ interface OrderEndpoints {
   BASE: string;
   BY_ID: EndpointFn<[string]>;
   BY_CUSTOMER: EndpointFn<[string]>;
+  UPDATE: EndpointFn<[string, string]>;
+  PROCESS: EndpointFn<[string]>
+}
+
+interface PaymentEndpoints{
+  CREATE: EndpointFn<[string, string]>;
+  PROCESS: EndpointFn<[string]>
 }
 
 interface CartEndpoints {
@@ -65,7 +72,9 @@ interface ApiConfig {
     PRODUCTS: ProductEndpoints;
     CATEGORIES: CategoryEndpoints;
     ORDERS: OrderEndpoints;
+    PAYMENT: PaymentEndpoints;
     CART: CartEndpoints;
+
   };
   TIMEOUT: number;
 }
@@ -103,6 +112,8 @@ const config: ApiConfig = {
       BASE: '/orders',
       BY_ID: (id: string) => `/orders/${id}`,
       BY_CUSTOMER: (customerId: string) => `/orders/customer/${customerId}`,
+      UPDATE: (orderId: string, status: string) => `/orders/${orderId}/status?status=${status}`,
+      PROCESS: (orderId: string) => `/orders/${orderId}/process`
     },
     CART: {
       BASE: '/carts',
@@ -121,6 +132,10 @@ const config: ApiConfig = {
       VENDORS: (customerId: string) => `/carts/customer/${customerId}/vendors`,
       ITEMS_BY_VENDOR: (customerId: string, vendorId: string) => `/carts/customer/${customerId}/vendor/${vendorId}/items`,
     },
+    PAYMENT: {
+      CREATE: (orderId: string, payment: string) => `/payments/order/${orderId}?paymentMethod=${payment}`,
+      PROCESS: (paymentId: string) =>`/payments/${paymentId}/process`
+    }
   },
   TIMEOUT: 30000,
 };

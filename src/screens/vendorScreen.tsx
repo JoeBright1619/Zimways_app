@@ -1,21 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {    Animated, View, Text, StyleSheet, ScrollView, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { getProductsByVendor} from '../helpers/productHelper'; // rename as needed
+
 import Ionicons from 'react-native-vector-icons/Ionicons'; // ensure you have this installed
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import colors_fonts from '../constants/colors_fonts'; // adjust path as needed
 import ProductCard from '../components/product/productCard';
 import VendorScreenInfo from '../components/vendor/VendorScreenInfo';
 import VendorScreenDropDown from '../components/vendor/vendorScreenDropDown';
 import { fetchItemsByVendor } from '../api/items';
-
-
+import { RootStackParamList } from '../type/navigation.type';
+import { ProductProps } from '../type/product.type';
 
 // (imports remain the same)
 
-const VendorScreen = ({ route }) => {
+const VendorScreen = ({ route }: {
+  route: RouteProp<RootStackParamList, "Vendor">;
+}) =>{
   const { vendor } = route.params;
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<ProductProps[]>([]);
   const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true); // Add loading state
@@ -83,7 +85,7 @@ const filteredProducts =
       />
 
         <Animated.ScrollView
-          contentContainerStyle={{ paddingTop: 400 }}
+          contentContainerStyle={{ paddingTop: 400, paddingBottom: 100 }}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scrollY } } }],
             { useNativeDriver: true }
@@ -140,7 +142,9 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
  
- 
+  vendorInfo: {
+
+  },
 
   productsHeading: {
     fontSize: 20,

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
+import type { RouteProp } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
 import OrderHistoryScreen from '../screens/OrderHistory';
 import CartScreen from '../screens/CartScreen';
@@ -7,17 +9,28 @@ import SettingsScreen from '../screens/SettingScreen';
 import { Feather } from '@expo/vector-icons';
 import colors_fonts from '../constants/colors_fonts';
 
-const Tab = createBottomTabNavigator();
+type TabParamList = {
+  Home: undefined;
+  Orders: undefined;
+  Cart: undefined;
+  Settings: undefined;
+};
 
-export default function MainTabs() {
+const Tab = createBottomTabNavigator<TabParamList>();
+
+export default function MainTabs(): JSX.Element {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({
+        route,
+      }: {
+        route: RouteProp<TabParamList, keyof TabParamList>;
+      }): BottomTabNavigationOptions => ({
         headerShown: false,
         tabBarActiveTintColor: colors_fonts.secondary,
         tabBarInactiveTintColor: colors_fonts.primary,
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
+        tabBarIcon: ({ color, size }: { color: string; size: number }) => {
+          let iconName: keyof typeof Feather.glyphMap = 'home';
           if (route.name === 'Home') iconName = 'home';
           else if (route.name === 'Orders') iconName = 'clipboard';
           else if (route.name === 'Cart') iconName = 'shopping-cart';

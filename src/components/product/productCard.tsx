@@ -34,7 +34,7 @@ const ProductCard = ({ product, variant = 'home' }: {product: ProductProps, vari
           <>
             <View style={vendorStyles.info}>
               <Text style={styles.name}>{product.name }</Text>
-              <Text style={styles.desc}>By {product.description || 'No description'}</Text>
+              <Text style={styles.desc}>{product.description || 'No description'}</Text>
 
               <Text style={styles.price}>RWF {product.price}</Text>
               
@@ -131,4 +131,5 @@ const vendorStyles = StyleSheet.create({
   },
 });
 
-export default ProductCard;
+export default React.memo(ProductCard);
+

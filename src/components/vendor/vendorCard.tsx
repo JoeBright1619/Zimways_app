@@ -5,9 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { VendorProps } from '../../type/vendor.type'; // adjust path as needed
 import { RootStackParamList } from '../../type/navigation.type';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React from 'react';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Vendor'>;
 
-export default function VendorCard({ vendor }: { vendor: VendorProps }) {
+const VendorCard = ({ vendor }: { vendor: VendorProps })=> {
   const navigation = useNavigation<NavigationProp>();
   const imageSource = imageMap[vendor.imageUrl] || require('../../../assets/placeholder.jpg');
   return (
@@ -78,3 +79,4 @@ ratingText: {
 
 });
 
+export default React.memo(VendorCard);

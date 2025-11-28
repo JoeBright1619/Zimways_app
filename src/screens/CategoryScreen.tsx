@@ -8,9 +8,25 @@ import { VendorsCategory } from '../components/category/vendorsCategory';
 import { ProductsCategory } from '../components/category/productsCategory';
 import {  VendorAndProductCategory } from '../components/category/vendorAndproductCategory';
 import { VerticalCategoryList } from '../components/category/allCategoriesList';
+import { RouteProp } from '@react-navigation/native';
+
+type CategoryScreenRouteParams = {
+  selectedCategory: {
+    name: string;
+    icon: string;
+    // add other properties if needed
+  };
+  type: 'BOTH' | 'VENDOR' | 'PRODUCT' | 'ALL';
+};
+
+type RootStackParamList = {
+  CategoryScreen: CategoryScreenRouteParams;
+};
+
+
 
 const CategoryScreen = () => {
-  const route = useRoute();
+  const route = useRoute<RouteProp<RootStackParamList, 'CategoryScreen'>>();
   const navigation = useNavigation();
   const { selectedCategory, type } = route.params;
 
@@ -24,7 +40,7 @@ const CategoryScreen = () => {
           <MaterialCommunityIcons name="chevron-left" size={30} color="white" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
-          <MaterialCommunityIcons name={selectedCategory.icon} size={32} color="white" />
+          <MaterialCommunityIcons name={selectedCategory.icon as any} size={32} color="white" />
           <Text style={styles.headerTitle}>{selectedCategory.name}</Text>
         </View>
       </View>

@@ -1,15 +1,19 @@
 import { LocationProps } from "./location.type";
-export type UserProps = {
-  id: string;
+export interface UserProps {
+  id?: string;
   name: string;
   email: string;
   phone: string;
   password: string;
-  address: string | null;
+  address?: string;
   firebaseUid: string;
-  profileUrl: string | null;
-  firebaseToken: string | null;
-  tfaSecret: string | null;
-  tfaEnabled: boolean;
-  locations: LocationProps[];
-};
+  firebaseToken: string;
+  profileUrl?: string;
+  tfaSecret?: string;
+  tfaEnabled?: boolean;
+  locations?: LocationProps[];
+  createdAt?: Date;
+}
+
+
+

@@ -3,14 +3,16 @@ import 'react-native-reanimated';
 import { ActivityIndicator, View } from 'react-native';
 import AuthStack from './src/navigation/AuthStack';
 import MainStack from './src/navigation/MainStack';
-import { AuthProvider, AuthContext } from './src/context/AuthContext';
+import { AuthProvider } from './src/context/AuthContext';
+import { useAuth } from './src/hooks/useAuth';
 import { useContext } from 'react';
 import MainTabs from './src/navigation/MainTabs';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import React from 'react';
 
 
 function RootNavigator() {
-  const { user, userData,loading } = useContext(AuthContext);
+  const { user, userData,loading } = useAuth();
   console.log("RootNavigator: Current user:", user?user.email:null); // Debug log
   
   if (loading) {
