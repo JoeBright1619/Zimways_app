@@ -3,16 +3,8 @@ import { getAnalytics, isSupported } from "firebase/analytics";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore"; // 👈 Import Firestore
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import firebaseConfig from "./src/config/firebase.config";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBWBB4vWnb7a0i_YsXEF-3JPh3ezw-Cu7c",
-  authDomain: "zimways.firebaseapp.com",
-  projectId: "zimways",
-  storageBucket: "zimways.firebasestorage.app",
-  messagingSenderId: "145459786800",
-  appId: "1:145459786800:web:8dd3dcfcb187b9e81029f5",
-  measurementId: "G-7DG5KS74CE"
-};
 
 const app = initializeApp(firebaseConfig);
 

@@ -1,5 +1,8 @@
-const DEV_API_URL = 'http://192.168.0.126:8080/api';
-const PROD_API_URL = 'https://your-production-url.com/api';
+import { ENV } from "../config/env";
+
+
+
+
 
 type EndpointFn<T extends any[] = any[]> = (...args: T) => string;
 
@@ -80,7 +83,7 @@ interface ApiConfig {
 }
 
 const config: ApiConfig = {
-  API_URL: __DEV__ ? DEV_API_URL : PROD_API_URL,
+  API_URL: __DEV__ ? ENV.DEV_API_URL : ENV.PROD_API_URL,
   ENDPOINTS: {
     AUTH: {
       LOGIN: '/customers/login',
