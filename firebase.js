@@ -3,8 +3,9 @@ import { getAnalytics, isSupported } from "firebase/analytics";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore"; // 👈 Import Firestore
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import firebaseConfig from "./src/config/firebase.config";
+import {firebaseConfig} from "./src/config/firebase.config.ts";
 
+console.log("Firebase config:", firebaseConfig);
 
 const app = initializeApp(firebaseConfig);
 
