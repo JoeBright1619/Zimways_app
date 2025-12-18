@@ -21,5 +21,6 @@ export type RootStackParamList = {
   TwoFactorAuth: { userId?: string; email: string };
   OrderDetails: { order: OrderProps };
   Payment: undefined;
+  Contact: undefined;
   // etc.
 };

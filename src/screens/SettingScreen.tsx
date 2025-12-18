@@ -13,9 +13,14 @@ import colors_fonts from '../constants/colors_fonts';
 import { Ionicons } from '@expo/vector-icons';
 import SettingItem from '../components/settings/SettingItem';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../type/navigation.type';
+
 const SettingsScreen: React.FC = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('ENG');
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const handleLogout = () => {
     Alert.alert(
@@ -63,7 +68,7 @@ const SettingsScreen: React.FC = () => {
 
           <SettingItem label="Profile" />
           <SettingItem label="Security" />
-          <SettingItem label="Contact" />
+          <SettingItem label="Contact" onPress={() => navigation.navigate('Contact')} />
           <SettingItem label="Address" />
           <SettingItem label="Payment Methods" />
           <SettingItem label="Security & Privacy" />

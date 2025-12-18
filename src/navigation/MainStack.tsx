@@ -17,6 +17,7 @@ import CategoryScreen from '../screens/CategoryScreen';
 import OrderDetailsScreen from '../screens/OrderDetailsScreen';
 import { RootStackParamList } from '../type/navigation.type';
 import PaymentScreen from '../screens/PaymentScreen';
+import ContactScreen from '../screens/ContactScreen';
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -109,6 +110,11 @@ export default function MainStack() {
       <Stack.Screen
         name="Payment"
         component={PaymentScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Contact"
+        component={ContactScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
