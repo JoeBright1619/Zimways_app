@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,8 +6,8 @@ import {
   Animated,
   Easing,
   ActivityIndicator,
-} from "react-native";
-import colors_fonts from "../constants/colors_fonts";
+} from 'react-native';
+import colors_fonts from '../constants/colors_fonts';
 
 type LoadingOverlayProps = {
   visible: boolean;
@@ -16,7 +16,7 @@ type LoadingOverlayProps = {
 
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   visible,
-  message = "Payment processing...",
+  message = 'Payment processing...',
 }) => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -36,7 +36,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
           easing: Easing.inOut(Easing.quad),
           useNativeDriver: true,
         }),
-      ])
+      ]),
     );
     animation.start();
     return () => {
@@ -61,14 +61,14 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
 
 const styles = StyleSheet.create({
   overlay: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.35)",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 999,
   },
   card: {
@@ -76,9 +76,9 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     paddingHorizontal: 28,
     borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
     shadowOpacity: 0.15,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },

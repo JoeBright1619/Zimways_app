@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -6,16 +6,24 @@ import {
   FlatList,
   Dimensions,
   ActivityIndicator,
-} from "react-native";
-import VendorCard from "../vendor/vendorCard";
-import colors_fonts from "../../constants/colors_fonts";
-import SearchSkeleton from "./SearchSkeleton";
-import { VendorProps } from "../../type/vendor.type";
+} from 'react-native';
+import VendorCard from '../vendor/vendorCard';
+import colors_fonts from '../../constants/colors_fonts';
+import SearchSkeleton from './SearchSkeleton';
+import { VendorProps } from '../../type/vendor.type';
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
 
-export const VendorSearch = ({ vendors, searchText, loading = false }: {vendors: VendorProps[], searchText: string, loading: boolean}) => {
-  const renderItem = ({ item }: {item: VendorProps}) => (
+export const VendorSearch = ({
+  vendors,
+  searchText,
+  loading = false,
+}: {
+  vendors: VendorProps[];
+  searchText: string;
+  loading: boolean;
+}) => {
+  const renderItem = ({ item }: { item: VendorProps }) => (
     <View style={styles.gridItem}>
       <VendorCard vendor={item} />
     </View>
@@ -40,7 +48,8 @@ export const VendorSearch = ({ vendors, searchText, loading = false }: {vendors:
   return (
     <View style={styles.container}>
       <Text style={styles.searchTitle}>
-        Search results for vendors: <Text style={styles.highlightText}>"{searchText}"</Text>
+        Search results for vendors:{' '}
+        <Text style={styles.highlightText}>"{searchText}"</Text>
       </Text>
 
       {loading ? (
@@ -71,12 +80,12 @@ const styles = StyleSheet.create({
   },
   searchTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 12,
     color: colors_fonts.text,
   },
   highlightText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.primary,
   },
   loadingContainer: {
@@ -98,19 +107,19 @@ const styles = StyleSheet.create({
   },
   noItemsText: {
     fontSize: 16,
-    textAlign: "center",
-    color: "#666",
-    fontWeight: "600",
+    textAlign: 'center',
+    color: '#666',
+    fontWeight: '600',
     marginBottom: 8,
   },
   emptySubText: {
     fontSize: 14,
-    textAlign: "center",
-    color: "#999",
+    textAlign: 'center',
+    color: '#999',
     paddingHorizontal: 20,
   },
   row: {
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     marginBottom: 16,
   },
   gridItem: {

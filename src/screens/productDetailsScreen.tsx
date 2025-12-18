@@ -1,5 +1,5 @@
 // screens/ProductDetailsScreen.tsx
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,32 +7,32 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-} from "react-native";
-import imageMap from "../constants/imageMap";
-import colors_fonts from "../constants/colors_fonts";
+} from 'react-native';
+import imageMap from '../constants/imageMap';
+import colors_fonts from '../constants/colors_fonts';
 // Adjust the import based on your auth context setup
-import { cartAPI } from "../services/api.service";
-import { useAuth } from "../hooks/useAuth";
-import { RootStackParamList } from "../type/navigation.type";
-import { RouteProp, useNavigation } from "@react-navigation/native";
-import { VendorProps } from "../type/vendor.type";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { cartAPI } from '../services/api.service';
+import { useAuth } from '../hooks/useAuth';
+import { RootStackParamList } from '../type/navigation.type';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import { VendorProps } from '../type/vendor.type';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const ProductDetailsScreen = ({
   route,
 }: {
-  route: RouteProp<RootStackParamList, "ProductDetails">;
+  route: RouteProp<RootStackParamList, 'ProductDetails'>;
 }) => {
   const { product } = route.params;
   const imageSource =
-    imageMap[product.imageUrl] || require("../../assets/placeholder.jpg");
+    imageMap[product.imageUrl] || require('../../assets/placeholder.jpg');
   const { backendUser } = useAuth();
   const [vendor] = useState<VendorProps | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>('');
 
   const increaseQty = () => setQuantity((q) => q + 1);
   const decreaseQty = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
@@ -41,28 +41,29 @@ const ProductDetailsScreen = ({
 
   const handleAddToCart = async () => {
     setLoading(true);
-    setMessage("");
+    setMessage('');
     try {
       if (!backendUser?.id) {
-        throw new Error("No backend user found");
+        throw new Error('No backend user found');
       }
       await cartAPI.addItem(backendUser.id, product.id, quantity);
-      setMessage("Added to cart!");
+      setMessage('Added to cart!');
     } catch (error) {
-      setMessage("Failed to add to cart");
-      console.error("Add to cart error:", error);
+      setMessage('Failed to add to cart');
+      console.error('Add to cart error:', error);
     } finally {
       setLoading(false);
       // Set timeout to clear message after 3 seconds
-      setTimeout(() => setMessage(""), 3000);
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
-    // Calculate discounted price
-    const discountedPrice = product.discountPercentage > 0
-    ? product.price * (1 - product.discountPercentage / 100)
-    : product.price;
-  
+  // Calculate discounted price
+  const discountedPrice =
+    product.discountPercentage > 0
+      ? product.price * (1 - product.discountPercentage / 100)
+      : product.price;
+
   const total = discountedPrice * quantity;
   const originalTotal = product.price * quantity; // For comparison
 
@@ -73,10 +74,13 @@ const ProductDetailsScreen = ({
         <Image source={imageSource} style={styles.image} />
         <View style={styles.heroOverlay} />
         <View style={styles.heroTopBar}>
-          <TouchableOpacity style={styles.iconBtnRound} onPress={()=> navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.iconBtnRound}
+            onPress={() => navigation.goBack()}
+          >
             <Ionicons name="arrow-back" size={20} color="#000" />
           </TouchableOpacity>
-          <View style={{ flexDirection: "row", gap: 10 }}>
+          <View style={{ flexDirection: 'row', gap: 10 }}>
             <TouchableOpacity style={styles.iconBtnRound}>
               <Ionicons name="share-outline" size={20} color="#000" />
             </TouchableOpacity>
@@ -87,8 +91,9 @@ const ProductDetailsScreen = ({
         </View>
         {/* Badges */}
         <View style={styles.badgesRow}>
-        <View style={styles.ratingContainer}>
-        <Text style={styles.ratingText}>⭐ {product.averageRating.toFixed(1)}
+          <View style={styles.ratingContainer}>
+            <Text style={styles.ratingText}>
+              ⭐ {product.averageRating.toFixed(1)}
             </Text>
           </View>
           {product.discountPercentage > 0 ? (
@@ -113,10 +118,10 @@ const ProductDetailsScreen = ({
 
         {/* Delivery estimate */}
         <Text style={styles.delivery}>
-          🚚 Est. Delivery:{" "}
-          {vendor?.vendorType !== "Restaurant" && vendor?.vendorType
-            ? product.estimatedDelivery || "1-2 days"
-            : "N/A"}
+          🚚 Est. Delivery:{' '}
+          {vendor?.vendorType !== 'Restaurant' && vendor?.vendorType
+            ? product.estimatedDelivery || '1-2 days'
+            : 'N/A'}
         </Text>
 
         {/* Category chips */}
@@ -133,7 +138,7 @@ const ProductDetailsScreen = ({
 
         {/* Description */}
         <Text style={styles.description}>
-          {product.description || "No description available"}
+          {product.description || 'No description available'}
         </Text>
 
         {/* Quantity stepper */}
@@ -162,15 +167,17 @@ const ProductDetailsScreen = ({
         <View>
           <Text style={styles.totalLabel}>Total</Text>
           {product.discountPercentage > 0 ? (
-      <View style={styles.totalPriceContainer}>
-        <Text style={styles.originalTotalPrice}>RWF {originalTotal.toLocaleString()}</Text>
-        <Text style={styles.discountedTotalPrice}>RWF {total.toLocaleString()}</Text>
-        
-      </View>
-    ) : (
-      <Text style={styles.totalPrice}>RWF {total.toLocaleString()}</Text>
-    )}
-
+            <View style={styles.totalPriceContainer}>
+              <Text style={styles.originalTotalPrice}>
+                RWF {originalTotal.toLocaleString()}
+              </Text>
+              <Text style={styles.discountedTotalPrice}>
+                RWF {total.toLocaleString()}
+              </Text>
+            </View>
+          ) : (
+            <Text style={styles.totalPrice}>RWF {total.toLocaleString()}</Text>
+          )}
         </View>
         <TouchableOpacity
           style={[styles.addToCartBtn, !product.available && styles.disabled]}
@@ -180,9 +187,9 @@ const ProductDetailsScreen = ({
           <MaterialCommunityIcons name="cart-plus" size={20} color="#fff" />
           <Text style={styles.cartText}>
             {(() => {
-              if (loading) return "Adding...";
-              if (product.available) return "Add to Cart";
-              return "Out of Stock";
+              if (loading) return 'Adding...';
+              if (product.available) return 'Add to Cart';
+              return 'Out of Stock';
             })()}
           </Text>
         </TouchableOpacity>
@@ -190,9 +197,9 @@ const ProductDetailsScreen = ({
       {message ? (
         <Text
           style={{
-            color: message.includes("Failed") ? "red" : "green",
+            color: message.includes('Failed') ? 'red' : 'green',
             marginTop: 8,
-            textAlign: "center",
+            textAlign: 'center',
           }}
         >
           {message}
@@ -209,48 +216,48 @@ const styles = StyleSheet.create({
     backgroundColor: colors_fonts.background,
   },
   heroContainer: {
-    position: "relative",
+    position: 'relative',
   },
   container: {
     padding: 16,
   },
   image: {
-    width: "100%",
+    width: '100%',
     height: 220,
     marginBottom: 16,
   },
   heroOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.05)",
+    backgroundColor: 'rgba(0,0,0,0.05)',
     borderRadius: 10,
   },
   heroTopBar: {
-    position: "absolute",
+    position: 'absolute',
     top: 12,
     left: 12,
     right: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   iconBtnRound: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
   },
   badgesRow: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 16,
     left: 16,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   ratingContainer: {
@@ -258,8 +265,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     backgroundColor: 'rgba(255, 215, 0, 0.9)',
     borderRadius: 14,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
   },
   ratingText: { fontSize: 12, fontWeight: 'bold', color: '#000' },
@@ -268,17 +275,17 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     backgroundColor: colors_fonts.secondary,
     borderRadius: 14,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
   },
   discountText: {
-    color: "#fff",
-    fontWeight: "600",
+    color: '#fff',
+    fontWeight: '600',
   },
   name: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 6,
   },
   vendor: {
@@ -288,79 +295,79 @@ const styles = StyleSheet.create({
   },
   delivery: {
     fontSize: 14,
-    color: "#333",
+    color: '#333',
     marginBottom: 8,
   },
   chipsRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
     marginBottom: 12,
   },
   chip: {
     paddingHorizontal: 10,
     paddingVertical: 6,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: '#f5f5f5',
     borderRadius: 16,
   },
   chipText: {
-    color: "#333",
+    color: '#333',
     fontSize: 12,
   },
   description: {
     fontSize: 16,
     lineHeight: 22,
-    color: "#333",
+    color: '#333',
     marginBottom: 12,
   },
   qtyRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 12,
   },
   qtyBtn: {
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 6,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   qtyBtnLg: {
     width: 40,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   qtyText: {
     fontSize: 20,
   },
   qtyNumber: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: '500',
     marginHorizontal: 12,
   },
   stickyBar: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderTopWidth: 1,
-    borderTopColor: "#eee",
+    borderTopColor: '#eee',
     padding: 16,
     paddingBottom: 30,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   totalLabel: {
-    color: "#777",
+    color: '#777',
     fontSize: 12,
   },
   totalPrice: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginTop: 2,
   },
   addToCartBtn: {
@@ -368,18 +375,18 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 18,
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
     gap: 8,
   },
   disabled: {
-    backgroundColor: "#ccc",
+    backgroundColor: '#ccc',
   },
   cartText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   priceContainer: {
     flexDirection: 'row',
@@ -414,7 +421,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
-  
+
   // Total price styles
   totalPriceContainer: {
     flexDirection: 'row',
@@ -432,7 +439,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors_fonts.primary,
   },
-
 });
 
 export default ProductDetailsScreen;

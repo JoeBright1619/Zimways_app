@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import ProductCard from "../product/productCard";
-import VendorCard from "../vendor/vendorCard";
-import SearchSkeleton from "../search/SearchSkeleton";
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import ProductCard from '../product/productCard';
+import VendorCard from '../vendor/vendorCard';
+import SearchSkeleton from '../search/SearchSkeleton';
 
-import { vendorsAPI, productsAPI } from "../../services/api.service";
-import { ProductProps } from "../../type/product.type";
-import { VendorProps } from "../../type/vendor.type";
+import { vendorsAPI, productsAPI } from '../../services/api.service';
+import { ProductProps } from '../../type/product.type';
+import { VendorProps } from '../../type/vendor.type';
 
 export const VendorAndProductCategory = ({
   selectedCategoryName,
@@ -20,14 +20,13 @@ export const VendorAndProductCategory = ({
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productData = await productsAPI.getByCategory(
-          selectedCategoryName
-        );
+        const productData =
+          await productsAPI.getByCategory(selectedCategoryName);
         setProducts(productData);
         const vendorData = await vendorsAPI.getByCategory(selectedCategoryName);
         setVendors(vendorData);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error('Error fetching products:', error);
       } finally {
         setLoadingProducts(false);
         setLoadingVendors(false);
@@ -88,19 +87,19 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   section: {
     marginVertical: 20,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   noItemsText: {
-    textAlign: "center",
-    color: "#888",
+    textAlign: 'center',
+    color: '#888',
     marginTop: 20,
   },
   loader: {

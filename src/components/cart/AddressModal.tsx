@@ -20,7 +20,7 @@ type Props = {
   styles?: object;
 };
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get('window');
 
 const AddressModal = ({
   visible,
@@ -71,7 +71,7 @@ const AddressModal = ({
         />
 
         {/* Add new address */}
-        <TouchableOpacity  onPress={onAddNew}>
+        <TouchableOpacity onPress={onAddNew}>
           <Text style={styles.addNewText}>+ Add New Address</Text>
         </TouchableOpacity>
       </Pressable>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,11 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-} from "react-native";
-import VendorCard from "../vendor/vendorCard";
-import { vendorsAPI } from "../../services/api.service";
-import colors_fonts from "../../constants/colors_fonts";
-import { VendorProps } from "../../type/vendor.type";
+} from 'react-native';
+import VendorCard from '../vendor/vendorCard';
+import { vendorsAPI } from '../../services/api.service';
+import colors_fonts from '../../constants/colors_fonts';
+import { VendorProps } from '../../type/vendor.type';
 
 export const VendorsCategory = ({
   selectedCategoryName,
@@ -26,7 +26,7 @@ export const VendorsCategory = ({
         const vendorData = await vendorsAPI.getByCategory(selectedCategoryName);
         setVendors(vendorData);
       } catch (error) {
-        console.error("Error fetching vendors:", error);
+        console.error('Error fetching vendors:', error);
       } finally {
         setLoading(false);
       }
@@ -66,11 +66,11 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   noItemsText: {
-    textAlign: "center",
-    color: "#888",
+    textAlign: 'center',
+    color: '#888',
   },
 });

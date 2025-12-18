@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   ScrollView,
@@ -8,12 +8,12 @@ import {
   ActivityIndicator,
   RefreshControl,
   Alert,
-} from "react-native";
-import colors_fonts from "../constants/colors_fonts";
-import { orderAPI } from "../services/api.service";
-import { useAuth } from "../hooks/useAuth";
-import { OrderProps } from "../type/order.type";
-import {OrderHistoryItem} from "../components/order/orderHistoryItem";
+} from 'react-native';
+import colors_fonts from '../constants/colors_fonts';
+import { orderAPI } from '../services/api.service';
+import { useAuth } from '../hooks/useAuth';
+import { OrderProps } from '../type/order.type';
+import { OrderHistoryItem } from '../components/order/orderHistoryItem';
 
 const OrderHistoryScreen: React.FC = () => {
   const [processing, setProcessing] = useState<boolean>(true);
@@ -28,14 +28,13 @@ const OrderHistoryScreen: React.FC = () => {
   const { backendUser } = useAuth();
 
   const FAILED_STATES = [
-    "FAILED",
-    "PAYMENT_FAILED",
-    "CANCELLED_BY_CUSTOMER",
-    "CANCELLED_BY_RESTAURANT",
-    "CANCELLED_BY_SYSTEM",
-    "REFUNDED",
+    'FAILED',
+    'PAYMENT_FAILED',
+    'CANCELLED_BY_CUSTOMER',
+    'CANCELLED_BY_RESTAURANT',
+    'CANCELLED_BY_SYSTEM',
+    'REFUNDED',
   ];
-  
 
   const fetchOrders = async (isRefresh: boolean = false) => {
     try {
@@ -43,29 +42,33 @@ const OrderHistoryScreen: React.FC = () => {
       if (!isRefresh) setLoading(true);
 
       if (!backendUser || !backendUser.id) {
-        throw new Error("No backend user found");
+        throw new Error('No backend user found');
       }
-      
+
       const response = await orderAPI.getOrdersByCustomer(backendUser.id);
-      console.log("Orders response:", response);
+      console.log('Orders response:', response);
 
       setAllOrders(response || []);
-      setOrders((response || []).filter((order: OrderProps) => {
-        if (processing) {
-          return order.status !== "COMPLETED" && !FAILED_STATES.includes(order.status);
-        }
-        
-        if (completed) {
-          return order.status === "COMPLETED";
-        }
-      
-        return FAILED_STATES.includes(order.status);
-      }));
-      
+      setOrders(
+        (response || []).filter((order: OrderProps) => {
+          if (processing) {
+            return (
+              order.status !== 'COMPLETED' &&
+              !FAILED_STATES.includes(order.status)
+            );
+          }
+
+          if (completed) {
+            return order.status === 'COMPLETED';
+          }
+
+          return FAILED_STATES.includes(order.status);
+        }),
+      );
     } catch (error) {
-      console.error("Failed to fetch orders:", error);
-      setError("Failed to load orders. Please try again.");
-      Alert.alert("Error", "Failed to load orders. Please try again.");
+      console.error('Failed to fetch orders:', error);
+      setError('Failed to load orders. Please try again.');
+      Alert.alert('Error', 'Failed to load orders. Please try again.');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -81,27 +84,29 @@ const OrderHistoryScreen: React.FC = () => {
     fetchOrders(true);
   };
 
-  const toggleScreen = (screen: "processing" | "completed" | "failed") => {
-    setProcessing(screen === "processing");
-    setCompleted(screen === "completed");
-    setFailed(screen === "failed");
+  const toggleScreen = (screen: 'processing' | 'completed' | 'failed') => {
+    setProcessing(screen === 'processing');
+    setCompleted(screen === 'completed');
+    setFailed(screen === 'failed');
 
     let filteredOrders: OrderProps[] = [];
 
     switch (screen) {
-      case "processing":
+      case 'processing':
         filteredOrders = (allOrders || []).filter(
-          (order) => order.status !== "COMPLETED" && !FAILED_STATES.includes(order.status)
+          (order) =>
+            order.status !== 'COMPLETED' &&
+            !FAILED_STATES.includes(order.status),
         );
         break;
-      case "completed":
+      case 'completed':
         filteredOrders = (allOrders || []).filter(
-          (order) => order.status === "COMPLETED"
+          (order) => order.status === 'COMPLETED',
         );
         break;
-      case "failed":
-        filteredOrders = (allOrders || []).filter(
-          (order) => FAILED_STATES.includes(order.status)
+      case 'failed':
+        filteredOrders = (allOrders || []).filter((order) =>
+          FAILED_STATES.includes(order.status),
         );
         break;
     }
@@ -113,7 +118,7 @@ const OrderHistoryScreen: React.FC = () => {
     title: string,
     isActive: boolean,
     onPress: () => void,
-    style: any
+    style: any,
   ) => (
     <TouchableOpacity
       style={[
@@ -133,7 +138,7 @@ const OrderHistoryScreen: React.FC = () => {
           styles.tabButtonText,
           {
             color: isActive ? colors_fonts.text : colors_fonts.white,
-            fontWeight: isActive ? "600" : "400",
+            fontWeight: isActive ? '600' : '400',
           },
         ]}
       >
@@ -147,7 +152,6 @@ const OrderHistoryScreen: React.FC = () => {
       <Text style={styles.emptyText}>{message}</Text>
     </View>
   );
-
 
   if (loading) {
     return (
@@ -166,22 +170,22 @@ const OrderHistoryScreen: React.FC = () => {
 
       <View style={styles.tabContainer}>
         {renderTabButton(
-          "Processing",
+          'Processing',
           processing,
-          () => toggleScreen("processing"),
-          styles.processingTab
+          () => toggleScreen('processing'),
+          styles.processingTab,
         )}
         {renderTabButton(
-          "Completed",
+          'Completed',
           completed,
-          () => toggleScreen("completed"),
-          styles.completedTab
+          () => toggleScreen('completed'),
+          styles.completedTab,
         )}
         {renderTabButton(
-          "Failed",
+          'Failed',
           failed,
-          () => toggleScreen("failed"),
-          styles.failedTab
+          () => toggleScreen('failed'),
+          styles.failedTab,
         )}
       </View>
 
@@ -203,16 +207,16 @@ const OrderHistoryScreen: React.FC = () => {
         ) : orders.length === 0 ? (
           renderEmptyState(
             processing
-              ? "No processing orders"
+              ? 'No processing orders'
               : completed
-              ? "No completed orders"
-              : "No failed orders"
+                ? 'No completed orders'
+                : 'No failed orders',
           )
         ) : (
           <View style={styles.ordersContainer}>
-            {orders.map(order => (
-                <OrderHistoryItem key={order.id} order={order} />
-              ))}
+            {orders.map((order) => (
+              <OrderHistoryItem key={order.id} order={order} />
+            ))}
           </View>
         )}
       </ScrollView>
@@ -227,8 +231,8 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors_fonts.background,
   },
   loadingText: {
@@ -242,16 +246,16 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 20,
     paddingHorizontal: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.white,
     fontFamily: colors_fonts.primary_font,
   },
   tabContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     backgroundColor: colors_fonts.primary,
     paddingHorizontal: 20,
     paddingBottom: 20,
@@ -262,8 +266,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     marginHorizontal: 4,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tabButtonText: {
     fontSize: 14,
@@ -286,14 +290,14 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingVertical: 60,
   },
   emptyText: {
     fontSize: 16,
     color: colors_fonts.text,
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: colors_fonts.primary_font,
   },
   ordersContainer: {

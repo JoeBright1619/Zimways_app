@@ -1,6 +1,6 @@
 // constants/colors.js
 export default {
-  primary: '#899305', 
+  primary: '#899305',
   secondary: '#A70505',
   tertiary: '#148D1C',
   background: '#DCDDD9',

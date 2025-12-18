@@ -8,24 +8,19 @@ type props = {
   visible: boolean;
   paymentMethods: paymentMethod[];
   onSelect: (method: paymentMethod) => void;
-  onClose: ()=> void;
-}
+  onClose: () => void;
+};
 const PaymentMethodModal = ({
   visible,
   paymentMethods,
   onSelect,
   onClose,
 }: props) => (
-  <Modal
-    visible={visible}
-    transparent
-
-    onRequestClose={onClose}
-  >
+  <Modal visible={visible} transparent onRequestClose={onClose}>
     <View style={styles.modalOverlay}>
       <View style={styles.modalContent}>
         <Text style={styles.modalTitle}>Choose Payment Method</Text>
-        {(paymentMethods || []).map(method => (
+        {(paymentMethods || []).map((method) => (
           <TouchableOpacity
             key={method.id}
             style={styles.modalOption}

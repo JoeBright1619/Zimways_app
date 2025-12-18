@@ -9,15 +9,15 @@ export const useSearch = () => {
   const [searchText, setSearchText] = useState<string>('');
   const [debouncedText, setDebouncedText] = useState<string>('');
   const [filter, setFilter] = useState<string>('ALL');
-  
+
   const [products, setProducts] = useState<ProductProps[]>([]);
   const [vendors, setVendors] = useState<VendorProps[]>([]);
-  
+
   const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
   const [loadingVendors, setLoadingVendors] = useState<boolean>(false);
-  
+
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
-  const [error, setError] = useState<string|null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
   // Debounced search text update
@@ -25,9 +25,10 @@ export const useSearch = () => {
     debounce((text) => {
       setDebouncedText(text);
     }, 800),
-    []
+    [],
   );
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
   // Update debounced text when search text changes
   useEffect(() => {
     debouncedUpdate(searchText);
@@ -43,19 +44,18 @@ export const useSearch = () => {
   useEffect(() => {
     const performSearch = async () => {
       if (debouncedText.trim() === '' && filter === 'ALL') {
-       
         await loadInitialData();
-        
+
         return;
       }
 
       setError(null);
-      
+
       try {
         // Optimize API calls based on filter
         if (filter === 'ALL' || filter === 'PRODUCTS') {
           setLoadingProducts(true);
-          
+
           const productData = await productsAPI.getBySearch(debouncedText);
           setProducts(productData);
         }
@@ -91,12 +91,12 @@ export const useSearch = () => {
     try {
       setLoadingProducts(true);
       setLoadingVendors(true);
-      
+
       const [productData, vendorData] = await Promise.all([
         productsAPI.getAll(),
-        vendorsAPI.getAll()
+        vendorsAPI.getAll(),
       ]);
-      
+
       setProducts(productData);
       setVendors(vendorData);
     } catch (err) {
@@ -124,9 +124,9 @@ export const useSearch = () => {
     try {
       const newHistory = [
         searchTerm,
-        ...searchHistory.filter(item => item !== searchTerm)
+        ...searchHistory.filter((item) => item !== searchTerm),
       ].slice(0, 10); // Keep only last 10 searches
-      
+
       setSearchHistory(newHistory);
       await AsyncStorage.setItem('searchHistory', JSON.stringify(newHistory));
     } catch (err) {
@@ -174,7 +174,7 @@ export const useSearch = () => {
     searchHistory,
     error,
     isInitialLoad,
-    
+
     // Actions
     setSearchText,
     setFilter,
@@ -184,4 +184,4 @@ export const useSearch = () => {
     clearSearchHistory,
     loadInitialData,
   };
-}; 
+};

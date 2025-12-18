@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,18 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Alert,
-} from "react-native";
-import { CommonActions, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import colors_fonts from "../constants/colors_fonts";
-import DropDownPicker from "react-native-dropdown-picker";
-import KeyboardDismissWrapper from "../components/keyboardDismissWrapper";
-import LoadingOverlay from "../components/LoadingOverlay";
-import { orderAPI } from "../services/api.service";
+} from 'react-native';
+import {
+  CommonActions,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import colors_fonts from '../constants/colors_fonts';
+import DropDownPicker from 'react-native-dropdown-picker';
+import KeyboardDismissWrapper from '../components/keyboardDismissWrapper';
+import LoadingOverlay from '../components/LoadingOverlay';
+import { orderAPI } from '../services/api.service';
 type PaymentMethod = {
   id: string;
   label: string;
@@ -25,58 +30,61 @@ type PaymentScreenParams = {
     paymentMethod: PaymentMethod;
     total?: number;
     address?: any;
-    orderId?: any
+    orderId?: any;
   };
 };
 
 const PaymentScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-  const route = useRoute<RouteProp<PaymentScreenParams, "Payment">>();
+  const route = useRoute<RouteProp<PaymentScreenParams, 'Payment'>>();
   const { paymentMethod, total, address, orderId } =
-    route.params || ({ paymentMethod: { label: "Payment" } } as any);
+    route.params || ({ paymentMethod: { label: 'Payment' } } as any);
 
-  const methodLabel = (paymentMethod?.label || "").toLowerCase();
+  const methodLabel = (paymentMethod?.label || '').toLowerCase();
 
-  const isCard = useMemo(() => methodLabel.includes("card"), [methodLabel]);
+  const isCard = useMemo(() => methodLabel.includes('card'), [methodLabel]);
   const isMobileMoney = useMemo(
-    () => methodLabel.includes("mobile"),
-    [methodLabel]
+    () => methodLabel.includes('mobile'),
+    [methodLabel],
   );
-  const isCash = useMemo(() => methodLabel.includes("cash"), [methodLabel]);
-  const isBank = useMemo(() => methodLabel.includes("bank"), [methodLabel]);
+  const isCash = useMemo(() => methodLabel.includes('cash'), [methodLabel]);
+  const isBank = useMemo(() => methodLabel.includes('bank'), [methodLabel]);
 
-  const [cardName, setCardName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvv, setCvv] = useState("");
+  const [cardName, setCardName] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
 
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [mobileProvider, setMobileProvider] = useState<string | null>("MTN");
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [mobileProvider, setMobileProvider] = useState<string | null>('MTN');
   const [openProvider, setOpenProvider] = useState(false);
   const [mobileProviders] = useState([
-    { label: "MTN", value: "MTN" },
-    { label: "Airtel", value: "Airtel" },
-    { label: "Econet", value: "Econet" },
+    { label: 'MTN', value: 'MTN' },
+    { label: 'Airtel', value: 'Airtel' },
+    { label: 'Econet', value: 'Econet' },
   ]);
-  const [recipientName, setRecipientName] = useState("");
-  const [notes, setNotes] = useState("");
+  const [recipientName, setRecipientName] = useState('');
+  const [notes, setNotes] = useState('');
 
-  const [accountNumber, setAccountNumber] = useState("");
-  const [reference, setReference] = useState("");
+  const [accountNumber, setAccountNumber] = useState('');
+  const [reference, setReference] = useState('');
 
   const [processing, setProcessing] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const [paymentId, setPaymentId] = useState("");
-  
+  const [paymentId, setPaymentId] = useState('');
+
   useEffect(() => {
     let isMounted = true;
-  
+
     const updateOrderStatus = async () => {
       if (!orderId) return;
-      
+
       setUpdatingStatus(true);
       try {
-        const response = await orderAPI.createPayment(orderId, paymentMethod.id);
+        const response = await orderAPI.createPayment(
+          orderId,
+          paymentMethod.id,
+        );
         setPaymentId(response.data.id);
         if (isMounted) {
           console.log('Order status updated:', response);
@@ -93,53 +101,53 @@ const PaymentScreen: React.FC = () => {
         }
       }
     };
-  
+
     updateOrderStatus();
-  
+
     // Cleanup function to prevent state updates on unmounted component
     return () => {
       isMounted = false;
     };
   }, [orderId]); // Only run when orderId changes
-  
+
   const handlePay = async () => {
     if (!orderId || !paymentMethod?.id) {
       Alert.alert('Error', 'Missing required information');
       return;
     }
-  
+
     setProcessing(true);
-  
+
     try {
       // Show processing state for 2-4 seconds (random for realism)
       const processingTime = 2000 + Math.random() * 2000;
-      await new Promise(resolve => setTimeout(resolve, processingTime));
-  
+      await new Promise((resolve) => setTimeout(resolve, processingTime));
+
       // Update order status in backend
       const response = await orderAPI.processPayment(paymentId);
-      
+
       if (response.status === 200) {
         // Navigate to success screen
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
             routes: [
-              { 
-                name: 'MainTabs', 
-                params: { 
-                  screen: 'Home' 
-                } 
-              }
+              {
+                name: 'MainTabs',
+                params: {
+                  screen: 'Home',
+                },
+              },
             ],
-          })
+          }),
         );
       } else {
         throw new Error('Payment processing failed');
       }
     } catch (error: any) {
       Alert.alert(
-        'Payment Processing', 
-        error.message || 'Payment failed. Please try again.'
+        'Payment Processing',
+        error.message || 'Payment failed. Please try again.',
       );
     } finally {
       setProcessing(false);
@@ -152,9 +160,9 @@ const PaymentScreen: React.FC = () => {
         <LoadingOverlay visible={processing} message="Payment processing..." />
         <View style={styles.header}>
           <Text style={styles.headerTitle}>
-            {paymentMethod?.label || "Payment"}
+            {paymentMethod?.label || 'Payment'}
           </Text>
-          {typeof total === "number" && (
+          {typeof total === 'number' && (
             <Text style={styles.headerSubtitle}>Total: RWF {total}</Text>
           )}
         </View>
@@ -215,7 +223,7 @@ const PaymentScreen: React.FC = () => {
                   style={styles.input}
                   returnKeyType="next"
                 />
-                <View style={{ flexDirection: "row", gap: 12 }}>
+                <View style={{ flexDirection: 'row', gap: 12 }}>
                   <TextInput
                     placeholder="MM/YY"
                     value={expiry}
@@ -287,7 +295,7 @@ const PaymentScreen: React.FC = () => {
               disabled={processing}
             >
               <Text style={styles.payButtonText}>
-                {processing ? "Processing..." : "Pay Now"}
+                {processing ? 'Processing...' : 'Pay Now'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -306,12 +314,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors_fonts.primary,
     paddingTop: 50,
     paddingBottom: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   headerTitle: {
     color: colors_fonts.white,
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontFamily: colors_fonts.primary_font,
   },
   headerSubtitle: {
@@ -330,7 +338,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.text,
     marginBottom: 12,
     fontFamily: colors_fonts.primary_font,
@@ -343,25 +351,25 @@ const styles = StyleSheet.create({
     backgroundColor: colors_fonts.white,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: '#e0e0e0',
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginBottom: 12,
   },
   helperText: {
-    color: "#666",
+    color: '#666',
     fontSize: 12,
   },
   payButton: {
     backgroundColor: colors_fonts.secondary,
     paddingVertical: 14,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 8,
   },
   payButtonText: {
     color: colors_fonts.white,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });

@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors_fonts from '../constants/colors_fonts';
 import { VendorsCategory } from '../components/category/vendorsCategory';
 import { ProductsCategory } from '../components/category/productsCategory';
-import {  VendorAndProductCategory } from '../components/category/vendorAndproductCategory';
+import { VendorAndProductCategory } from '../components/category/vendorAndproductCategory';
 import { VerticalCategoryList } from '../components/category/allCategoriesList';
 import { RouteProp } from '@react-navigation/native';
 
@@ -23,8 +30,6 @@ type RootStackParamList = {
   CategoryScreen: CategoryScreenRouteParams;
 };
 
-
-
 const CategoryScreen = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'CategoryScreen'>>();
   const navigation = useNavigation();
@@ -36,21 +41,35 @@ const CategoryScreen = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
           <MaterialCommunityIcons name="chevron-left" size={30} color="white" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
-          <MaterialCommunityIcons name={selectedCategory.icon as any} size={32} color="white" />
+          <MaterialCommunityIcons
+            name={selectedCategory.icon as any}
+            size={32}
+            color="white"
+          />
           <Text style={styles.headerTitle}>{selectedCategory.name}</Text>
         </View>
       </View>
-    
-        {/* Render based on category type */}
-  {type === 'BOTH' && <VendorAndProductCategory selectedCategoryName={selectedCategory.name} />}
-  {type === 'VENDOR' && <VendorsCategory selectedCategoryName={selectedCategory.name} />}
-  {type === 'PRODUCT' && <ProductsCategory selectedCategoryName={selectedCategory.name} />}
-  {type === 'ALL' && <VerticalCategoryList />}
 
+      {/* Render based on category type */}
+      {type === 'BOTH' && (
+        <VendorAndProductCategory
+          selectedCategoryName={selectedCategory.name}
+        />
+      )}
+      {type === 'VENDOR' && (
+        <VendorsCategory selectedCategoryName={selectedCategory.name} />
+      )}
+      {type === 'PRODUCT' && (
+        <ProductsCategory selectedCategoryName={selectedCategory.name} />
+      )}
+      {type === 'ALL' && <VerticalCategoryList />}
     </View>
   );
 };
@@ -103,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryScreen; 
+export default CategoryScreen;

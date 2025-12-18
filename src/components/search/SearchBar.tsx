@@ -1,5 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, FlatList, Modal } from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  FlatList,
+  Modal,
+} from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import style from '../../constants/colors_fonts';
@@ -11,13 +19,13 @@ type searchBarProps = {
   filter: string;
   onFilterChange: React.Dispatch<React.SetStateAction<string>>; // ✅ correct
   showFilter: boolean;
- 
+
   searchHistory: string[];
   onHistoryItemPress: (item: string) => void;
-}
+};
 
 const SearchBar = ({
-  placeholder = "Search...",
+  placeholder = 'Search...',
   onChangeText,
   value,
   filter,
@@ -89,7 +97,7 @@ const SearchBar = ({
           </TouchableOpacity>
         ) : null}
       </View>
-      
+
       {showFilter && (
         <DropDownPicker
           open={open}
@@ -103,7 +111,11 @@ const SearchBar = ({
           textStyle={{ fontSize: 14, color: style.text }}
           labelStyle={{ color: style.text }}
           ArrowDownIconComponent={() => (
-            <MaterialCommunityIcons name="chevron-down" size={20} color="grey" />
+            <MaterialCommunityIcons
+              name="chevron-down"
+              size={20}
+              color="grey"
+            />
           )}
           ArrowUpIconComponent={() => (
             <MaterialCommunityIcons name="chevron-up" size={20} color="black" />

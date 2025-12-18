@@ -1,6 +1,6 @@
-import { ProductProps } from "./product.type";
-import { VendorProps } from "./vendor.type";
-import { OrderProps } from "./order.type";
+import { ProductProps } from './product.type';
+import { VendorProps } from './vendor.type';
+import { OrderProps } from './order.type';
 
 type Category = {
   id: number | string;
@@ -20,6 +20,6 @@ export type RootStackParamList = {
   Signup: undefined;
   TwoFactorAuth: { userId?: string; email: string };
   OrderDetails: { order: OrderProps };
-  Payment: undefined
+  Payment: undefined;
   // etc.
 };

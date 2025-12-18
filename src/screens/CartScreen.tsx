@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import {
   View,
   Modal,
@@ -9,17 +9,17 @@ import {
   Alert,
   StyleSheet,
   SafeAreaView,
-} from "react-native";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useAuth } from "../hooks/useAuth";
-import VendorCartSection from "../components/cart/vendorCartSection";
-import colors_fonts from "../constants/colors_fonts";
-import AddressModal from "../components/cart/AddressModal";
-import PaymentMethodModal from "../components/cart/PaymentMethodModal";
-import { VendorProps } from "../type/vendor.type";
-import { ProductProps } from "../type/product.type";
-import { LocationProps } from "../type/location.type";
-import { orderAPI, cartAPI } from "../services/api.service";
+} from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useAuth } from '../hooks/useAuth';
+import VendorCartSection from '../components/cart/vendorCartSection';
+import colors_fonts from '../constants/colors_fonts';
+import AddressModal from '../components/cart/AddressModal';
+import PaymentMethodModal from '../components/cart/PaymentMethodModal';
+import { VendorProps } from '../type/vendor.type';
+import { ProductProps } from '../type/product.type';
+import { LocationProps } from '../type/location.type';
+import { orderAPI, cartAPI } from '../services/api.service';
 
 type VendorProducts = {
   [vendorId: string]: ProductProps[];
@@ -47,57 +47,56 @@ const CartScreen: React.FC = () => {
   const [showAddressModal, setShowAddressModal] = useState<boolean>(false);
   const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
   const [selectedAddress, setSelectedAddress] = useState<LocationProps | null>(
-    null
+    null,
   );
   const [selectedPayment, setSelectedPayment] = useState<PaymentMethod | null>(
-    null
+    null,
   );
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
   const paymentMethods: PaymentMethod[] = [
-    { id: "CASH", label: "Cash" },
-    { id: "CREDIT_CARD", label: "Credit Card" },
-    { id: "DEBIT_CARD", label: "Debit Card" },
-    { id: "MOBILE_MONEY", label: "Mobile Money" },
-    { id: "BANK_TRANSFER", label: "Bank Transfer" },
-    {id: "CRYPTO", label: "Crypto"}
+    { id: 'CASH', label: 'Cash' },
+    { id: 'CREDIT_CARD', label: 'Credit Card' },
+    { id: 'DEBIT_CARD', label: 'Debit Card' },
+    { id: 'MOBILE_MONEY', label: 'Mobile Money' },
+    { id: 'BANK_TRANSFER', label: 'Bank Transfer' },
+    { id: 'CRYPTO', label: 'Crypto' },
   ];
   const fetchVendorsAndProducts = async () => {
     setLoading(true);
     try {
       if (!backendUser || !backendUser.id) {
-        throw new Error("No backend user found");
+        throw new Error('No backend user found');
       }
 
       const vendorList: VendorProps[] = await cartAPI.cartVendors(
-        backendUser.id
+        backendUser.id,
       );
       setVendors(vendorList);
       const productsByVendor: VendorProducts = {};
       for (const vendor of vendorList) {
         const items = await cartAPI.cartItemsByVendor(
           backendUser.id,
-          vendor.vendorId
+          vendor.vendorId,
         );
         productsByVendor[vendor.vendorId] = items.map((item: any) => ({
           id: item.itemId,
-          name: item.name || "",
+          name: item.name || '',
           price: item.price || 0,
           quantity: item.quantity,
-          description: item.description || "",
-          imageUrl: item.imageUrl || "",
+          description: item.description || '',
+          imageUrl: item.imageUrl || '',
         }));
       }
       setVendorProducts(productsByVendor);
       setTotal(await cartAPI.getTotal(backendUser.id));
       setDeliveryFee(1500 * vendorList.length);
     } catch (err) {
-      Alert.alert("Error", "Failed to load cart");
+      Alert.alert('Error', 'Failed to load cart');
     } finally {
       setLoading(false);
     }
   };
   useEffect(() => {
-    
     if (backendUser?.id) fetchVendorsAndProducts();
   }, [backendUser?.id]);
 
@@ -105,59 +104,59 @@ const CartScreen: React.FC = () => {
     useCallback(() => {
       // Refresh cart data when screen comes into focus
       fetchVendorsAndProducts();
-    }, [])
+    }, []),
   );
 
   const handleProductAction = async (
-    action: "increase" | "decrease" | "remove" | "details" ,
+    action: 'increase' | 'decrease' | 'remove' | 'details',
     product: ProductProps,
-    vendorId: string
+    vendorId: string,
   ) => {
     setUpdating(true);
     try {
       if (!backendUser || !backendUser.id) {
-        throw new Error("No backend user found");
+        throw new Error('No backend user found');
       }
-      if (action === "increase") {
+      if (action === 'increase') {
         await cartAPI.addItem(backendUser.id, product.id, 1);
-      } else if (action === "decrease") {
+      } else if (action === 'decrease') {
         await cartAPI.removeItem(backendUser.id, product.id, 1);
-      } else if (action === "remove") {
+      } else if (action === 'remove') {
         await cartAPI.deleteItem(backendUser.id, product.id);
-      } else if (action === "details") {
-        Alert.alert("Product Details", `Show details for ${product.name}`);
+      } else if (action === 'details') {
+        Alert.alert('Product Details', `Show details for ${product.name}`);
       }
 
       const vendorList: VendorProps[] = await cartAPI.cartVendors(
-        backendUser.id
+        backendUser.id,
       );
       setVendors(vendorList);
       const productsByVendor: VendorProducts = {};
       for (const vendor of vendorList) {
         const items = await cartAPI.cartItemsByVendor(
           backendUser.id,
-          vendor.vendorId
+          vendor.vendorId,
         );
         productsByVendor[vendor.vendorId] = items.map((item: any) => ({
           id: item.itemId,
-          name: item.name || "",
+          name: item.name || '',
           price: item.price || 0,
           quantity: item.quantity,
-          description: item.description || "",
-          imageUrl: item.imageUrl || "",
+          description: item.description || '',
+          imageUrl: item.imageUrl || '',
         }));
       }
       setVendorProducts(productsByVendor);
       setTotal(await cartAPI.getTotal(backendUser.id));
     } catch (err) {
-      Alert.alert("Error", "Action failed");
+      Alert.alert('Error', 'Action failed');
     } finally {
       setUpdating(false);
     }
   };
 
   const handleAddMore = (vendorName: string) => {
-    Alert.alert("Add More", `Navigate to ${vendorName}'s products`);
+    Alert.alert('Add More', `Navigate to ${vendorName}'s products`);
   };
 
   const handleCheckout = async (customerId: string): Promise<void> => {
@@ -171,7 +170,7 @@ const CartScreen: React.FC = () => {
       Alert.alert('Error', 'Failed to create order');
     }
   };
-  
+
   if (loading) {
     return (
       <SafeAreaView style={styles.center}>
@@ -203,7 +202,7 @@ const CartScreen: React.FC = () => {
             onProductAction={(action, product) =>
               handleProductAction(action, product, vendor.vendorId)
             }
-            message={messages[vendor.vendorId] || ""}
+            message={messages[vendor.vendorId] || ''}
             setMessage={(msg) =>
               setMessages((prev) => ({ ...prev, [vendor.vendorId]: msg }))
             }
@@ -237,15 +236,20 @@ const CartScreen: React.FC = () => {
       <View style={styles.fixedButtonContainer}>
         <TouchableOpacity
           style={styles.checkoutBtn}
-          onPress={()=>{  if (backendUser?.id) {
-            handleCheckout(backendUser.id);
-          } else {
-            // Handle the case where user is not logged in
-            Alert.alert('Authentication Required', 'Please log in to proceed with checkout');
-            navigation.navigate('Login');
-          }}}
+          onPress={() => {
+            if (backendUser?.id) {
+              handleCheckout(backendUser.id);
+            } else {
+              // Handle the case where user is not logged in
+              Alert.alert(
+                'Authentication Required',
+                'Please log in to proceed with checkout',
+              );
+              navigation.navigate('Login');
+            }
+          }}
         >
-          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 18 }}>
+          <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }}>
             Checkout
           </Text>
         </TouchableOpacity>
@@ -253,13 +257,12 @@ const CartScreen: React.FC = () => {
       <AddressModal
         visible={showAddressModal}
         addresses={
-          backendUser?.locations || [{ label: "kicukiro" }, { label: "remera" }]
+          backendUser?.locations || [{ label: 'kicukiro' }, { label: 'remera' }]
         }
         onSelect={(address) => {
           setSelectedAddress(address);
           setShowAddressModal(false);
           setShowPaymentModal(true);
-
         }}
         onClose={() => setShowAddressModal(false)}
         onAddNew={() => null}
@@ -271,16 +274,16 @@ const CartScreen: React.FC = () => {
         onSelect={(method) => {
           if (
             method &&
-            typeof method.id === "string" &&
-            typeof method.label === "string"
+            typeof method.id === 'string' &&
+            typeof method.label === 'string'
           ) {
             setSelectedPayment({ id: method.id, label: method.label });
             setShowPaymentModal(false);
-            navigation.navigate("Payment", {
+            navigation.navigate('Payment', {
               paymentMethod: { id: method.id, label: method.label },
               total: total + DeliveryFee,
               address: selectedAddress,
-              orderId: createdOrderId
+              orderId: createdOrderId,
             });
           } else {
             setSelectedPayment(null);
@@ -300,17 +303,17 @@ const styles = StyleSheet.create({
   },
   center: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
   itemRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderColor: "#eee",
+    borderColor: '#eee',
   },
   itemName: {
     flex: 2,
@@ -319,15 +322,15 @@ const styles = StyleSheet.create({
   itemQty: {
     flex: 1,
     fontSize: 15,
-    textAlign: "center",
+    textAlign: 'center',
   },
   itemPrice: {
     flex: 1,
     fontSize: 15,
-    textAlign: "right",
+    textAlign: 'right',
   },
   removeBtn: {
-    backgroundColor: "#FF6347",
+    backgroundColor: '#FF6347',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
@@ -339,14 +342,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     padding: 18,
     borderRadius: 12,
-    width: "92%",
-    alignSelf: "center",
+    width: '92%',
+    alignSelf: 'center',
     elevation: 2,
   },
   totalLine: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginVertical: 4,
   },
   totalLabel: {
@@ -359,26 +362,26 @@ const styles = StyleSheet.create({
   },
   totalLabelBold: {
     fontSize: 17,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.primary,
   },
   totalValueBold: {
     fontSize: 17,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.primary,
   },
   totalDivider: {
     borderBottomWidth: 1,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     marginVertical: 10,
   },
   fixedButtonContainer: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
     padding: 16,
-    alignItems: "center",
+    alignItems: 'center',
     zIndex: 100,
     elevation: 20,
   },
@@ -387,39 +390,39 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 14,
     borderRadius: 8,
-    alignItems: "center",
-    width: "80%",
+    alignItems: 'center',
+    width: '80%',
   },
 
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 24,
-    width: "80%",
-    alignItems: "center",
+    width: '80%',
+    alignItems: 'center',
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 16,
   },
   modalOption: {
     padding: 12,
     borderBottomWidth: 1,
-    borderColor: "#eee",
-    width: "100%",
-    alignItems: "center",
+    borderColor: '#eee',
+    width: '100%',
+    alignItems: 'center',
   },
   modalCancel: {
-    color: "#FF6347",
+    color: '#FF6347',
     marginTop: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

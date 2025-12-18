@@ -1,15 +1,15 @@
-import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { useSearch } from "../hooks/useSearch";
-import SearchBar from "../components/search/SearchBar";
-import { VendorSearch } from "../components/search/Vendors";
-import { ProductSearch } from "../components/search/Products";
-import { VendorAndProductSearch } from "../components/search/Vendors&Products";
-import colors_fonts from "../constants/colors_fonts";
-import { VendorProps } from "../type/vendor.type";
-import { ProductProps } from "../type/product.type";
+import React from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useSearch } from '../hooks/useSearch';
+import SearchBar from '../components/search/SearchBar';
+import { VendorSearch } from '../components/search/Vendors';
+import { ProductSearch } from '../components/search/Products';
+import { VendorAndProductSearch } from '../components/search/Vendors&Products';
+import colors_fonts from '../constants/colors_fonts';
+import { VendorProps } from '../type/vendor.type';
+import { ProductProps } from '../type/product.type';
 
-type FilterType = "VENDORS" | "PRODUCTS" | "ALL";
+type FilterType = 'VENDORS' | 'PRODUCTS' | 'ALL';
 
 interface UseSearchReturn {
   searchText: string;
@@ -72,17 +72,17 @@ const SearchScreen = () => {
       )}
 
       {/* Search Results */}
-      {searchText === "" ? (
+      {searchText === '' ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyText}>Start typing to search...</Text>
         </View>
-      ) : filter === "VENDORS" ? (
+      ) : filter === 'VENDORS' ? (
         <VendorSearch
           vendors={vendors}
           searchText={searchText}
           loading={loadingVendors}
         />
-      ) : filter === "PRODUCTS" ? (
+      ) : filter === 'PRODUCTS' ? (
         <ProductSearch
           products={products}
           searchText={searchText}
@@ -104,7 +104,7 @@ const SearchScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors_fonts.backgroundLight || "#F2F2F2",
+    backgroundColor: colors_fonts.backgroundLight || '#F2F2F2',
   },
   header: {
     backgroundColor: colors_fonts.primary,
@@ -114,42 +114,42 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
     marginBottom: 16,
   },
   errorContainer: {
-    backgroundColor: "#ffebee",
+    backgroundColor: '#ffebee',
     padding: 16,
     margin: 16,
     borderRadius: 8,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   errorText: {
-    color: "#c62828",
+    color: '#c62828',
     flex: 1,
     marginRight: 12,
   },
   retryButton: {
-    backgroundColor: "#c62828",
+    backgroundColor: '#c62828',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 4,
   },
   retryButtonText: {
-    color: "white",
-    fontWeight: "600",
+    color: 'white',
+    fontWeight: '600',
   },
   emptyState: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   emptyText: {
     fontSize: 16,
-    color: "#666",
+    color: '#666',
   },
 });
 

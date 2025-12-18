@@ -6,26 +6,41 @@ import { ProductProps } from '../../type/product.type';
 import { RootStackParamList } from '../../type/navigation.type';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'ProductDetails'>;
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'ProductDetails'
+>;
 
-const ProductCard = ({ product, variant = 'home' }: {product: ProductProps, variant?: 'home'|'vendor'}) => {
-  
+const ProductCard = ({
+  product,
+  variant = 'home',
+}: {
+  product: ProductProps;
+  variant?: 'home' | 'vendor';
+}) => {
   const navigation = useNavigation<NavigationProp>();
 
-  const imageSource = imageMap[product.imageUrl] || require('../../../assets/placeholder.jpg');
+  const imageSource =
+    imageMap[product.imageUrl] || require('../../../assets/placeholder.jpg');
   const styles = variant === 'vendor' ? vendorStyles : homeStyles;
-  
+
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { product })}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ProductDetails', { product })}
+    >
       <View style={styles.card}>
         {variant === 'home' && (
           <>
             <Image source={imageSource} style={styles.image} />
             <Text style={styles.name}>{product.name}</Text>
-            <Text style={styles.desc}>{product.vendorName || 'Unknown Vendor'}</Text>
+            <Text style={styles.desc}>
+              {product.vendorName || 'Unknown Vendor'}
+            </Text>
             <Text style={styles.price}>RWF {product.price}</Text>
             <View style={homeStyles.ratingContainer}>
-              <Text style={homeStyles.ratingText}>⭐ {product.averageRating || 0}</Text>
+              <Text style={homeStyles.ratingText}>
+                ⭐ {product.averageRating || 0}
+              </Text>
             </View>
           </>
         )}
@@ -33,12 +48,12 @@ const ProductCard = ({ product, variant = 'home' }: {product: ProductProps, vari
         {variant === 'vendor' && (
           <>
             <View style={vendorStyles.info}>
-              <Text style={styles.name}>{product.name }</Text>
-              <Text style={styles.desc}>{product.description || 'No description'}</Text>
+              <Text style={styles.name}>{product.name}</Text>
+              <Text style={styles.desc}>
+                {product.description || 'No description'}
+              </Text>
 
               <Text style={styles.price}>RWF {product.price}</Text>
-              
-                
             </View>
             <Image source={imageSource} style={styles.image} />
           </>
@@ -47,7 +62,6 @@ const ProductCard = ({ product, variant = 'home' }: {product: ProductProps, vari
     </TouchableOpacity>
   );
 };
-
 
 // Styles for home layout (horizontal scroll card)
 const homeStyles = StyleSheet.create({
@@ -71,7 +85,13 @@ const homeStyles = StyleSheet.create({
   },
   name: { fontWeight: 'bold', marginTop: 6, paddingHorizontal: 6 },
   desc: { color: '#555', fontSize: 12, marginTop: 4, paddingHorizontal: 6 },
-  price: { fontSize: 14, fontWeight: '600', marginTop: 6, color: '#000', paddingHorizontal: 6 },
+  price: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 6,
+    color: '#000',
+    paddingHorizontal: 6,
+  },
   ratingContainer: {
     position: 'absolute',
     top: 0,
@@ -132,4 +152,3 @@ const vendorStyles = StyleSheet.create({
 });
 
 export default React.memo(ProductCard);
-

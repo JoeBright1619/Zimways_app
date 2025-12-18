@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,17 @@ import {
   Alert,
   Image,
   ActivityIndicator,
-} from "react-native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import CustomButton from "../components/button";
+} from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import CustomButton from '../components/button';
 
-import style from "../constants/colors_fonts";
-import { useAuth } from "../hooks/useAuth";
-import { RootStackParamList } from "../type/navigation.type";
+import style from '../constants/colors_fonts';
+import { useAuth } from '../hooks/useAuth';
+import { RootStackParamList } from '../type/navigation.type';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  "Login"
+  'Login'
 >;
 
 interface LoginScreenProps {
@@ -31,56 +31,56 @@ interface LoginResult {
 }
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const { login } = useAuth();
 
   const handleLogin = async (): Promise<void> => {
     if (!email || !password) {
-      Alert.alert("Missing Information", "Please fill in all fields");
+      Alert.alert('Missing Information', 'Please fill in all fields');
       return;
     }
 
     try {
       setLoading(true);
-      setError("");
+      setError('');
 
       const result = (await login(email, password)) as LoginResult;
 
       if (!result || !result.success) {
-        throw new Error("Login failed - invalid response from server");
+        throw new Error('Login failed - invalid response from server');
       }
 
       if (result.requiresTFA) {
         // Navigate to 2FA screen if required
-        navigation.navigate("TwoFactorAuth", {
+        navigation.navigate('TwoFactorAuth', {
           userId: result.userId,
           email: email,
         });
         return;
       }
       // Clear form
-      setEmail("");
-      setPassword("");
-      setError("");
+      setEmail('');
+      setPassword('');
+      setError('');
     } catch (err: unknown) {
       // More specific error handling
-      let errorMessage = "An error occurred during login";
+      let errorMessage = 'An error occurred during login';
 
       if (err instanceof Error) {
-        if (err.message.includes("auth/user-not-found")) {
-          errorMessage = "No account exists with this email";
-        } else if (err.message.includes("auth/wrong-password")) {
-          errorMessage = "Invalid password";
-        } else if (err.message.includes("Backend authentication failed")) {
-          errorMessage = "Account exists but backend verification failed";
+        if (err.message.includes('auth/user-not-found')) {
+          errorMessage = 'No account exists with this email';
+        } else if (err.message.includes('auth/wrong-password')) {
+          errorMessage = 'Invalid password';
+        } else if (err.message.includes('Backend authentication failed')) {
+          errorMessage = 'Account exists but backend verification failed';
         }
       }
 
       setError(errorMessage);
-      Alert.alert("Login Error", errorMessage);
+      Alert.alert('Login Error', errorMessage);
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   return (
     <View style={styles.container}>
       {/* Add the PNG logo */}
-      <Image source={require("../../assets/zimways.png")} style={styles.logo} />
+      <Image source={require('../../assets/zimways.png')} style={styles.logo} />
 
       <Text style={styles.title}>Login</Text>
       {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -130,7 +130,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         <Text style={styles.signupText}>New customer? </Text>
         <Text
           style={styles.signupLink}
-          onPress={() => navigation.navigate("Signup")}
+          onPress={() => navigation.navigate('Signup')}
           disabled={loading}
         >
           Sign up here
@@ -143,21 +143,21 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
   },
   logo: {
     width: 250,
     height: 150,
     marginBottom: 20,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   input: {
     borderWidth: 1,
@@ -168,23 +168,23 @@ const styles = StyleSheet.create({
     width: 300,
   },
   error: {
-    color: "red",
+    color: 'red',
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   signupContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 16,
   },
   signupText: {
     fontSize: 16,
-    color: "#000",
+    color: '#000',
   },
   signupLink: {
     fontSize: 16,
-    color: "red",
-    fontWeight: "bold",
+    color: 'red',
+    fontWeight: 'bold',
   },
   loader: {
     marginVertical: 20,

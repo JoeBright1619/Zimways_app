@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -6,19 +6,19 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
-} from "react-native";
-import colors_fonts from "../constants/colors_fonts";
-import { RootStackParamList } from "../type/navigation.type";
-import { RouteProp } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { MaterialCommunityIcons } from "@expo/vector-icons"; // Adjust the import based on your icon library
-import OrderProgress from "../components/order/orderStatus";
-import { orderAPI } from "../services/api.service";
-import { OrderProps } from "../type/order.type";
+} from 'react-native';
+import colors_fonts from '../constants/colors_fonts';
+import { RootStackParamList } from '../type/navigation.type';
+import { RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; // Adjust the import based on your icon library
+import OrderProgress from '../components/order/orderStatus';
+import { orderAPI } from '../services/api.service';
+import { OrderProps } from '../type/order.type';
 
 type OrderDetailsScreenProps = {
-  route: RouteProp<RootStackParamList, "OrderDetails">;
+  route: RouteProp<RootStackParamList, 'OrderDetails'>;
 };
 
 const OrderDetailsScreen: React.FC<OrderDetailsScreenProps> = ({ route }) => {
@@ -29,7 +29,7 @@ const OrderDetailsScreen: React.FC<OrderDetailsScreenProps> = ({ route }) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [expandVendor, setExpandVendor] = useState<{ [key: string]: boolean }>(
-    {}
+    {},
   );
 
   useEffect(() => {
@@ -45,14 +45,14 @@ const OrderDetailsScreen: React.FC<OrderDetailsScreenProps> = ({ route }) => {
   // Poll order status periodically and update UI live
   useEffect(() => {
     const terminalStatuses = new Set([
-      "DELIVERED",
-      "COMPLETED",
-      "PAYMENT_FAILED",
-      "CANCELLED_BY_CUSTOMER",
-      "REFUNDED",
-      "CANCELLED_BY_RESTAURANT",
-      "FAILED",
-      "CANCELLED_BY_SYSTEM",
+      'DELIVERED',
+      'COMPLETED',
+      'PAYMENT_FAILED',
+      'CANCELLED_BY_CUSTOMER',
+      'REFUNDED',
+      'CANCELLED_BY_RESTAURANT',
+      'FAILED',
+      'CANCELLED_BY_SYSTEM',
     ]);
 
     if (!currentOrder?.id) return;
@@ -85,12 +85,12 @@ const OrderDetailsScreen: React.FC<OrderDetailsScreenProps> = ({ route }) => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
@@ -147,8 +147,8 @@ const OrderDetailsScreen: React.FC<OrderDetailsScreenProps> = ({ route }) => {
                     <MaterialCommunityIcons
                       name={
                         expandVendor[vendor.vendorId] === true
-                          ? "chevron-up"
-                          : "chevron-down"
+                          ? 'chevron-up'
+                          : 'chevron-down'
                       }
                       size={24}
                     />
@@ -159,11 +159,11 @@ const OrderDetailsScreen: React.FC<OrderDetailsScreenProps> = ({ route }) => {
                     <View style={styles.vendorDetails}>
                       <View style={styles.vendorInfo}>
                         <Text style={styles.label}>Place: </Text>
-                        <Text>{vendor.place ?? "N/A"} </Text>
+                        <Text>{vendor.place ?? 'N/A'} </Text>
                       </View>
                       <View style={styles.vendorInfo}>
                         <Text style={styles.label}>Street: </Text>
-                        <Text>{vendor.street ?? "N/A"}</Text>
+                        <Text>{vendor.street ?? 'N/A'}</Text>
                       </View>
 
                       <View style={styles.vendorInfo}>
@@ -182,9 +182,9 @@ const OrderDetailsScreen: React.FC<OrderDetailsScreenProps> = ({ route }) => {
             <View style={styles.detailContainer}>
               <Text>Order Type</Text>
               <Text style={styles.type}>
-                {currentOrder.orderType == "MULTIPLE_VENDORS"
-                  ? "Combined Order"
-                  : "Single Order"}
+                {currentOrder.orderType == 'MULTIPLE_VENDORS'
+                  ? 'Combined Order'
+                  : 'Single Order'}
               </Text>
             </View>
             <View style={styles.detailContainer}>
@@ -236,7 +236,7 @@ const OrderDetailsScreen: React.FC<OrderDetailsScreenProps> = ({ route }) => {
             <View style={styles.totalRow}>
               <Text style={styles.totalLabel}>Total Amount:</Text>
               <Text style={styles.totalAmount}>
-                RWF {currentOrder.total?.toFixed(2) || "0.00"}
+                RWF {currentOrder.total?.toFixed(2) || '0.00'}
               </Text>
             </View>
           </View>
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors_fonts.white,
     borderRadius: 20,
-    borderStyle: "dashed",
+    borderStyle: 'dashed',
     borderColor: colors_fonts.primary,
     borderWidth: 1,
   },
@@ -261,8 +261,8 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors_fonts.background,
   },
   loadingText: {
@@ -276,8 +276,8 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 20,
     paddingHorizontal: 20,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   backButton: {
     marginRight: 16,
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.white,
     fontFamily: colors_fonts.primary_font,
     flex: 1,
@@ -306,20 +306,20 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     marginBottom: 16,
     elevation: 3,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
   cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 12,
   },
   cardTitle: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: '500',
     color: colors_fonts.text,
     fontFamily: colors_fonts.primary_font,
     marginLeft: 20,
@@ -329,35 +329,35 @@ const styles = StyleSheet.create({
   },
   vendor: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     marginBottom: 10,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   vendorHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: colors_fonts.backgroundDark,
     paddingLeft: 10,
   },
   vendorName: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   vendorDetails: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 10,
   },
   vendorInfo: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   label: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   subTitle: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
     color: colors_fonts.text,
     fontFamily: colors_fonts.primary_font,
     marginTop: 15,
@@ -369,18 +369,18 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: colors_fonts.white,
     fontFamily: colors_fonts.secondary_font,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   type: {
     color: colors_fonts.secondary,
   },
 
   detailContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: colors_fonts.backgroundLight,
@@ -391,14 +391,14 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: colors_fonts.secondary,
     fontFamily: colors_fonts.primary_font,
     marginBottom: 4,
   },
 
   itemPriceContainer: {
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
   },
   itemPrice: {
     color: colors_fonts.primary,
@@ -433,21 +433,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   totalRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     fontSize: 10,
   },
   totalLabel: {
-    fontWeight: "600",
+    fontWeight: '600',
     color: colors_fonts.text,
     fontFamily: colors_fonts.primary_font,
   },
   totalAmount: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.primary,
     fontFamily: colors_fonts.primary_font,
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
 });
 

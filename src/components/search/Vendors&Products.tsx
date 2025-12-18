@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -6,30 +6,36 @@ import {
   FlatList,
   Dimensions,
   ActivityIndicator,
-} from "react-native";
-import VendorCard from "../vendor/vendorCard";
-import ProductCard from "../product/productCard";
-import colors_fonts from "../../constants/colors_fonts";
-import SearchSkeleton from "./SearchSkeleton";
-import { VendorProps } from "../../type/vendor.type";
-import { ProductProps } from "../../type/product.type";
+} from 'react-native';
+import VendorCard from '../vendor/vendorCard';
+import ProductCard from '../product/productCard';
+import colors_fonts from '../../constants/colors_fonts';
+import SearchSkeleton from './SearchSkeleton';
+import { VendorProps } from '../../type/vendor.type';
+import { ProductProps } from '../../type/product.type';
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
 
-export const VendorAndProductSearch = ({ 
-  products, 
-  vendors, 
-  searchText, 
+export const VendorAndProductSearch = ({
+  products,
+  vendors,
+  searchText,
   loadingProducts = false,
-  loadingVendors = false 
-}: {products: ProductProps[], vendors: VendorProps[], searchText: string, loadingProducts: boolean, loadingVendors: boolean}) => {
-  const renderVendor = ({ item }: {item: VendorProps}) => (
+  loadingVendors = false,
+}: {
+  products: ProductProps[];
+  vendors: VendorProps[];
+  searchText: string;
+  loadingProducts: boolean;
+  loadingVendors: boolean;
+}) => {
+  const renderVendor = ({ item }: { item: VendorProps }) => (
     <View style={styles.cardWrapper}>
       <VendorCard vendor={item} />
     </View>
   );
 
-  const renderProduct = ({ item }: {item: ProductProps}) => (
+  const renderProduct = ({ item }: { item: ProductProps }) => (
     <View style={styles.cardWrapper}>
       <ProductCard product={item} />
     </View>
@@ -45,23 +51,22 @@ export const VendorAndProductSearch = ({
   const renderEmptyState = (type: string) => (
     <View style={styles.emptyContainer}>
       <Text style={styles.noItemsText}>No {type} found</Text>
-      <Text style={styles.emptySubText}>
-        Try adjusting your search
-      </Text>
+      <Text style={styles.emptySubText}>Try adjusting your search</Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
       <Text style={styles.searchTitle}>
-        Search results for <Text style={styles.highlightText}>"{searchText}"</Text>
+        Search results for{' '}
+        <Text style={styles.highlightText}>"{searchText}"</Text>
       </Text>
 
       {/* Vendors */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Vendors</Text>
         {loadingVendors ? (
-          <SearchSkeleton type=""/>
+          <SearchSkeleton type="" />
         ) : vendors.length > 0 ? (
           <FlatList
             data={vendors}
@@ -80,7 +85,7 @@ export const VendorAndProductSearch = ({
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Products</Text>
         {loadingProducts ? (
-          <SearchSkeleton type=""/>
+          <SearchSkeleton type="" />
         ) : products.length > 0 ? (
           <FlatList
             data={products}
@@ -107,12 +112,12 @@ const styles = StyleSheet.create({
   },
   searchTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 12,
     color: colors_fonts.text,
   },
   highlightText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.primary,
   },
   section: {
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.text,
     marginBottom: 10,
   },
@@ -139,15 +144,15 @@ const styles = StyleSheet.create({
   },
   noItemsText: {
     fontSize: 16,
-    textAlign: "center",
-    color: "#666",
-    fontWeight: "600",
+    textAlign: 'center',
+    color: '#666',
+    fontWeight: '600',
     marginBottom: 8,
   },
   emptySubText: {
     fontSize: 14,
-    textAlign: "center",
-    color: "#999",
+    textAlign: 'center',
+    color: '#999',
     paddingHorizontal: 20,
   },
   cardWrapper: {

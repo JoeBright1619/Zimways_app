@@ -1,8 +1,4 @@
-import { ENV } from "../config/env";
-
-
-
-
+import { ENV } from '../config/env';
 
 type EndpointFn<T extends any[] = any[]> = (...args: T) => string;
 
@@ -41,12 +37,12 @@ interface OrderEndpoints {
   BY_ID: EndpointFn<[string]>;
   BY_CUSTOMER: EndpointFn<[string]>;
   UPDATE: EndpointFn<[string, string]>;
-  PROCESS: EndpointFn<[string]>
+  PROCESS: EndpointFn<[string]>;
 }
 
-interface PaymentEndpoints{
+interface PaymentEndpoints {
   CREATE: EndpointFn<[string, string]>;
-  PROCESS: EndpointFn<[string]>
+  PROCESS: EndpointFn<[string]>;
 }
 
 interface CartEndpoints {
@@ -77,7 +73,6 @@ interface ApiConfig {
     ORDERS: OrderEndpoints;
     PAYMENT: PaymentEndpoints;
     CART: CartEndpoints;
-
   };
   TIMEOUT: number;
 }
@@ -96,14 +91,16 @@ const config: ApiConfig = {
       BY_ID: (id: string) => `/vendors/${id}`,
       CATEGORIES: (id: string) => `/vendors/${id}/categories`,
       BY_CATEGORY: (category: string) => `/categories/${category}/vendors`,
-      BY_SEARCH: (query: string) => `/vendors/search?keyword=${encodeURIComponent(query)}`,
+      BY_SEARCH: (query: string) =>
+        `/vendors/search?keyword=${encodeURIComponent(query)}`,
     },
     PRODUCTS: {
       BASE: '/items',
       BY_ID: (id: string) => `/items/${id}`,
       BY_VENDOR: (vendorId: string) => `/items/vendor/${vendorId}`,
       BY_CATEGORY: (category: string) => `/categories/${category}/items`,
-      BY_SEARCH: (query: string) => `/items/search?keyword=${encodeURIComponent(query)}`,
+      BY_SEARCH: (query: string) =>
+        `/items/search?keyword=${encodeURIComponent(query)}`,
     },
     CATEGORIES: {
       BASE: '/categories',
@@ -115,8 +112,9 @@ const config: ApiConfig = {
       BASE: '/orders',
       BY_ID: (id: string) => `/orders/${id}`,
       BY_CUSTOMER: (customerId: string) => `/orders/customer/${customerId}`,
-      UPDATE: (orderId: string, status: string) => `/orders/${orderId}/status?status=${status}`,
-      PROCESS: (orderId: string) => `/orders/${orderId}/process`
+      UPDATE: (orderId: string, status: string) =>
+        `/orders/${orderId}/status?status=${status}`,
+      PROCESS: (orderId: string) => `/orders/${orderId}/process`,
     },
     CART: {
       BASE: '/carts',
@@ -124,21 +122,28 @@ const config: ApiConfig = {
       ALL: '/carts',
       BY_CUSTOMER: (customerId: string) => `/carts/customer/${customerId}`,
       CREATE: (customerId: string) => `/carts/customer/${customerId}`,
-      ADD_ITEM: (customerId: string) => `/carts/customer/${customerId}/add-item`,
-      REMOVE_ITEM: (customerId: string) => `/carts/customer/${customerId}/remove-item`,
-      UPDATE_ITEM: (customerId: string) => `/carts/customer/${customerId}/update-item`,
+      ADD_ITEM: (customerId: string) =>
+        `/carts/customer/${customerId}/add-item`,
+      REMOVE_ITEM: (customerId: string) =>
+        `/carts/customer/${customerId}/remove-item`,
+      UPDATE_ITEM: (customerId: string) =>
+        `/carts/customer/${customerId}/update-item`,
       ITEMS: (customerId: string) => `/carts/customer/${customerId}/items`,
       TOTAL: (customerId: string) => `/carts/customer/${customerId}/total`,
-      CHECKOUT: (customerId: string) => `/carts/customer/${customerId}/checkout`,
+      CHECKOUT: (customerId: string) =>
+        `/carts/customer/${customerId}/checkout`,
       DELETE: (cartId: string) => `/carts/${cartId}`,
-      DELETE_ITEM: (customerId: string, itemId: string) => `/carts/customer/${customerId}/items/${itemId}`,
+      DELETE_ITEM: (customerId: string, itemId: string) =>
+        `/carts/customer/${customerId}/items/${itemId}`,
       VENDORS: (customerId: string) => `/carts/customer/${customerId}/vendors`,
-      ITEMS_BY_VENDOR: (customerId: string, vendorId: string) => `/carts/customer/${customerId}/vendor/${vendorId}/items`,
+      ITEMS_BY_VENDOR: (customerId: string, vendorId: string) =>
+        `/carts/customer/${customerId}/vendor/${vendorId}/items`,
     },
     PAYMENT: {
-      CREATE: (orderId: string, payment: string) => `/payments/order/${orderId}?paymentMethod=${payment}`,
-      PROCESS: (paymentId: string) =>`/payments/${paymentId}/process`
-    }
+      CREATE: (orderId: string, payment: string) =>
+        `/payments/order/${orderId}?paymentMethod=${payment}`,
+      PROCESS: (paymentId: string) => `/payments/${paymentId}/process`,
+    },
   },
   TIMEOUT: 30000,
 };

@@ -19,7 +19,7 @@ const SearchSkeleton = ({ type = 'grid', count = 6 }) => {
           duration: 1000,
           useNativeDriver: false,
         }),
-      ])
+      ]),
     );
     animation.start();
 
@@ -34,13 +34,7 @@ const SearchSkeleton = ({ type = 'grid', count = 6 }) => {
   const renderGridSkeleton = () => (
     <View style={styles.gridContainer}>
       {Array.from({ length: count }).map((_, index) => (
-        <Animated.View
-          key={index}
-          style={[
-            styles.gridItem,
-            { opacity }
-          ]}
-        >
+        <Animated.View key={index} style={[styles.gridItem, { opacity }]}>
           <View style={styles.imageSkeleton} />
           <View style={styles.textSkeleton} />
           <View style={styles.textSkeleton2} />
@@ -52,13 +46,7 @@ const SearchSkeleton = ({ type = 'grid', count = 6 }) => {
   const renderHorizontalSkeleton = () => (
     <View style={styles.horizontalContainer}>
       {Array.from({ length: count }).map((_, index) => (
-        <Animated.View
-          key={index}
-          style={[
-            styles.horizontalItem,
-            { opacity }
-          ]}
-        >
+        <Animated.View key={index} style={[styles.horizontalItem, { opacity }]}>
           <View style={styles.horizontalImageSkeleton} />
           <View style={styles.horizontalTextSkeleton} />
         </Animated.View>
@@ -76,7 +64,6 @@ const SearchSkeleton = ({ type = 'grid', count = 6 }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
   },
   gridContainer: {
     flexDirection: 'row',
@@ -119,7 +106,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
     padding: 8,
-  
   },
   horizontalImageSkeleton: {
     width: '100%',
@@ -136,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchSkeleton; 
+export default SearchSkeleton;

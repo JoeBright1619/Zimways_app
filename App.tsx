@@ -10,19 +10,18 @@ import MainTabs from './src/navigation/MainTabs';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React from 'react';
 
-
 function RootNavigator() {
-  const { user, userData,loading } = useAuth();
-  console.log("RootNavigator: Current user:", user?user.email:null); // Debug log
-  
+  const { user, userData, loading } = useAuth();
+  console.log('RootNavigator: Current user:', user ? user.email : null); // Debug log
+
   if (loading) {
-    console.log("RootNavigator: Loading state is true"); // Debug log
-    return(
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    console.log('RootNavigator: Loading state is true'); // Debug log
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#0000ff" />
-    </View>
+      </View>
     ); // Show a loader while loading data
- // Show a loader while loading data
+    // Show a loader while loading data
   }
   return user ? <MainStack /> : <AuthStack />;
 }
@@ -40,4 +39,3 @@ function AppWrapper() {
 }
 
 export default AppWrapper;
-

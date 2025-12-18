@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,26 +6,26 @@ import {
   Alert,
   ScrollView,
   StyleSheet,
-} from "react-native";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebase";
-import colors_fonts from "../constants/colors_fonts";
-import { Ionicons } from "@expo/vector-icons";
-import SettingItem from "../components/settings/SettingItem";
+} from 'react-native';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import colors_fonts from '../constants/colors_fonts';
+import { Ionicons } from '@expo/vector-icons';
+import SettingItem from '../components/settings/SettingItem';
 
 const SettingsScreen: React.FC = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState("ENG");
+  const [selectedLanguage, setSelectedLanguage] = useState('ENG');
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
   const handleLogout = () => {
     Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
+      'Logout',
+      'Are you sure you want to logout?',
       [
-        { text: "Cancel", style: "cancel" },
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: "Logout",
-          style: "destructive",
+          text: 'Logout',
+          style: 'destructive',
           onPress: async () => {
             try {
               await signOut(auth);
@@ -35,11 +35,10 @@ const SettingsScreen: React.FC = () => {
           },
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
- 
   const renderLogoutButton = () => (
     <TouchableOpacity style={styles.logoutContainer} onPress={handleLogout}>
       <View style={styles.settingItemContent}>
@@ -54,33 +53,40 @@ const SettingsScreen: React.FC = () => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Settings</Text>
       </View>
-    <ScrollView style={styles.contentContainer} showsVerticalScrollIndicator={false}>
-      {/* Account Settings Container */}
-      <View style={styles.settingsContainer}>
-        <Text style={styles.containerTitle}>Account Settings</Text>
+      <ScrollView
+        style={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Account Settings Container */}
+        <View style={styles.settingsContainer}>
+          <Text style={styles.containerTitle}>Account Settings</Text>
 
-        <SettingItem label="Profile" />
-        <SettingItem label="Security" />
-        <SettingItem label="Contact" />
-        <SettingItem label="Address" />
-        <SettingItem label="Payment Methods" />
-        <SettingItem label="Security & Privacy" />
-      </View>
+          <SettingItem label="Profile" />
+          <SettingItem label="Security" />
+          <SettingItem label="Contact" />
+          <SettingItem label="Address" />
+          <SettingItem label="Payment Methods" />
+          <SettingItem label="Security & Privacy" />
+        </View>
 
-      {/* App Settings Container */}
-      <View style={styles.settingsContainer}>
-        <Text style={styles.containerTitle}>App Settings</Text>
+        {/* App Settings Container */}
+        <View style={styles.settingsContainer}>
+          <Text style={styles.containerTitle}>App Settings</Text>
 
-        <SettingItem label="Language Preference" isDropdown={true} dropdownValue={selectedLanguage} />
-        <SettingItem label="Notifications" />
-        <SettingItem label="App Theme" />
-        <SettingItem label="App Ratings and Reviews" />
-        <SettingItem label="About Us" />
-      </View>
+          <SettingItem
+            label="Language Preference"
+            isDropdown={true}
+            dropdownValue={selectedLanguage}
+          />
+          <SettingItem label="Notifications" />
+          <SettingItem label="App Theme" />
+          <SettingItem label="App Ratings and Reviews" />
+          <SettingItem label="About Us" />
+        </View>
 
-      {/* Logout Button */}
-      {renderLogoutButton()}
-    </ScrollView>
+        {/* Logout Button */}
+        {renderLogoutButton()}
+      </ScrollView>
     </View>
   );
 };
@@ -89,7 +95,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors_fonts.background,
- 
   },
   contentContainer: {
     flex: 1,
@@ -101,11 +106,11 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 20,
     paddingHorizontal: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.white,
     fontFamily: colors_fonts.primary_font,
   },
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -125,7 +130,7 @@ const styles = StyleSheet.create({
   },
   containerTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.text,
     marginBottom: 16,
     fontFamily: colors_fonts.primary_font,
@@ -134,9 +139,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   settingItemContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 8,
   },
@@ -152,8 +157,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   dropdownContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   dropdownValue: {
@@ -165,7 +170,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors_fonts.primary,
     borderRadius: 12,
     padding: 16,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -178,7 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors_fonts.secondary,
     fontFamily: colors_fonts.secondary_font,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

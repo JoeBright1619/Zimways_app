@@ -1,4 +1,4 @@
-import { ProductProps } from "./product.type";
+import { ProductProps } from './product.type';
 
 export type VendorProps = {
   id: string;
@@ -17,12 +17,11 @@ export type VendorProps = {
   items: ProductProps[]; // If items is an array of products
 };
 
-
 export type VendorSummaryProps = {
-    vendorId: string;
-    vendorName: string;
-    type: string;
-    phone: string;
-    place: string;
-    street: string;
-}
+  vendorId: string;
+  vendorName: string;
+  type: string;
+  phone: string;
+  place: string;
+  street: string;
+};

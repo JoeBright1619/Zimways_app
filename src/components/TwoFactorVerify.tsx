@@ -2,7 +2,15 @@ import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import CustomButton from './button';
 
-export default function TwoFactorVerify({ onVerify, loading, error }: {onVerify: (code: string, secret: string) => void, loading: boolean, error?: string}) {
+export default function TwoFactorVerify({
+  onVerify,
+  loading,
+  error,
+}: {
+  onVerify: (code: string, secret: string) => void;
+  loading: boolean;
+  error?: string;
+}) {
   const [code, setCode] = useState('');
   const [secret, setSecret] = useState('');
 
@@ -15,13 +23,13 @@ export default function TwoFactorVerify({ onVerify, loading, error }: {onVerify:
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Two-Factor Authentication</Text>
-      
+
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      
+
       <Text style={styles.label}>
         Please enter the verification code from your authenticator app
       </Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="Enter verification code"
@@ -30,7 +38,7 @@ export default function TwoFactorVerify({ onVerify, loading, error }: {onVerify:
         keyboardType="number-pad"
         maxLength={6}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Enter secret key"
@@ -38,7 +46,7 @@ export default function TwoFactorVerify({ onVerify, loading, error }: {onVerify:
         onChangeText={setSecret}
         autoCapitalize="none"
       />
-      
+
       <CustomButton
         title={loading ? 'Verifying...' : 'Verify'}
         onPress={handleVerify}
@@ -83,4 +91,4 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
-}); 
+});

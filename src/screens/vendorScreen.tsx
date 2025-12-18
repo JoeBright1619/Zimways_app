@@ -1,5 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {    Animated, View, Text, StyleSheet, ScrollView, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  Animated,
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons'; // ensure you have this installed
 import { RouteProp, useNavigation } from '@react-navigation/native';
@@ -13,34 +23,33 @@ import { ProductProps } from '../type/product.type';
 
 // (imports remain the same)
 
-const VendorScreen = ({ route }: {
-  route: RouteProp<RootStackParamList, "Vendor">;
-}) =>{
+const VendorScreen = ({
+  route,
+}: {
+  route: RouteProp<RootStackParamList, 'Vendor'>;
+}) => {
   const { vendor } = route.params;
   const [products, setProducts] = useState<ProductProps[]>([]);
   const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true); // Add loading state
 
+  useEffect(() => {
+    const fetchVendorProducts = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchItemsByVendor(vendor.id);
+        console.log('Fetched products in vendorscreen:', result);
+        setProducts(result || []);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVendorProducts();
+  }, [vendor.id]);
 
- useEffect(() => {
-  const fetchVendorProducts = async () => {
-    setLoading(true);
-    try {
-      const result = await fetchItemsByVendor(vendor.id);
-      console.log('Fetched products in vendorscreen:', result);
-      setProducts(result || []);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchVendorProducts();
-}, [vendor.id]);
-
-
- 
   const scrollY = useRef(new Animated.Value(0)).current;
   const translateY = scrollY.interpolate({
     inputRange: [0, 245],
@@ -48,14 +57,14 @@ const VendorScreen = ({ route }: {
     extrapolate: 'clamp',
   });
 
-
-
-const filteredProducts =
-  selectedCategory === 'All'
-    ? products
-    : products.filter(
-        (p) => Array.isArray(p.categoryNames) && p.categoryNames.includes(selectedCategory)
-      );
+  const filteredProducts =
+    selectedCategory === 'All'
+      ? products
+      : products.filter(
+          (p) =>
+            Array.isArray(p.categoryNames) &&
+            p.categoryNames.includes(selectedCategory),
+        );
 
   return (
     <View style={styles.container}>
@@ -67,28 +76,22 @@ const filteredProducts =
       </View>
 
       {/* Vendor Image */}
-      
 
       <View style={styles.vendorInfo}>
+        <VendorScreenInfo vendor={vendor} translateY={translateY} />
 
-      <VendorScreenInfo 
-        vendor={vendor}
-        translateY={translateY} 
-      />
-
-
-      <VendorScreenDropDown
-        vendor={vendor}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        translateY={translateY}
-      />
+        <VendorScreenDropDown
+          vendor={vendor}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          translateY={translateY}
+        />
 
         <Animated.ScrollView
           contentContainerStyle={{ paddingTop: 400, paddingBottom: 100 }}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: true }
+            { useNativeDriver: true },
           )}
           scrollEventThrottle={16}
         >
@@ -98,19 +101,21 @@ const filteredProducts =
               <Text style={styles.loadingText}>Loading products...</Text>
             </View>
           ) : filteredProducts.length === 0 ? (
-  <View style={styles.centerContent}>
-    <Text style={styles.noItemsText}>No products in this category.</Text>
-  </View>
-) : (
-  <FlatList
-    data={filteredProducts}
-    keyExtractor={(item) => item.id}
-    renderItem={({ item }) => <ProductCard product={item} variant="vendor" />}
-    scrollEnabled={false}
-  />
-)}
-
-
+            <View style={styles.centerContent}>
+              <Text style={styles.noItemsText}>
+                No products in this category.
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={filteredProducts}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ProductCard product={item} variant="vendor" />
+              )}
+              scrollEnabled={false}
+            />
+          )}
         </Animated.ScrollView>
       </View>
     </View>
@@ -123,7 +128,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors_fonts.background,
     paddingBottom: 20,
-
   },
   header: {
     paddingTop: 50,
@@ -141,10 +145,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     flexShrink: 1,
   },
- 
-  vendorInfo: {
 
-  },
+  vendorInfo: {},
 
   productsHeading: {
     fontSize: 20,
@@ -153,24 +155,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 12,
   },
- 
 
   centerContent: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  paddingVertical: 40,
-},
-loadingText: {
-  marginTop: 10,
-  fontSize: 16,
-  color: '#666',
-},
-noItemsText: {
-  fontSize: 16,
-  color: '#999',
-  fontStyle: 'italic',
-},
-
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  noItemsText: {
+    fontSize: 16,
+    color: '#999',
+    fontStyle: 'italic',
+  },
 });
 
 export default VendorScreen;

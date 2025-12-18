@@ -1,4 +1,4 @@
-import { LocationProps } from "./location.type";
+import { LocationProps } from './location.type';
 export interface UserProps {
   id?: string;
   name: string;
@@ -14,6 +14,3 @@ export interface UserProps {
   locations?: LocationProps[];
   createdAt?: Date;
 }
-
-
-

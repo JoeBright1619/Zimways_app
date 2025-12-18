@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -6,36 +6,41 @@ import {
   FlatList,
   Dimensions,
   ActivityIndicator,
-} from "react-native";
-import ProductCard from "../product/productCard";
-import colors_fonts from "../../constants/colors_fonts";
-import SearchSkeleton from "./SearchSkeleton";
-import { ProductProps } from "../../type/product.type";
+} from 'react-native';
+import ProductCard from '../product/productCard';
+import colors_fonts from '../../constants/colors_fonts';
+import SearchSkeleton from './SearchSkeleton';
+import { ProductProps } from '../../type/product.type';
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
 
-export const ProductSearch = ({ products, searchText, loading = false }: {products: ProductProps[], searchText: string, loading: boolean}) => {
-  const renderItem = ({ item }: {item: ProductProps}) => (
+export const ProductSearch = ({
+  products,
+  searchText,
+  loading = false,
+}: {
+  products: ProductProps[];
+  searchText: string;
+  loading: boolean;
+}) => {
+  const renderItem = ({ item }: { item: ProductProps }) => (
     <View style={styles.gridItem}>
       <ProductCard product={item} />
     </View>
   );
 
-
-
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.noItemsText}>No products found</Text>
-      <Text style={styles.emptySubText}>
-        Try adjusting your search
-      </Text>
+      <Text style={styles.emptySubText}>Try adjusting your search</Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
       <Text style={styles.searchTitle}>
-        Search results for products: <Text style={styles.highlightText}>"{searchText}"</Text>
+        Search results for products:{' '}
+        <Text style={styles.highlightText}>"{searchText}"</Text>
       </Text>
 
       {loading ? (
@@ -66,12 +71,12 @@ const styles = StyleSheet.create({
   },
   searchTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 12,
     color: colors_fonts.text,
   },
   highlightText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors_fonts.primary,
   },
   loadingContainer: {
@@ -93,19 +98,19 @@ const styles = StyleSheet.create({
   },
   noItemsText: {
     fontSize: 16,
-    textAlign: "center",
-    color: "#666",
-    fontWeight: "600",
+    textAlign: 'center',
+    color: '#666',
+    fontWeight: '600',
     marginBottom: 8,
   },
   emptySubText: {
     fontSize: 14,
-    textAlign: "center",
-    color: "#999",
+    textAlign: 'center',
+    color: '#999',
     paddingHorizontal: 20,
   },
   row: {
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     marginBottom: 16,
   },
   gridItem: {

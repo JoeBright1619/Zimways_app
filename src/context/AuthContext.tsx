@@ -1,15 +1,15 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect, ReactNode } from 'react';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   User,
-} from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase";
-import { authAPI } from "../services/api.service";
-import { UserProps } from "../type/user.type";
+} from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../../firebase';
+import { authAPI } from '../services/api.service';
+import { UserProps } from '../type/user.type';
 
 interface UserData {
   name: string;
@@ -49,7 +49,7 @@ interface RegisterData {
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
+  undefined,
 );
 
 interface AuthProviderProps {
@@ -69,34 +69,34 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (firebaseUser) {
         try {
           // Fetch extra user info from Firestore
-          const userRef = doc(db, "users", firebaseUser.uid);
+          const userRef = doc(db, 'users', firebaseUser.uid);
           const docSnap = await getDoc(userRef);
 
           if (docSnap.exists()) {
             const data = docSnap.data() as UserData;
             setUserData(data);
-            console.log("1. User data:", docSnap.data());
+            console.log('1. User data:', docSnap.data());
           } else {
-            console.warn("1. No user document found in Firestore.");
+            console.warn('1. No user document found in Firestore.');
           }
 
           // Get backend user data using our API service
           const idToken = await firebaseUser.getIdToken();
           try {
             if (!firebaseUser.email) {
-              throw new Error("Firebase user has no email");
+              throw new Error('Firebase user has no email');
             }
 
             const backendData = await authAPI.login(
               firebaseUser.email,
-              idToken
+              idToken,
             );
 
             setBackendUser(backendData.data);
             setUser(firebaseUser); // Only set Firebase user if backend auth succeeds
-            console.log("2. Backend user data:", backendData.data);
+            console.log('2. Backend user data:', backendData.data);
           } catch (error) {
-            console.error("3. Failed to get backend user:", error);
+            console.error('3. Failed to get backend user:', error);
             // If backend auth fails, sign out from Firebase
             await signOut(auth);
             setUser(null);
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             setBackendUser(null);
           }
         } catch (error) {
-          console.error("4. Error fetching user data:", error);
+          console.error('4. Error fetching user data:', error);
           // On any error, sign out
           await signOut(auth);
           setUser(null);
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUserData(null);
         setBackendUser(null);
         setLoading(false);
-        console.log("5. No user is signed in.");
+        console.log('5. No user is signed in.');
       }
     });
 
@@ -132,7 +132,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
 
       // Get fresh token for backend auth
@@ -148,13 +148,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         return { success: true };
       } catch (error) {
         await signOut(auth);
-        console.error("Backend authentication failed:", error);
+        console.error('Backend authentication failed:', error);
         throw new Error(
-          "Backend authentication failed. Please try again later."
+          'Backend authentication failed. Please try again later.',
         );
       }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error('Login error:', error);
       throw error;
     }
   };
@@ -166,25 +166,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         userData.email,
-        userData.password
+        userData.password,
       );
 
       // Get default profileURL from Firebase user or use a default avatar
       const profileUrl =
         userCredential.user.photoURL ||
-        "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
+        'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
 
       // Save additional user data to Firestore
       const userDocData = {
         name: userData.name,
         email: userData.email,
         phone: userData.phone,
-        address: userData.address || "",
+        address: userData.address || '',
         profileUrl: profileUrl,
         createdAt: new Date(),
       };
 
-      await setDoc(doc(db, "users", userCredential.user.uid), userDocData);
+      await setDoc(doc(db, 'users', userCredential.user.uid), userDocData);
 
       // Get token for backend auth
       const idToken = await userCredential.user.getIdToken();
@@ -207,7 +207,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         throw error;
       }
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error('Registration error:', error);
       throw error;
     }
   };
@@ -220,7 +220,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUserData(null);
       setBackendUser(null);
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
       throw error;
     }
   };
@@ -235,7 +235,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
       return false;
     } catch (error) {
-      console.error("2FA verification error:", error);
+      console.error('2FA verification error:', error);
       throw error;
     }
   };

@@ -1,5 +1,5 @@
 // components/ProfileReveal.tsx
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,21 +8,21 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
-import { BlurView } from "expo-blur";
-import colors_fonts from "../constants/colors_fonts";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Feather } from "@expo/vector-icons";
-import { pickAndSaveProfileImage } from "../utils/profileHelper";
-import imageMap from "../constants/imageMap";
+} from 'react-native-reanimated';
+import { BlurView } from 'expo-blur';
+import colors_fonts from '../constants/colors_fonts';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Feather } from '@expo/vector-icons';
+import { pickAndSaveProfileImage } from '../utils/profileHelper';
+import imageMap from '../constants/imageMap';
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
 type ProfileRevealProps = {
   profileImage?: string;
@@ -30,7 +30,7 @@ type ProfileRevealProps = {
 };
 
 const ProfileReveal: React.FC<ProfileRevealProps> = ({
-  profileImage = "https://i.pravatar.cc/100", // fallback demo avatar
+  profileImage = 'https://i.pravatar.cc/100', // fallback demo avatar
   onProfileImageChange,
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -90,7 +90,7 @@ const ProfileReveal: React.FC<ProfileRevealProps> = ({
         style={[
           styles.profileCircle,
           profileStyle,
-          { position: "absolute", top: 45, right: 30 },
+          { position: 'absolute', top: 45, right: 30 },
         ]}
       >
         <TouchableOpacity
@@ -102,7 +102,7 @@ const ProfileReveal: React.FC<ProfileRevealProps> = ({
             {!expanded && (
               <View style={styles.flagCircle}>
                 <Image
-                  source={imageMap["zim_flag.png"]}
+                  source={imageMap['zim_flag.png']}
                   style={styles.flagImage}
                 />
               </View>
@@ -127,7 +127,7 @@ const ProfileReveal: React.FC<ProfileRevealProps> = ({
             styles.navButton,
             {
               zIndex: 1001,
-              position: "absolute",
+              position: 'absolute',
               top: height / 2 + 70,
               right: 75,
             },
@@ -172,34 +172,34 @@ const ProfileReveal: React.FC<ProfileRevealProps> = ({
 const styles = StyleSheet.create({
   container: {
     zIndex: 1000,
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
   },
   profileCircle: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    overflow: "hidden",
+    overflow: 'hidden',
     zIndex: 10,
   },
   profileContainer: {
-    position: "relative",
-    width: "100%",
-    height: "100%",
+    position: 'relative',
+    width: '100%',
+    height: '100%',
   },
   profileImg: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     borderRadius: 30,
   },
   flagCircle: {
-    position: "absolute",
+    position: 'absolute',
     bottom: -2,
     right: 18,
     width: 24,
     height: 24,
     borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 11,
   },
   flagImage: {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   chevronContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: 45 + 55, // profile top + profile height + margin
     right: 30 + 18, // profile right + half profile width - half chevron width
     zIndex: 12,
@@ -224,25 +224,25 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   buttonsContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: height / 2 + 250,
     left: 0,
     right: 0,
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     gap: 25,
   },
   btnContainer: {
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   navButton: {
     width: 50,
     height: 50,
     borderRadius: 25,
     backgroundColor: colors_fonts.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOpacity: 0.2,
     shadowRadius: 4,
   },

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ListRenderItem } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  ListRenderItem,
+} from 'react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import colors_fonts from '../../constants/colors_fonts';
@@ -20,7 +27,7 @@ type HorizontalCategoryListProps = {
 };
 
 export const VerticalCategoryList = () => {
-   const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<NavigationProp>();
   const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
     const fetchCategories = async () => {
@@ -35,7 +42,6 @@ export const VerticalCategoryList = () => {
     fetchCategories();
   }, []);
 
-
   const handlePress = (category: Category) => {
     navigation.navigate('Category', {
       selectedCategory: category,
@@ -43,7 +49,7 @@ export const VerticalCategoryList = () => {
     });
   };
 
- const renderItem: ListRenderItem<Category> = ({ item }) => (
+  const renderItem: ListRenderItem<Category> = ({ item }) => (
     <TouchableOpacity style={styles.tile} onPress={() => handlePress(item)}>
       <Text style={styles.tileText}>{item.name}</Text>
     </TouchableOpacity>
@@ -62,10 +68,9 @@ export const VerticalCategoryList = () => {
   );
 };
 
-
-
-
-export const HorizontalCategoryList = ({ categories }: HorizontalCategoryListProps) => {
+export const HorizontalCategoryList = ({
+  categories,
+}: HorizontalCategoryListProps) => {
   const navigation = useNavigation<NavigationProp>();
 
   const handlePress = (category: Category) => {
@@ -92,8 +97,6 @@ export const HorizontalCategoryList = ({ categories }: HorizontalCategoryListPro
     />
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {

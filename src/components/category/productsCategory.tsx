@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,26 +6,31 @@ import {
   ActivityIndicator,
   FlatList,
   Dimensions,
-  ListRenderItem
-} from "react-native";
-import ProductCard from "../product/productCard";
-import { productsAPI } from "../../services/api.service";
-import colors_fonts from "../../constants/colors_fonts";
-import { ProductProps } from "../../type/product.type";
+  ListRenderItem,
+} from 'react-native';
+import ProductCard from '../product/productCard';
+import { productsAPI } from '../../services/api.service';
+import colors_fonts from '../../constants/colors_fonts';
+import { ProductProps } from '../../type/product.type';
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
 
-export const ProductsCategory = ({ selectedCategoryName }: {selectedCategoryName: string}) => {
+export const ProductsCategory = ({
+  selectedCategoryName,
+}: {
+  selectedCategoryName: string;
+}) => {
   const [products, setProducts] = useState<ProductProps[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productData = await productsAPI.getByCategory(selectedCategoryName);
+        const productData =
+          await productsAPI.getByCategory(selectedCategoryName);
         setProducts(productData);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error('Error fetching products:', error);
       } finally {
         setLoading(false);
       }
@@ -34,7 +39,7 @@ export const ProductsCategory = ({ selectedCategoryName }: {selectedCategoryName
     fetchProducts();
   }, [selectedCategoryName]);
 
-  const renderItem:ListRenderItem<ProductProps> = ({ item }) => (
+  const renderItem: ListRenderItem<ProductProps> = ({ item }) => (
     <View style={styles.gridItem}>
       <ProductCard product={item} />
     </View>
@@ -57,7 +62,9 @@ export const ProductsCategory = ({ selectedCategoryName }: {selectedCategoryName
           showsVerticalScrollIndicator={false}
         />
       ) : (
-        <Text style={styles.noItemsText}>No products found in this category</Text>
+        <Text style={styles.noItemsText}>
+          No products found in this category
+        </Text>
       )}
     </View>
   );
@@ -71,21 +78,20 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
     color: colors_fonts.text,
   },
   noItemsText: {
-    textAlign: "center",
-    color: "#888",
+    textAlign: 'center',
+    color: '#888',
     marginTop: 20,
   },
   row: {
-    justifyContent: "space-evenly",
+    justifyContent: 'space-evenly',
     marginBottom: 12,
   },
   gridItem: {
     width: (screenWidth - 65) / 2, // 10px padding left + right + 10px between items
-
   },
 });

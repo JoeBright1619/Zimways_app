@@ -1,5 +1,18 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert, Image, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform  } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Image,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { auth, db } from '../../firebase';
 import CustomButton from '../components/button';
 import style from '../constants/colors_fonts';
@@ -19,7 +32,7 @@ export default function SignupScreen() {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  
+
   const navigation = useNavigation<NavigationProp>();
 
   const handleSignup = async () => {
@@ -35,100 +48,103 @@ export default function SignupScreen() {
     try {
       setLoading(true);
       setError('');
-      
+
       // Use the register function from AuthContext
       await register({
         email,
         password,
-        name: username,  // backend expects 'name' instead of 'username'
+        name: username, // backend expects 'name' instead of 'username'
         phone,
-        address: '' // optional, can be updated later
+        address: '', // optional, can be updated later
       });
 
-      Alert.alert(
-        'Success',
-        'Account created successfully!',
-        [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
-      );
+      Alert.alert('Success', 'Account created successfully!', [
+        { text: 'OK', onPress: () => navigation.navigate('Login') },
+      ]);
     } catch (err: unknown) {
-      if(err instanceof Error){
+      if (err instanceof Error) {
         setError(err.message);
         Alert.alert('Signup Error', err.message);
         console.error('Signup Error:', err);
       }
-      
     } finally {
       setLoading(false);
     }
   };
 
- return (
-  <KeyboardAvoidingView 
-      style={styles.keyboardcontainer} 
+  return (
+    <KeyboardAvoidingView
+      style={styles.keyboardcontainer}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={styles.container}>
-      <Image source={require('../../assets/zimways.png')} style={styles.logo} />
-      <Text style={styles.title}>Sign Up</Text>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <TextInput 
-        style={styles.input} 
-        placeholder="Username" 
-        value={username} 
-        onChangeText={setUsername}
-        editable={!loading}
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Email" 
-        value={email} 
-        onChangeText={setEmail} 
-        keyboardType="email-address"
-        autoCapitalize="none"
-        editable={!loading}
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Phone Number" 
-        value={phone} 
-        onChangeText={setPhone} 
-        keyboardType="phone-pad"
-        editable={!loading}
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Password" 
-        value={password} 
-        onChangeText={setPassword} 
-        secureTextEntry
-        editable={!loading}
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Confirm Password" 
-        value={confirmPassword} 
-        onChangeText={setConfirmPassword} 
-        secureTextEntry
-        editable={!loading}
-      />
+        <View style={styles.container}>
+          <Image
+            source={require('../../assets/zimways.png')}
+            style={styles.logo}
+          />
+          <Text style={styles.title}>Sign Up</Text>
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            editable={!loading}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            editable={!loading}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Phone Number"
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="phone-pad"
+            editable={!loading}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            editable={!loading}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+            editable={!loading}
+          />
 
-      <CustomButton 
-        title={loading ? "Creating Account..." : "Signup"} 
-        onPress={handleSignup} 
-        style={{ width: 200, height: 50 }} 
-        textStyle={{ fontSize: 18 }}
-        disabled={loading}
-      />
+          <CustomButton
+            title={loading ? 'Creating Account...' : 'Signup'}
+            onPress={handleSignup}
+            style={{ width: 200, height: 50 }}
+            textStyle={{ fontSize: 18 }}
+            disabled={loading}
+          />
 
-      <View style={styles.signupContainer}>
-        <Text style={styles.signupText}>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')} disabled={loading}>
-          <Text style={styles.signupLink}>Sign in</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-    </TouchableWithoutFeedback>
+          <View style={styles.signupContainer}>
+            <Text style={styles.signupText}>Already have an account? </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
+              disabled={loading}
+            >
+              <Text style={styles.signupLink}>Sign in</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }

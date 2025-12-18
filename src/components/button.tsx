@@ -10,7 +10,12 @@ type Props = {
   disabled?: boolean;
 };
 
-export default function CustomButton({ title, onPress, style, textStyle }: Props) {
+export default function CustomButton({
+  title,
+  onPress,
+  style,
+  textStyle,
+}: Props) {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.btn, style]}>
       <Text style={[styles.text, textStyle]}>{title}</Text>

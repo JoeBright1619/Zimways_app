@@ -1,13 +1,11 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import colors_fonts from "../../constants/colors_fonts";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import colors_fonts from '../../constants/colors_fonts';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-
-
-const stages = ["Paid", "Order Placed", "Preparing", "Picked Up", "Delivered"];
+const stages = ['Paid', 'Order Placed', 'Preparing', 'Picked Up', 'Delivered'];
 
 // helper function: map backend status -> progress indices
 // returns { completedIndex, currentIndex, isFailed, failedIndex }
@@ -16,7 +14,7 @@ const stages = ["Paid", "Order Placed", "Preparing", "Picked Up", "Delivered"];
 // isFailed: whether the order ended in a failed/cancelled terminal state
 // failedIndex: stage index where failure is shown (red cross)
 const getProgress = (
-  status: string
+  status: string,
 ): {
   completedIndex: number;
   currentIndex: number;
@@ -25,15 +23,15 @@ const getProgress = (
 } => {
   switch (status) {
     // Payment flow
-    case "PAYMENT_PENDING":
-    case "PAYMENT_PROCESSING":
+    case 'PAYMENT_PENDING':
+    case 'PAYMENT_PROCESSING':
       return {
         completedIndex: -1,
         currentIndex: 0,
         isFailed: false,
         failedIndex: -1,
       };
-    case "PAYMENT_COMPLETED":
+    case 'PAYMENT_COMPLETED':
       return {
         completedIndex: 0,
         currentIndex: 1,
@@ -42,8 +40,8 @@ const getProgress = (
       };
 
     // Order placed and prep
-    case "CONFIRMED":
-    case "PREPARING":
+    case 'CONFIRMED':
+    case 'PREPARING':
       return {
         completedIndex: 1,
         currentIndex: 2,
@@ -52,9 +50,9 @@ const getProgress = (
       };
 
     // Ready for pickup / driver states → waiting at Picked Up
-    case "READY_FOR_PICKUP":
-    case "DRIVER_ASSIGNED":
-    case "DRIVER_EN_ROUTE":
+    case 'READY_FOR_PICKUP':
+    case 'DRIVER_ASSIGNED':
+    case 'DRIVER_EN_ROUTE':
       return {
         completedIndex: 2,
         currentIndex: 3,
@@ -63,8 +61,8 @@ const getProgress = (
       };
 
     // Picked up / out for delivery → waiting at Delivered
-    case "DRIVER_PICKED_UP":
-    case "OUT_FOR_DELIVERY":
+    case 'DRIVER_PICKED_UP':
+    case 'OUT_FOR_DELIVERY':
       return {
         completedIndex: 3,
         currentIndex: 4,
@@ -73,8 +71,8 @@ const getProgress = (
       };
 
     // Delivery done
-    case "DELIVERED":
-    case "COMPLETED":
+    case 'DELIVERED':
+    case 'COMPLETED':
       return {
         completedIndex: 4,
         currentIndex: -1,
@@ -83,17 +81,17 @@ const getProgress = (
       };
 
     // Cancellations / terminal failures → show a red cross at a sensible stage
-    case "PAYMENT_FAILED":
-    case "CANCELLED_BY_CUSTOMER":
-    case "REFUNDED":
+    case 'PAYMENT_FAILED':
+    case 'CANCELLED_BY_CUSTOMER':
+    case 'REFUNDED':
       // Typically cancelled after placing but before preparing
       return {
         completedIndex: -1,
         currentIndex: -1,
         isFailed: true,
-        failedIndex:0,
+        failedIndex: 0,
       };
-    case "CANCELLED_BY_RESTAURANT":
+    case 'CANCELLED_BY_RESTAURANT':
       // Typically during preparing
       return {
         completedIndex: 0,
@@ -101,8 +99,8 @@ const getProgress = (
         isFailed: true,
         failedIndex: 1,
       };
-    case "FAILED":
-    case "CANCELLED_BY_SYSTEM":
+    case 'FAILED':
+    case 'CANCELLED_BY_SYSTEM':
       // Often during pickup/delivery logistics
       return {
         completedIndex: 2,
@@ -110,7 +108,6 @@ const getProgress = (
         isFailed: true,
         failedIndex: 3,
       };
-    
 
     default:
       return {
@@ -122,20 +119,26 @@ const getProgress = (
   }
 };
 
-const getIcon = (stage: string)=>{
-  switch(stage){
-    case "Paid":
-      return <Ionicons name="cash-outline" size={20} color="black" />
-    case  "Order Placed":
-      return <MaterialCommunityIcons name="check" size={20} color="black" />
-    case "Preparing":
-      return <Ionicons name="hourglass-outline" size={20} color="black" />
-    case "Picked Up":
-      return <MaterialCommunityIcons name="truck-fast-outline" size={20} color="black" />
-    case "Delivered":
-      return <FontAwesome6 name="people-carry-box" size={15} color="black" />
+const getIcon = (stage: string) => {
+  switch (stage) {
+    case 'Paid':
+      return <Ionicons name="cash-outline" size={20} color="black" />;
+    case 'Order Placed':
+      return <MaterialCommunityIcons name="check" size={20} color="black" />;
+    case 'Preparing':
+      return <Ionicons name="hourglass-outline" size={20} color="black" />;
+    case 'Picked Up':
+      return (
+        <MaterialCommunityIcons
+          name="truck-fast-outline"
+          size={20}
+          color="black"
+        />
+      );
+    case 'Delivered':
+      return <FontAwesome6 name="people-carry-box" size={15} color="black" />;
   }
-}
+};
 const OrderProgress = ({ status }: { status: string }) => {
   const { completedIndex, currentIndex, isFailed, failedIndex } =
     getProgress(status);
@@ -183,13 +186,13 @@ export default OrderProgress;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     margin: 20,
   },
   stageContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     flex: 1,
   },
   circle: {
@@ -197,49 +200,49 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 20,
     marginBottom: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "hidden"
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
   },
   circleActive: {
     backgroundColor: colors_fonts.tertiary,
   },
   circleInactive: {
-    backgroundColor: "lightgray",
+    backgroundColor: 'lightgray',
   },
   circleFailed: {
     backgroundColor: colors_fonts.secondary,
   },
   cross: {
-    color: "white",
+    color: 'white',
     fontSize: 12,
     lineHeight: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   label: {
     fontSize: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   waiting: {
     fontSize: 10,
-    color: "red",
+    color: 'red',
     marginTop: 2,
-    textAlign: "center",
+    textAlign: 'center',
   },
   failedText: {
     fontSize: 10,
-    color: "red",
+    color: 'red',
     marginTop: 2,
-    textAlign: "center",
-    textTransform: "lowercase",
+    textAlign: 'center',
+    textTransform: 'lowercase',
   },
   line: {
-    position: "absolute",
+    position: 'absolute',
     top: 10,
-    left: "50%",
+    left: '50%',
     height: 2,
-    width: "100%",
-    backgroundColor: "lightgray",
+    width: '100%',
+    backgroundColor: 'lightgray',
     zIndex: -1,
   },
 });

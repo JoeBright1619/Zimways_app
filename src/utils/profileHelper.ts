@@ -14,7 +14,8 @@ export const pickAndSaveProfileImage = async (): Promise<string | null> => {
         {
           text: 'Camera',
           onPress: async () => {
-            const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
+            const cameraStatus =
+              await ImagePicker.requestCameraPermissionsAsync();
             if (cameraStatus.status !== 'granted') {
               alert('Camera access is required!');
               return resolve(null);
@@ -38,7 +39,8 @@ export const pickAndSaveProfileImage = async (): Promise<string | null> => {
         {
           text: 'Gallery',
           onPress: async () => {
-            const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            const galleryStatus =
+              await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (galleryStatus.status !== 'granted') {
               alert('Gallery access is required!');
               return resolve(null);
@@ -66,7 +68,7 @@ export const pickAndSaveProfileImage = async (): Promise<string | null> => {
           onPress: () => resolve(null),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   });
 };

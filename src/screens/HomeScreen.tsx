@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from 'react';
 import {
   ScrollView,
   View,
@@ -6,22 +6,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   RefreshControl,
-} from "react-native";
+} from 'react-native';
 
-import style from "../constants/colors_fonts"; // adjust if needed
-import SearchBar from "../components/search/SearchBar"; // your custom search bar
-import { Feather } from "@expo/vector-icons";
-import ProductCard from "../components/product/productCard"; // your custom product card
-import VendorCard from "../components/vendor/vendorCard";
-import { FlatList } from "react-native-gesture-handler"; // for better performance with large lists
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import CategoryGrid from "../components/CategoryGrid";
-import SearchSkeleton from "../components/search/SearchSkeleton";
-import { VendorAndProductSearch } from "../components/search/Vendors&Products"; // your custom search component
-import { VendorSearch } from "../components/search/Vendors";
-import { ProductSearch } from "../components/search/Products"; // if you have a separate search for products
-import { useSearch } from "../hooks/useSearch"; // Import the custom hook
-import ProfileReveal from "../components/profile";
+import style from '../constants/colors_fonts'; // adjust if needed
+import SearchBar from '../components/search/SearchBar'; // your custom search bar
+import { Feather } from '@expo/vector-icons';
+import ProductCard from '../components/product/productCard'; // your custom product card
+import VendorCard from '../components/vendor/vendorCard';
+import { FlatList } from 'react-native-gesture-handler'; // for better performance with large lists
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CategoryGrid from '../components/CategoryGrid';
+import SearchSkeleton from '../components/search/SearchSkeleton';
+import { VendorAndProductSearch } from '../components/search/Vendors&Products'; // your custom search component
+import { VendorSearch } from '../components/search/Vendors';
+import { ProductSearch } from '../components/search/Products'; // if you have a separate search for products
+import { useSearch } from '../hooks/useSearch'; // Import the custom hook
+import ProfileReveal from '../components/profile';
 const HomeScreen: React.FC = () => {
   // Replace all the search-related state with the useSearch hook
   const {
@@ -39,7 +39,7 @@ const HomeScreen: React.FC = () => {
     setSearchFromHistory,
   } = useSearch();
 
-  const [profileImage, setProfileImage] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<string>('');
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
@@ -50,7 +50,7 @@ const HomeScreen: React.FC = () => {
   // ✅ Load profile image
   useEffect(() => {
     const loadProfileImage = async () => {
-      const storedUri = await AsyncStorage.getItem("profileImageUri");
+      const storedUri = await AsyncStorage.getItem('profileImageUri');
       if (storedUri) setProfileImage(storedUri);
     };
     loadProfileImage();
@@ -63,7 +63,7 @@ const HomeScreen: React.FC = () => {
 
   // Render search content based on current state
   const renderSearchContent = () => {
-    if (searchText === "") {
+    if (searchText === '') {
       return (
         <ScrollView
           refreshControl={
@@ -108,7 +108,7 @@ const HomeScreen: React.FC = () => {
       );
     }
 
-    if (filter === "VENDORS") {
+    if (filter === 'VENDORS') {
       return (
         <VendorSearch
           vendors={vendors}
@@ -118,7 +118,7 @@ const HomeScreen: React.FC = () => {
       );
     }
 
-    if (filter === "PRODUCTS") {
+    if (filter === 'PRODUCTS') {
       return (
         <ProductSearch
           products={products}
@@ -189,33 +189,33 @@ const styles = StyleSheet.create({
     backgroundColor: style.background,
   },
   header: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 20,
     backgroundColor: style.primary,
     paddingTop: 60,
-    width: "100%",
+    width: '100%',
   },
   profiledetails: {
-    flexDirection: "row",
-    width: "90%",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    width: '90%',
+    justifyContent: 'space-between',
   },
   profile: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   locationContainer: {
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   label: {
     fontSize: 15,
     color: style.background,
   },
   dropdown: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   dropdownText: {
     marginRight: 4,
@@ -228,21 +228,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   logoutBtn: {
     marginTop: 20,
-    backgroundColor: "crimson",
+    backgroundColor: 'crimson',
     padding: 10,
     borderRadius: 8,
-    alignItems: "center",
-    width: "60%",
-    alignSelf: "center",
+    alignItems: 'center',
+    width: '60%',
+    alignSelf: 'center',
   },
   categoryLabel: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: 20,
   },
   list: {
@@ -253,36 +253,36 @@ const styles = StyleSheet.create({
   },
   // New styles for improved UX
   errorContainer: {
-    backgroundColor: "#ffebee",
+    backgroundColor: '#ffebee',
     padding: 16,
     margin: 16,
     borderRadius: 8,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   errorText: {
-    color: "#c62828",
+    color: '#c62828',
     flex: 1,
     marginRight: 12,
   },
   retryButton: {
-    backgroundColor: "#c62828",
+    backgroundColor: '#c62828',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 4,
   },
   retryButtonText: {
-    color: "white",
-    fontWeight: "600",
+    color: 'white',
+    fontWeight: '600',
   },
   loadingContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 20,
   },
   loadingText: {
     marginTop: 8,
-    color: "#666",
+    color: '#666',
     fontSize: 14,
   },
 });
